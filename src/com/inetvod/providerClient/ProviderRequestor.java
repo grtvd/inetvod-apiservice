@@ -5,11 +5,9 @@
 package com.inetvod.providerClient;
 
 import com.inetvod.common.dbdata.Provider;
-import com.inetvod.common.dbdata.ProviderShowID;
-import com.inetvod.common.dbdata.ShowCostList;
-import com.inetvod.providerClient.request.CheckShowAvailResp;
-import com.inetvod.providerClient.request.CheckShowAvailRqst;
+import com.inetvod.common.dbdata.ShowIDList;
 import com.inetvod.providerClient.request.DataRequestor;
+import com.inetvod.providerClient.request.ShowListResp;
 import com.inetvod.providerClient.rqdata.ProviderStatusCode;
 
 public class ProviderRequestor
@@ -37,7 +35,8 @@ public class ProviderRequestor
 	private ProviderRequestor(Provider provider)
 	{
 		fProvider = provider;
-		fProviderRequestURL = "http://api.inetvod.com/provider/providerapi";	//TODO: get from Provider
+//		fProviderRequestURL = "http://api.inetvod.com/provider/providerapi";	//TODO: get from Provider
+		fProviderRequestURL = "http://localhost/provider/providerapi";	//TODO: get from Provider
 		fProviderAdminUserID = "super";	//TODO: get from Provider
 		fProviderAdminPassword = "superpassword";	//TODO: get from Provider
 	}
@@ -63,15 +62,26 @@ public class ProviderRequestor
 		return ProviderStatusCode.sc_Success.equals(fStatusCode);
 	}
 
-	public ShowCostList checkShowAvail(ProviderShowID providerShowID)
+	public ShowIDList showList()
 	{
 		DataRequestor dataRequestor = newDataRequestor();
-		CheckShowAvailRqst checkShowAvailRqst = CheckShowAvailRqst.newInstance(providerShowID);
-		CheckShowAvailResp checkShowAvailResp = dataRequestor.checkShowAvail(checkShowAvailRqst);
+		ShowListResp showListResp = dataRequestor.showList();
 
 		fStatusCode = dataRequestor.getStatusCode();
-		if(checkShowAvailResp != null)
-			return checkShowAvailResp.getShowCostList();
+		if(showListResp != null)
+			return showListResp.getShowIDList();
 		return null;
 	}
+
+//	public ShowCostList checkShowAvail(ProviderShowID providerShowID)
+//	{
+//		DataRequestor dataRequestor = newDataRequestor();
+//		CheckShowAvailRqst checkShowAvailRqst = CheckShowAvailRqst.newInstance(providerShowID);
+//		CheckShowAvailResp checkShowAvailResp = dataRequestor.checkShowAvail(checkShowAvailRqst);
+//
+//		fStatusCode = dataRequestor.getStatusCode();
+//		if(checkShowAvailResp != null)
+//			return checkShowAvailResp.getShowCostList();
+//		return null;
+//	}
 }

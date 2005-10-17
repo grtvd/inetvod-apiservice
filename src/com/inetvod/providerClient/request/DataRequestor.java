@@ -133,8 +133,13 @@ public class DataRequestor
 		return fStatusCode;
 	}
 
-	public CheckShowAvailResp checkShowAvail(CheckShowAvailRqst checkShowAvailRqst)
+	public ShowListResp showList()
 	{
-		return (CheckShowAvailResp)sendRequest(checkShowAvailRqst, fRequestTimeoutMillis);
+		return (ShowListResp)sendRequest(ShowListRqst.newInstance(), fRequestTimeoutMillis);
 	}
+
+//	public CheckShowAvailResp checkShowAvail(CheckShowAvailRqst checkShowAvailRqst)
+//	{
+//		return (CheckShowAvailResp)sendRequest(checkShowAvailRqst, fRequestTimeoutMillis);
+//	}
 }
