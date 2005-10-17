@@ -138,6 +138,11 @@ public class DataRequestor
 		return (ShowListResp)sendRequest(ShowListRqst.newInstance(), fRequestTimeoutMillis);
 	}
 
+	public ShowDetailResp showDetail(ShowDetailRqst showDetailRqst)
+	{
+		return (ShowDetailResp)sendRequest(showDetailRqst, fRequestTimeoutMillis);
+	}
+
 //	public CheckShowAvailResp checkShowAvail(CheckShowAvailRqst checkShowAvailRqst)
 //	{
 //		return (CheckShowAvailResp)sendRequest(checkShowAvailRqst, fRequestTimeoutMillis);

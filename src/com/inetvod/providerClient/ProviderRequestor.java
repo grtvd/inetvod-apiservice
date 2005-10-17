@@ -8,7 +8,10 @@ import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ShowIDList;
 import com.inetvod.providerClient.request.DataRequestor;
 import com.inetvod.providerClient.request.ShowListResp;
+import com.inetvod.providerClient.request.ShowDetailRqst;
+import com.inetvod.providerClient.request.ShowDetailResp;
 import com.inetvod.providerClient.rqdata.ProviderStatusCode;
+import com.inetvod.providerClient.rqdata.ShowDetailList;
 
 public class ProviderRequestor
 {
@@ -70,6 +73,18 @@ public class ProviderRequestor
 		fStatusCode = dataRequestor.getStatusCode();
 		if(showListResp != null)
 			return showListResp.getShowIDList();
+		return null;
+	}
+
+	public ShowDetailList showDetail(ShowIDList showIDList)
+	{
+		DataRequestor dataRequestor = newDataRequestor();
+		ShowDetailRqst showDetailRqst = ShowDetailRqst.newInstance(showIDList);
+		ShowDetailResp showDetailResp = dataRequestor.showDetail(showDetailRqst);
+
+		fStatusCode = dataRequestor.getStatusCode();
+		if(showDetailResp != null)
+			return showDetailResp.getShowDetailList();
 		return null;
 	}
 
