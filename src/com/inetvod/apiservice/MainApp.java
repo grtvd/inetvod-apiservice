@@ -11,8 +11,6 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 import com.inetvod.common.core.Logger;
-import com.inetvod.common.dbdata.Show;
-import com.inetvod.common.dbdata.ShowID;
 import org.apache.log4j.xml.DOMConfigurator;
 
 public class MainApp
@@ -38,13 +36,13 @@ public class MainApp
 		}
 		catch(Exception e)
 		{
-			System.out.println("MainApp.main: caught exception:");
-			e.printStackTrace();
+			Logger.logErr(fMainApp, "main", e);
 		}
 	}
 
 	private void init() throws IOException, InvalidPropertiesFormatException
 	{
+		//noinspection MismatchedQueryAndUpdateOfCollection
 		Properties properties = new Properties();
 		FileInputStream propertiesFile = new FileInputStream(new File("apiservice.xml"));
 		try
@@ -67,8 +65,6 @@ public class MainApp
 	private void doWork() throws Exception
 	{
 		Logger.logInfo(this, "doWork", "Start...");
-
-		Show show = Show.get(new ShowID("1"));
 
 		Logger.logInfo(this, "doWork", "Done!");
 	}

@@ -16,4 +16,8 @@
 		<level value="info"/>
 		<appender-ref ref="DailyFileLog"/>
 	</category>
+	<category name="httpclient">
+		<level value="info"/>
+		<appender-ref ref="DailyFileLog"/>
+	</category>
 </log4j:configuration>
