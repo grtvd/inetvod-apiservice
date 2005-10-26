@@ -143,8 +143,8 @@ public class DataRequestor
 		return (ShowDetailResp)sendRequest(showDetailRqst, fRequestTimeoutMillis);
 	}
 
-//	public CheckShowAvailResp checkShowAvail(CheckShowAvailRqst checkShowAvailRqst)
-//	{
-//		return (CheckShowAvailResp)sendRequest(checkShowAvailRqst, fRequestTimeoutMillis);
-//	}
+	public CheckShowAvailResp checkShowAvail(CheckShowAvailRqst checkShowAvailRqst)
+	{
+		return (CheckShowAvailResp)sendRequest(checkShowAvailRqst, fRequestTimeoutMillis);
+	}
 }

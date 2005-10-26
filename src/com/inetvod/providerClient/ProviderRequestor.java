@@ -6,10 +6,15 @@ package com.inetvod.providerClient;
 
 import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ShowIDList;
+import com.inetvod.common.dbdata.ShowCostList;
+import com.inetvod.common.dbdata.ProviderShowID;
+import com.inetvod.common.dbdata.ShowFormat;
 import com.inetvod.providerClient.request.DataRequestor;
 import com.inetvod.providerClient.request.ShowListResp;
 import com.inetvod.providerClient.request.ShowDetailRqst;
 import com.inetvod.providerClient.request.ShowDetailResp;
+import com.inetvod.providerClient.request.CheckShowAvailRqst;
+import com.inetvod.providerClient.request.CheckShowAvailResp;
 import com.inetvod.providerClient.rqdata.ProviderStatusCode;
 import com.inetvod.providerClient.rqdata.ShowDetailList;
 
@@ -87,15 +92,15 @@ public class ProviderRequestor
 		return null;
 	}
 
-//	public ShowCostList checkShowAvail(ProviderShowID providerShowID)
-//	{
-//		DataRequestor dataRequestor = newDataRequestor();
-//		CheckShowAvailRqst checkShowAvailRqst = CheckShowAvailRqst.newInstance(providerShowID);
-//		CheckShowAvailResp checkShowAvailResp = dataRequestor.checkShowAvail(checkShowAvailRqst);
-//
-//		fStatusCode = dataRequestor.getStatusCode();
-//		if(checkShowAvailResp != null)
-//			return checkShowAvailResp.getShowCostList();
-//		return null;
-//	}
+	public ShowCostList checkShowAvail(ProviderShowID providerShowID, ShowFormat showFormat)
+	{
+		DataRequestor dataRequestor = newDataRequestor();
+		CheckShowAvailRqst checkShowAvailRqst = CheckShowAvailRqst.newInstance(providerShowID, showFormat);
+		CheckShowAvailResp checkShowAvailResp = dataRequestor.checkShowAvail(checkShowAvailRqst);
+
+		fStatusCode = dataRequestor.getStatusCode();
+		if(checkShowAvailResp != null)
+			return checkShowAvailResp.getShowCostList();
+		return null;
+	}
 }
