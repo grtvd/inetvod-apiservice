@@ -16,7 +16,6 @@ import com.inetvod.common.core.DataID;
 import com.inetvod.common.core.ISO8601DateFormat;
 import com.inetvod.common.core.LanguageID;
 import com.inetvod.common.core.Money;
-import com.inetvod.common.core.Logger;
 import com.inetvod.common.dbdata.CategoryID;
 import com.inetvod.common.dbdata.MediaContainer;
 import com.inetvod.common.dbdata.MediaEncoding;
@@ -32,7 +31,6 @@ import com.inetvod.common.dbdata.ShowFormat;
 import com.inetvod.common.dbdata.ShowID;
 import com.inetvod.common.dbdata.ShowProvider;
 import com.inetvod.common.dbdata.ShowProviderList;
-import com.inetvod.provider.rqdata.DataManager;
 
 public class CreateDataXml
 {
@@ -288,7 +286,8 @@ public class CreateDataXml
 	{
 		for(ShowCategory showCategory : showCategoryList)
 		{
-			writeDataID("CategoryID", showCategory.getCategoryID(), CategoryID.MaxLength);
+			if(!CategoryID.Featured.equals(showCategory.getCategoryID()))
+				writeDataID("CategoryID", showCategory.getCategoryID(), CategoryID.MaxLength);
 		}
 	}
 
