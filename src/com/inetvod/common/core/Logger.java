@@ -31,6 +31,26 @@ public class Logger
 		logInfo(objClass.getClass(), method, e);
 	}
 
+	public static void logWarn(Class objClass, String method, String message)
+	{
+		getLogger(objClass).warn(String.format("%s|%s", method, ((message != null) ? message : "")));
+	}
+
+	public static void logWarn(Class objClass, String method, Exception e)
+	{
+		getLogger(objClass).warn(String.format("%s|", method), e);
+	}
+
+	public static void logWarn(Object objClass, String method, String message)
+	{
+		logWarn(objClass.getClass(), method, message);
+	}
+
+	public static void logWarn(Object objClass, String method, Exception e)
+	{
+		logWarn(objClass.getClass(), method, e);
+	}
+
 	public static void logErr(Class objClass, String method, String message, Exception e)
 	{
 		getLogger(objClass).error(String.format("%s|%s", method, ((message != null) ? message : "")), e);
