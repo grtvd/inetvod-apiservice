@@ -13,14 +13,15 @@ import com.inetvod.common.core.DataWriter;
 public class ShowProvider extends DatabaseObject
 {
 	/* Constants */
-	public static final int NumFields = 6;
+	private static final int NumFields = 9;
 
 	/* Properties */
-	protected ShowProviderID fShowProviderID;
-	protected ShowID fShowID;
-	protected ProviderID fProviderID;
-	protected ProviderShowID fProviderShowID;
-	protected ShowCost fShowCost;
+	private ShowProviderID fShowProviderID;
+	private ShowID fShowID;
+	private ProviderID fProviderID;
+
+	private ProviderShowID fProviderShowID;
+	private ShowCost fShowCost;
 
 	private static DatabaseAdaptor<ShowProvider, ShowProviderList> fDatabaseAdaptor =
 		new DatabaseAdaptor<ShowProvider, ShowProviderList>(ShowProvider.class, ShowProviderList.class, NumFields);
@@ -36,31 +37,30 @@ public class ShowProvider extends DatabaseObject
 	public ProviderShowID getProviderShowID() { return fProviderShowID; }
 
 	public ShowCost getShowCost() { return fShowCost; }
+	public void setShowCost(ShowCost showCost) { fShowCost = showCost; }
 
 	/* Constuction Methods */
+	private ShowProvider(ShowID showID, ProviderID providerID, ProviderShowID providerShowID)
+	{
+		super(true);
+		fShowProviderID = ShowProviderID.newInstance();
+		fShowID = showID;
+		fProviderID = providerID;
+		fProviderShowID = providerShowID;
+	}
+
 	public ShowProvider(DataReader reader) throws Exception
 	{
 		super(reader);
 		readFrom(reader);
 	}
 
-//		protected static ShowProvider Load(ShowProviderID showProviderID, bool mayNotExist)
-//		{
-//			SqlCommand command = new SqlCommand("sp_ShowProvider_Get");
-//
-//			command.CommandType = CommandType.StoredProcedure;
-//			command.Parameters.Add("@ShowID", showID.ToString());
-//			command.Parameters.Add("@ProviderID", providerID.ToString());
-//
-//			return DatabaseAdaptor.Select(command, mayNotExist) as ShowProvider;
-//		}
-//
-//		public static ShowProvider Get(ShowProviderID showProviderID)
-//		{
-//			return Load(showProviderID, false);
-//		}
+	public static ShowProvider newInstance(ShowID showID, ProviderID providerID, ProviderShowID providerShowID)
+	{
+		return new ShowProvider(showID, providerID, providerShowID);
+	}
 
-	protected static ShowProvider loadByShowIDProviderID(ShowID showID, ProviderID providerID, DataExists dataExists)
+	private static ShowProvider loadByShowIDProviderID(ShowID showID, ProviderID providerID, DataExists dataExists)
 		throws Exception
 	{
 		DatabaseProcParam params[] = new DatabaseProcParam[2];
@@ -71,11 +71,33 @@ public class ShowProvider extends DatabaseObject
 		return fDatabaseAdaptor.selectByProc("ShowProvider_GetByShowIDProviderID", params, dataExists);
 	}
 
+	public static ShowProvider findByShowIDProviderID(ShowID showID, ProviderID providerID) throws Exception
+	{
+		return loadByShowIDProviderID(showID, providerID, DataExists.MayNotExist);
+	}
+
 	public static ShowProvider getByShowIDProviderID(ShowID showID, ProviderID providerID) throws Exception
 	{
 		return loadByShowIDProviderID(showID, providerID, DataExists.MustExist);
 	}
 
+	private static ShowProvider loadByProviderIDProviderShowID(ProviderID providerID, ProviderShowID providerShowID, DataExists dataExists)
+		throws Exception
+	{
+		DatabaseProcParam params[] = new DatabaseProcParam[2];
+
+		params[0] = new DatabaseProcParam(Types.VARCHAR, providerID.toString());
+		params[1] = new DatabaseProcParam(Types.VARCHAR, providerShowID.toString());
+
+		return fDatabaseAdaptor.selectByProc("ShowProvider_GetByProviderIDProviderShowID", params, dataExists);
+	}
+
+	public static ShowProvider findByProviderIDProviderShowID(ProviderID providerID, ProviderShowID providerShowID) throws Exception
+	{
+		return loadByProviderIDProviderShowID(providerID, providerShowID, DataExists.MayNotExist);
+	}
+
+	/* Implementation */
 	public void readFrom(DataReader reader) throws Exception
 	{
 		fShowProviderID = reader.readDataID("ShowProviderID", ShowProviderID.MaxLength, ShowProviderID.CtorString);
@@ -94,5 +116,15 @@ public class ShowProvider extends DatabaseObject
 
 		writer.writeDataID("ProviderShowID", fProviderShowID, ProviderShowID.MaxLength);
 		writer.writeObject("ShowCost", fShowCost);
+	}
+
+	public void update() throws Exception
+	{
+		fDatabaseAdaptor.update(this);
+	}
+
+	public void delete() throws Exception
+	{
+		fDatabaseAdaptor.delete(fShowProviderID);
 	}
 }

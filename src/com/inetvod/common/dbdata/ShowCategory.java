@@ -10,12 +10,12 @@ import com.inetvod.common.core.DataWriter;
 public class ShowCategory extends  DatabaseObject
 {
 	/* Constants */
-	public static final int NumFields = 3;
+	private static final int NumFields = 3;
 
 	/* Fields */
-	protected ShowCategoryID fShowCategoryID;
-	protected ShowID fShowID;
-	protected CategoryID fCategoryID;
+	private ShowCategoryID fShowCategoryID;
+	private ShowID fShowID;
+	private CategoryID fCategoryID;
 
 	private static DatabaseAdaptor<ShowCategory, ShowCategoryList> fDatabaseAdaptor =
 		new DatabaseAdaptor<ShowCategory, ShowCategoryList>(ShowCategory.class, ShowCategoryList.class, NumFields);
@@ -27,13 +27,26 @@ public class ShowCategory extends  DatabaseObject
 	public CategoryID getCategoryID() { return fCategoryID; }
 
 	/* Constuction Methods */
+	private ShowCategory(ShowID showID, CategoryID categoryID)
+	{
+		super(true);
+		fShowCategoryID = ShowCategoryID.newInstance();
+		fShowID = showID;
+		fCategoryID = categoryID;
+	}
+
 	public ShowCategory(DataReader reader) throws Exception
 	{
 		super(reader);
 		readFrom(reader);
 	}
 
-	/* Streamable Members */
+	public static ShowCategory newInstance(ShowID showID, CategoryID categoryID)
+	{
+		return new ShowCategory(showID, categoryID);
+	}
+
+	/* Implementation */
 	public void readFrom(DataReader reader) throws Exception
 	{
 		fShowCategoryID = reader.readDataID("ShowCategoryID", ShowCategoryID.MaxLength, ShowCategoryID.CtorString);
@@ -48,4 +61,13 @@ public class ShowCategory extends  DatabaseObject
 		writer.writeDataID("CategoryID", fCategoryID, CategoryID.MaxLength);
 	}
 
+	public void update() throws Exception
+	{
+		fDatabaseAdaptor.update(this);
+	}
+
+	public void delete() throws Exception
+	{
+		fDatabaseAdaptor.delete(fShowCategoryID);
+	}
 }

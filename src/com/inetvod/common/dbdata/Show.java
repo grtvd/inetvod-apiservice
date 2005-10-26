@@ -13,27 +13,26 @@ import com.inetvod.common.core.DataWriter;
 public class Show extends DatabaseObject
 {
 	/* Constants */
-	public static final int NumFields = 11;
+	private static final int NumFields = 11;
 	public static final int NameMaxLength = 64;
 	public static final int EpisodeNameMaxLength = 64;
 	public static final int EpisodeNumberMaxLength = 32;
 	public static final int DescriptionMaxLength = Short.MAX_VALUE;
 	public static final int ShowURLMaxLength = 4096;
 	public static final int PictureURLMaxLength = 4096;
-	public static final int ShowAccessKeyMaxLength = Short.MAX_VALUE;
 
 	/* Fields */
-	protected ShowID fShowID;
-	protected String fName;
-	protected String fEpisodeName;
-	protected String fEpisodeNumber;
-	protected Date fReleasedOn;
-	protected Short fReleasedYear;
-	protected String fDescription;
-	protected Short fRunningMins;
-	protected String fPictureURL;
-	protected RatingID fRatingID;
-	protected Boolean fIsAdult;
+	private ShowID fShowID;
+	private String fName;
+	private String fEpisodeName;
+	private String fEpisodeNumber;
+	private Date fReleasedOn;
+	private Short fReleasedYear;
+	private String fDescription;
+	private Short fRunningMins;
+	private String fPictureURL;
+	private RatingID fRatingID;
+	private Boolean fIsAdult;
 
 	private static DatabaseAdaptor<Show, ShowList> fDatabaseAdaptor =
 		new DatabaseAdaptor<Show, ShowList>(Show.class, ShowList.class, NumFields);
@@ -73,13 +72,26 @@ public class Show extends DatabaseObject
 	public void setIsAdult(Boolean isAdult) { fIsAdult = isAdult; }
 
 	/* Constuction Methods */
+	private Show(String name, boolean isAdult)
+	{
+		super(true);
+		fShowID = ShowID.newInstance();
+		fName = name;
+		fIsAdult = isAdult;
+	}
+
 	public Show(DataReader reader) throws Exception
 	{
 		super(reader);
 		readFrom(reader);
 	}
 
-	protected static Show load(ShowID showID, DataExists exists) throws Exception
+	public static Show newInstance(String name, boolean isAdult)
+	{
+		return new Show(name, isAdult);
+	}
+
+	private static Show load(ShowID showID, DataExists exists) throws Exception
 	{
 		return fDatabaseAdaptor.selectByKey(showID, exists);
 	}

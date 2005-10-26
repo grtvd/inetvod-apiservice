@@ -58,6 +58,10 @@ public class ShowCost implements Readable, Writeable
 	public void writeTo(DataWriter writer) throws Exception
 	{
 		writer.writeString("ShowCostType", ShowCostType.convertToString(fShowCostType), ShowCostType.MaxLength);
+		//TODO: need to handle NULL columns better
+		if(fCost == null)
+			fCost = new Money(null, null);
+		//TODO: need to handle NULL columns better
 		writer.writeObject("Cost", fCost);
 		writer.writeString("CostDisplay", fCostDisplay, DescriptionMaxLength);
 		writer.writeShort("RentalHours", fRentalHours);

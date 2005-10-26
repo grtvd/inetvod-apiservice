@@ -38,8 +38,7 @@ public class ProviderRequestor
 	private ProviderRequestor(Provider provider)
 	{
 		fProvider = provider;
-//		fProviderRequestURL = "http://api.inetvod.com/provider/providerapi";	//TODO: get from Provider
-		fProviderRequestURL = "http://localhost/provider/providerapi";	//TODO: get from Provider
+		fProviderRequestURL = String.format("http://api.inetvod.com/provider_%s/providerapi", provider.getProviderID().toString());	//TODO: get from Provider
 		fProviderAdminUserID = "super";	//TODO: get from Provider
 		fProviderAdminPassword = "superpassword";	//TODO: get from Provider
 	}

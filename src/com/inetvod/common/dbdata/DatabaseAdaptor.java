@@ -202,6 +202,8 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 					statement.setNull(i + 1, param.SqlType);
 				else if(param.SqlType == Types.VARCHAR)
 					statement.setString(i + 1, (String)param.Value);
+				else if(param.SqlType == Types.SMALLINT)
+					statement.setShort(i + 1, (Short)param.Value);
 				else
 					throw new IllegalArgumentException();
 			}

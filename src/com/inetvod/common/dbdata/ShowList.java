@@ -24,6 +24,17 @@ public class ShowList extends ArrayList<Show>
 		return Show.getDatabaseAdaptor().selectManyByProc("Show_Search", params);
 	}
 
+	public static ShowList findByNameReleasedYear(String name, String episodeName, short releasedYear) throws Exception
+	{
+		DatabaseProcParam params[] = new DatabaseProcParam[3];
+
+		params[0] = new DatabaseProcParam(Types.VARCHAR, name);
+		params[1] = new DatabaseProcParam(Types.VARCHAR, episodeName);
+		params[2] = new DatabaseProcParam(Types.SMALLINT, releasedYear);
+
+		return Show.getDatabaseAdaptor().selectManyByProc("Show_GetByNameReleasedYear", params);
+	}
+
 	public static ShowList findByRentedShowMemberID(MemberID memberID) throws Exception
 	{
 		DatabaseProcParam params[] = new DatabaseProcParam[1];

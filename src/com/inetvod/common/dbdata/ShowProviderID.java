@@ -5,6 +5,7 @@
 package com.inetvod.common.dbdata;
 
 import java.lang.reflect.Constructor;
+import java.util.UUID;
 
 import com.inetvod.common.core.CtorUtil;
 import com.inetvod.common.core.StringID;
@@ -17,5 +18,10 @@ public class ShowProviderID extends StringID
 	public ShowProviderID(String value)
 	{
 		super(value);
+	}
+
+	public static ShowProviderID newInstance()
+	{
+		return new ShowProviderID(UUID.randomUUID().toString());
 	}
 }
