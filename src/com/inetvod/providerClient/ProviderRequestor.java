@@ -21,7 +21,6 @@ import com.inetvod.providerClient.rqdata.ShowDetailList;
 public class ProviderRequestor
 {
 	/* Fields */
-	private Provider fProvider;
 	private String fProviderRequestURL;
 	private String fProviderAdminUserID;
 	private String fProviderAdminPassword;
@@ -42,10 +41,9 @@ public class ProviderRequestor
 	/* Construction */
 	private ProviderRequestor(Provider provider)
 	{
-		fProvider = provider;
-		fProviderRequestURL = String.format("http://api.inetvod.com/provider_%s/providerapi", provider.getProviderID().toString());	//TODO: get from Provider
-		fProviderAdminUserID = "super";	//TODO: get from Provider
-		fProviderAdminPassword = "superpassword";	//TODO: get from Provider
+		fProviderRequestURL = provider.getRequestURL();
+		fProviderAdminUserID = provider.getAdminUserID();
+		fProviderAdminPassword = provider.getAdminPassword();
 	}
 
 	public static ProviderRequestor newInstance(Provider provider)
