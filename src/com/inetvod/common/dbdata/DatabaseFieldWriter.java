@@ -24,14 +24,12 @@ public class DatabaseFieldWriter extends DataWriter
 	private HashMap<String, DatabaseField> fFields;
 	private HashSet<String> fFieldsWritten;
 	private List<String> fFieldNamePrefixList = new ArrayList<String>();
-	//protected int fCurParam;
 
 	public DatabaseFieldWriter(PreparedStatement statement, HashMap<String, DatabaseField> fields)
 	{
 		fStatement = statement;
 		fFields = fields;
 		fFieldsWritten = new HashSet<String>();
-		//fCurParam = 1;
 	}
 
 	public void close() throws SQLException
@@ -139,6 +137,7 @@ public class DatabaseFieldWriter extends DataWriter
 		if((data != null) && (data.length() > maxLength))
 			throw new Exception("invalid len(" + data.length() + "), maxLength(" + maxLength +" )");
 
+		//TODO: might need to update this to handle 'text' (blob) fields larger than 4000 chars
 		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
 		fStatement.setString(fieldPosition, ((data == null) || (data.length() == 0)) ? null : data);
 	}
@@ -210,7 +209,7 @@ public class DatabaseFieldWriter extends DataWriter
 	 */
 	public void writeList(String fieldName, List data)
 	{
-		throw new UnsupportedOperationException("need to implement");	//TODO: need to implement
+		throw new UnsupportedOperationException("writeList not supported for databases");
 	}
 
 	/**
@@ -222,7 +221,7 @@ public class DatabaseFieldWriter extends DataWriter
 	 */
 	public void writeStringList(String fieldName, List data, int maxLength) throws Exception
 	{
-		throw new UnsupportedOperationException("need to implement");	//TODO: need to implement
+		throw new UnsupportedOperationException("writeStringList not supported for databases");
 	}
 
 	/**

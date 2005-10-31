@@ -4,14 +4,14 @@
  */
 package com.inetvod.common.dbdata;
 
+import com.inetvod.common.core.DataExists;
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
-import com.inetvod.common.core.DataExists;
 
 public class Provider extends DatabaseObject
 {
 	/* Constants */
-	private static final int NameMaxLength = 64;
+	public static final int NameMaxLength = 64;
 	private static final int RequestURLMaxLength = 4096;
 	private static final int AdminUserIDMaxLength = 128;	//64 if not encrypted
 	private static final int AdminPasswordMaxLength = 32;	//16 if not encrypted
