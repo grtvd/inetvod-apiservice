@@ -11,18 +11,17 @@ import com.inetvod.common.core.DataWriter;
 public class SerialNumber extends DatabaseObject
 {
 	/* Constants */
-	public static final int NumFields = 4;
-	public static final int SerialNumberIDMaxLength = 64;
-	public static final int PINMaxLength = 16;
+	private static final int SerialNumberIDMaxLength = 64;
+	private static final int PINMaxLength = 16;
 
 	/* Fields */
-	protected String fSerialNumberID;
-	protected boolean fActive;
-	protected MemberID fMemberID;
-	protected String fPIN;
+	private String fSerialNumberID;
+	private boolean fActive;
+	private MemberID fMemberID;
+	private String fPIN;
 
 	private static DatabaseAdaptor<SerialNumber, SerialNumberList> fDatabaseAdaptor =
-		new DatabaseAdaptor<SerialNumber, SerialNumberList>(SerialNumber.class, SerialNumberList.class, NumFields);
+		new DatabaseAdaptor<SerialNumber, SerialNumberList>(SerialNumber.class, SerialNumberList.class);
 	public static DatabaseAdaptor<SerialNumber, SerialNumberList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

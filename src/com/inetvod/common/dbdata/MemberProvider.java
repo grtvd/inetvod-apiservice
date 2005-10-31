@@ -13,19 +13,18 @@ import com.inetvod.common.core.DataWriter;
 public class MemberProvider extends DatabaseObject
 {
 	/* Constants */
-	public static final int NumFields = 5;
 	public static final int EncryptedUserIDMaxLength = 128;
 	public static final int EncryptedPasswordMaxLength = 32;
 
 	/* Properties */
-	protected MemberProviderID fMemberProviderID;
-	protected MemberID fMemberID;
-	protected ProviderID fProviderID;
-	protected String fEncryptedUserName;	//TODO: rename to UserID
-	protected String fEncryptedPassword;
+	private MemberProviderID fMemberProviderID;
+	private MemberID fMemberID;
+	private ProviderID fProviderID;
+	private String fEncryptedUserName;	//TODO: rename to UserID
+	private String fEncryptedPassword;
 
 	private static DatabaseAdaptor<MemberProvider, MemberProviderList> fDatabaseAdaptor =
-		new DatabaseAdaptor<MemberProvider, MemberProviderList>(MemberProvider.class, MemberProviderList.class, NumFields);
+		new DatabaseAdaptor<MemberProvider, MemberProviderList>(MemberProvider.class, MemberProviderList.class);
 	public static DatabaseAdaptor<MemberProvider, MemberProviderList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

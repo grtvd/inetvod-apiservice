@@ -13,7 +13,6 @@ import com.inetvod.common.core.DataWriter;
 public class Show extends DatabaseObject
 {
 	/* Constants */
-	private static final int NumFields = 11;
 	public static final int NameMaxLength = 64;
 	public static final int EpisodeNameMaxLength = 64;
 	public static final int EpisodeNumberMaxLength = 32;
@@ -35,7 +34,7 @@ public class Show extends DatabaseObject
 	private Boolean fIsAdult;
 
 	private static DatabaseAdaptor<Show, ShowList> fDatabaseAdaptor =
-		new DatabaseAdaptor<Show, ShowList>(Show.class, ShowList.class, NumFields);
+		new DatabaseAdaptor<Show, ShowList>(Show.class, ShowList.class);
 	public static DatabaseAdaptor<Show, ShowList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

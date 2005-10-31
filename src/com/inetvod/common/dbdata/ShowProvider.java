@@ -12,9 +12,6 @@ import com.inetvod.common.core.DataWriter;
 
 public class ShowProvider extends DatabaseObject
 {
-	/* Constants */
-	private static final int NumFields = 9;
-
 	/* Properties */
 	private ShowProviderID fShowProviderID;
 	private ShowID fShowID;
@@ -24,7 +21,7 @@ public class ShowProvider extends DatabaseObject
 	private ShowCost fShowCost;
 
 	private static DatabaseAdaptor<ShowProvider, ShowProviderList> fDatabaseAdaptor =
-		new DatabaseAdaptor<ShowProvider, ShowProviderList>(ShowProvider.class, ShowProviderList.class, NumFields);
+		new DatabaseAdaptor<ShowProvider, ShowProviderList>(ShowProvider.class, ShowProviderList.class);
 	public static DatabaseAdaptor<ShowProvider, ShowProviderList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

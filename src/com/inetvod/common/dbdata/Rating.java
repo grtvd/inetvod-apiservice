@@ -11,15 +11,14 @@ import com.inetvod.common.core.DataExists;
 public class Rating extends DatabaseObject
 {
 	/* Constants */
-	public static final int NumFields = 2;
-	public static final int NameMaxLength = 64;
+	private static final int NameMaxLength = 64;
 
  	/* Properties */
-	RatingID fRatingID;
-	String fName;
+	private RatingID fRatingID;
+	private String fName;
 
 	private static DatabaseAdaptor<Rating, RatingList> fDatabaseAdaptor =
-		new DatabaseAdaptor<Rating, RatingList>(Rating.class, RatingList.class, NumFields);
+		new DatabaseAdaptor<Rating, RatingList>(Rating.class, RatingList.class);
 	public static DatabaseAdaptor<Rating, RatingList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

@@ -13,31 +13,30 @@ import com.inetvod.common.core.DataWriter;
 public class Member extends DatabaseObject
 {
 	/* Constants */
-	public static final int NumFields = 11;
-	public static final int FirstNameMaxLength = 32;
-	public static final int LastNameMaxLength = 32;
-	public static final int AddrStreetMaxLength = 64;
-	public static final int CityMaxLength = 64;
-	public static final int StateMaxLength = 64;
-	public static final int PostalCodeMaxLength = 32;
-	public static final int CountryMaxLength = 64;
-	public static final int PhoneMaxLength = 32;
+	private static final int FirstNameMaxLength = 32;
+	private static final int LastNameMaxLength = 32;
+	private static final int AddrStreetMaxLength = 64;
+	private static final int CityMaxLength = 64;
+	private static final int StateMaxLength = 64;
+	private static final int PostalCodeMaxLength = 32;
+	private static final int CountryMaxLength = 64;
+	private static final int PhoneMaxLength = 32;
 
 	/* Properties */
-	protected MemberID fMemberID;
-	protected String fFirstName;
-	protected String fLastName;
-	protected String fAddrStreet1;
-	protected String fAddrStreet2;
-	protected String fCity;
-	protected String fState;
-	protected String fPostalCode;
-	protected String fCountry;
-	protected String fPhone;
-	protected Date fBirthDate;
+	private MemberID fMemberID;
+	private String fFirstName;
+	private String fLastName;
+	private String fAddrStreet1;
+	private String fAddrStreet2;
+	private String fCity;
+	private String fState;
+	private String fPostalCode;
+	private String fCountry;
+	private String fPhone;
+	private Date fBirthDate;
 
 	private static DatabaseAdaptor<Member, MemberList> fDatabaseAdaptor
-		= new DatabaseAdaptor<Member, MemberList>(Member.class, MemberList.class, NumFields);
+		= new DatabaseAdaptor<Member, MemberList>(Member.class, MemberList.class);
 	public static DatabaseAdaptor<Member, MemberList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

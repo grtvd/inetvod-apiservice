@@ -10,15 +10,12 @@ import com.inetvod.common.core.DataWriter;
 
 public class MemberPrefs extends DatabaseObject
 {
-	/* Constants */
-	public static final int NumFields = 1;
-
 	/* Properties */
-	protected MemberID fMemberID;
-	protected IncludeAdult fIncludeAdult;
+	private MemberID fMemberID;
+	private IncludeAdult fIncludeAdult;
 
 	private static DatabaseAdaptor<MemberPrefs, MemberPrefsList> fDatabaseAdaptor =
-		new DatabaseAdaptor<MemberPrefs, MemberPrefsList>(MemberPrefs.class, MemberPrefsList.class, NumFields);
+		new DatabaseAdaptor<MemberPrefs, MemberPrefsList>(MemberPrefs.class, MemberPrefsList.class);
 	public static DatabaseAdaptor<MemberPrefs, MemberPrefsList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

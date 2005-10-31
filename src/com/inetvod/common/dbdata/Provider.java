@@ -11,7 +11,6 @@ import com.inetvod.common.core.DataExists;
 public class Provider extends DatabaseObject
 {
 	/* Constants */
-	private static final int NumFields = 5;
 	private static final int NameMaxLength = 64;
 	private static final int RequestURLMaxLength = 4096;
 	private static final int AdminUserIDMaxLength = 128;	//64 if not encrypted
@@ -26,7 +25,7 @@ public class Provider extends DatabaseObject
 	private String fAdminPassword;
 
 	private static DatabaseAdaptor<Provider, ProviderList> fDatabaseAdaptor =
-		new DatabaseAdaptor<Provider, ProviderList>(Provider.class, ProviderList.class, NumFields);
+		new DatabaseAdaptor<Provider, ProviderList>(Provider.class, ProviderList.class);
 	public static DatabaseAdaptor<Provider, ProviderList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

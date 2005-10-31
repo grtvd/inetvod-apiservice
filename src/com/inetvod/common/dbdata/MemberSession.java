@@ -13,9 +13,6 @@ import com.inetvod.common.core.SystemConfiguation;
 
 public class MemberSession extends DatabaseObject
 {
-	/* Constants */
-	private static final int NumFields = 6;
-
 	/* Properties */
 	private MemberSessionID fMemberSessionID;
 	private MemberID fMemberID;
@@ -25,7 +22,7 @@ public class MemberSession extends DatabaseObject
 	private boolean fShowAdult;
 
 	private static DatabaseAdaptor<MemberSession, MemberSessionList> fDatabaseAdaptor =
-		new DatabaseAdaptor<MemberSession, MemberSessionList>(MemberSession.class, MemberSessionList.class, NumFields);
+		new DatabaseAdaptor<MemberSession, MemberSessionList>(MemberSession.class, MemberSessionList.class);
 	public static DatabaseAdaptor<MemberSession, MemberSessionList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

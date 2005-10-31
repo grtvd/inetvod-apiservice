@@ -11,19 +11,15 @@ import com.inetvod.common.core.DataExists;
 public class Category extends DatabaseObject
 {
 	/* Constants */
-	public static final int NumFields = 2;
-	public static final int NameMaxLength = 64;
+	private static final int NameMaxLength = 64;
 
 	/* Properties */
-	CategoryID fCategoryID;
-	String fName;
+	private CategoryID fCategoryID;
+	private String fName;
 
 	private static DatabaseAdaptor<Category, CategoryList> fDatabaseAdaptor
-		= new DatabaseAdaptor<Category, CategoryList>(Category.class, CategoryList.class, NumFields);
+		= new DatabaseAdaptor<Category, CategoryList>(Category.class, CategoryList.class);
 	public static DatabaseAdaptor<Category, CategoryList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
-
-	/* Getters and Setters */
-
 
 	/* Constuction Methods */
 	public Category(DataReader reader) throws Exception

@@ -51,7 +51,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 	private String fUpdateStoredProcedure;
 	private String fDeleteStoredProcedure;
 
-	protected DatabaseAdaptor(Class<T> objectType, Class<L> listType, int unused)
+	protected DatabaseAdaptor(Class<T> objectType, Class<L> listType)
 	{
 		fObjectType = objectType;
 		fListType = listType;

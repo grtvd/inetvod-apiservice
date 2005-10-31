@@ -12,22 +12,19 @@ import com.inetvod.common.core.DataWriter;
 
 public class RentedShow extends DatabaseObject
 {
-	/* Constants */
-	public static final int NumFields = 12;
-
 	/* Fields */
-	protected RentedShowID fRentedShowID;
-	protected MemberID fMemberID;
-	protected ShowID fShowID;
-	protected ProviderID fProviderID;
+	private RentedShowID fRentedShowID;
+	private MemberID fMemberID;
+	private ShowID fShowID;
+	private ProviderID fProviderID;
 
-	protected String fShowURL;
-	protected ShowCost fShowCost;
-	protected Date fRentedOn;
-	protected Date fAvailableUntil;
+	private String fShowURL;
+	private ShowCost fShowCost;
+	private Date fRentedOn;
+	private Date fAvailableUntil;
 
 	private static DatabaseAdaptor<RentedShow, RentedShowList> fDatabaseAdaptor =
-		new DatabaseAdaptor<RentedShow, RentedShowList>(RentedShow.class, RentedShowList.class, NumFields);
+		new DatabaseAdaptor<RentedShow, RentedShowList>(RentedShow.class, RentedShowList.class);
 	public static DatabaseAdaptor<RentedShow, RentedShowList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */

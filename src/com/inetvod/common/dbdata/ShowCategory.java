@@ -9,16 +9,13 @@ import com.inetvod.common.core.DataWriter;
 
 public class ShowCategory extends  DatabaseObject
 {
-	/* Constants */
-	private static final int NumFields = 3;
-
 	/* Fields */
 	private ShowCategoryID fShowCategoryID;
 	private ShowID fShowID;
 	private CategoryID fCategoryID;
 
 	private static DatabaseAdaptor<ShowCategory, ShowCategoryList> fDatabaseAdaptor =
-		new DatabaseAdaptor<ShowCategory, ShowCategoryList>(ShowCategory.class, ShowCategoryList.class, NumFields);
+		new DatabaseAdaptor<ShowCategory, ShowCategoryList>(ShowCategory.class, ShowCategoryList.class);
 	public static DatabaseAdaptor<ShowCategory, ShowCategoryList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
 	/* Getters and Setters */
