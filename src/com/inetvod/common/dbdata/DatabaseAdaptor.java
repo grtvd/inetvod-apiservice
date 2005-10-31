@@ -209,7 +209,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 	private Connection getConnection() throws Exception
 	{
 		Class.forName("com.microsoft.jdbc.sqlserver.SQLServerDriver");
-		Connection conn = DriverManager.getConnection("jdbc:microsoft:sqlserver://localhost","sa","st&r3uc");
+		Connection conn = DriverManager.getConnection("jdbc:microsoft:sqlserver://localhost","inetvod","1v0d");
 		conn.setCatalog(DatabaseName);
 		return conn;
 	}
