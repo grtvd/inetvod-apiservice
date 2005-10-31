@@ -7,8 +7,12 @@ package com.inetvod.common.dbdata;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.HashSet;
 
 import com.inetvod.common.core.DataID;
 import com.inetvod.common.core.DataWriter;
@@ -16,13 +20,46 @@ import com.inetvod.common.core.Writeable;
 
 public class DatabaseFieldWriter extends DataWriter
 {
-	protected PreparedStatement fStatement;		// for writing
-	protected int fCurParam;
+	private PreparedStatement fStatement;		// for writing
+	private HashMap<String, DatabaseField> fFields;
+	private HashSet<String> fFieldsWritten;
+	private List<String> fFieldNamePrefixList = new ArrayList<String>();
+	//protected int fCurParam;
 
-	public DatabaseFieldWriter(PreparedStatement statement)
+	public DatabaseFieldWriter(PreparedStatement statement, HashMap<String, DatabaseField> fields)
 	{
 		fStatement = statement;
-		fCurParam = 1;
+		fFields = fields;
+		fFieldsWritten = new HashSet<String>();
+		//fCurParam = 1;
+	}
+
+	public void close() throws SQLException
+	{
+		for(DatabaseField databaseField : fFields.values())
+		{
+			if(!fFieldsWritten.contains(databaseField.Name))
+				fStatement.setNull(databaseField.Position, databaseField.SqlType);
+		}
+	}
+
+	private String buildFullFieldName(String fieldName)
+	{
+		if(fFieldNamePrefixList.size() == 0)
+			return fieldName;
+
+		StringBuffer sb = new StringBuffer();
+		for(String namePrefix : fFieldNamePrefixList)
+			sb.append(namePrefix);
+		sb.append(fieldName);
+
+		return sb.toString();
+	}
+
+	private DatabaseField getField(String fieldName)
+	{
+		fFieldsWritten.add(fieldName);
+		return fFields.get(fieldName);
 	}
 
 	/**
@@ -45,10 +82,11 @@ public class DatabaseFieldWriter extends DataWriter
 	 */
 	public void writeShort(String fieldName, Short data) throws Exception
 	{
+		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
 		if (data != null)
-			fStatement.setShort(fCurParam++, data);
+			fStatement.setShort(fieldPosition, data);
 		else
-			fStatement.setNull(fCurParam++, Types.SMALLINT);
+			fStatement.setNull(fieldPosition, Types.SMALLINT);
 	}
 
 	/**
@@ -81,10 +119,11 @@ public class DatabaseFieldWriter extends DataWriter
 	 */
 	public void writeDouble(String fieldName, Double data) throws Exception
 	{
+		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
 		if (data != null)
-			fStatement.setDouble(fCurParam++, data);
+			fStatement.setDouble(fieldPosition, data);
 		else
-			fStatement.setNull(fCurParam++, Types.DOUBLE);
+			fStatement.setNull(fieldPosition, Types.DOUBLE);
 	}
 
 	/**
@@ -100,7 +139,8 @@ public class DatabaseFieldWriter extends DataWriter
 		if((data != null) && (data.length() > maxLength))
 			throw new Exception("invalid len(" + data.length() + "), maxLength(" + maxLength +" )");
 
-		fStatement.setString(fCurParam++, ((data == null) || (data.length() == 0)) ? null : data);
+		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
+		fStatement.setString(fieldPosition, ((data == null) || (data.length() == 0)) ? null : data);
 	}
 
 	/**
@@ -112,7 +152,8 @@ public class DatabaseFieldWriter extends DataWriter
 	 */
 	public void writeDate(String fieldName, Date data) throws Exception
 	{
-		fStatement.setDate(fCurParam++, (data != null) ? new java.sql.Date (data.getTime()) : null);
+		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
+		fStatement.setDate(fieldPosition, (data != null) ? new java.sql.Date (data.getTime()) : null);
 	}
 
 	/**
@@ -124,7 +165,8 @@ public class DatabaseFieldWriter extends DataWriter
 	 */
 	public void writeDateTime(String fieldName, Date data) throws Exception
 	{
-		fStatement.setTimestamp(fCurParam++, (data != null) ? new Timestamp (data.getTime()) : null);
+		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
+		fStatement.setTimestamp(fieldPosition, (data != null) ? new Timestamp (data.getTime()) : null);
 	}
 
 	/**
@@ -136,10 +178,11 @@ public class DatabaseFieldWriter extends DataWriter
 	 */
 	public void writeBoolean(String fieldName, Boolean data) throws Exception
 	{
+		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
 		if(data != null)
-			fStatement.setBoolean(fCurParam++, data);
+			fStatement.setBoolean(fieldPosition, data);
 		else
-			fStatement.setNull(fCurParam, Types.BOOLEAN);
+			fStatement.setNull(fieldPosition, Types.BOOLEAN);
 	}
 
 	/**
@@ -152,9 +195,11 @@ public class DatabaseFieldWriter extends DataWriter
 	public void writeObject(String fieldName, Writeable data) throws Exception
 	{
 		if(data == null)
-			throw new UnsupportedOperationException("null objects currently not supported");	//TODO: need to implement
+			return;
 
+		fFieldNamePrefixList.add(fieldName + "_");
 		data.writeTo(this);
+		fFieldNamePrefixList.remove(fFieldNamePrefixList.size() - 1);
 	}
 
 	/**

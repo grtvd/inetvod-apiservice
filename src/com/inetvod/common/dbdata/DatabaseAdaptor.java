@@ -13,31 +13,48 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
 
 import com.inetvod.common.core.DataExists;
 import com.inetvod.common.core.DataReader;
+import com.inetvod.common.core.Logger;
 
 public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 {
-	protected Class<T> fObjectType;
-	protected String fObjectName;
-	protected Constructor<T> fObjectCtor;
-	protected Class<L> fListType;
-	protected Constructor<L> fListCtor;
-//	protected String fKeyFieldName;
+	private static final String DatabaseName = "iNetVOD";	//TODO: move to configuration
+	private static final String SchemaName = "dbo";	//TODO: move to configuration
+	private static final int MetaDataTableColumnName = 4;
+	private static final int MetaDataTableColumnSqlType = 5;
+	private static final int MetaDataTableColumnSqlSize = 7;
+	private static final int MetaDataTableColumnPos = 17;
+	private static final int MetaDataProcedureName = 3;
+	private static final int MetaDataProcedureColumnName = 4;
+	private static final int MetaDataProcedureColumnSqlType = 6;
+	private static final int MetaDataProcedureColumnSqlSize = 8;
 
-	//protected Connection fSqlConnection;
-	protected String fGetStoredProcedure;
-	protected String fInsertStoredProcedure;
-	protected String fUpdateStoredProcedure;
-	protected String fDeleteStoredProcedure;
+	private static final String GetProcedureSuffix = "_Get";
+	private static final String InsertProcedureSuffix = "_Insert";
+	private static final String UpdateProcedureSuffix = "_Update";
+	private static final String DeleteProcedureSuffix = "_Delete";
 
-	protected DatabaseAdaptor(Class<T> objectType, Class<L> listType, int numFields)
+	private Class<T> fObjectType;
+	private String fObjectName;
+	private Constructor<T> fObjectCtor;
+	private Class<L> fListType;
+	private Constructor<L> fListCtor;
+
+	private HashMap<String, DatabaseField> fFields;
+
+	private String fGetStoredProcedure;
+	private String fInsertStoredProcedure;
+	private String fUpdateStoredProcedure;
+	private String fDeleteStoredProcedure;
+
+	protected DatabaseAdaptor(Class<T> objectType, Class<L> listType, int unused)
 	{
 		fObjectType = objectType;
 		fListType = listType;
-//		fKeyFieldName = keyFieldName;
 
 		try
 		{
@@ -46,27 +63,154 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 		}
 		catch(NoSuchMethodException e)
 		{
-			//TODO: add message to logger
+			Logger.logErr(this, "ctor", e);
+			return;
 		}
-
-		//Class.forName("com.microsoft.jdbc.sqlserver.SQLServerDriver");
-		//fSqlConnection = DriverManager.getConnection("jdbc:microsoft:sqlserver://DAVIDSON03\\INETVOD","sa","");
 
 		String name = objectType.getName();
 		String[] nameParts = name.split("\\.");
 		fObjectName = nameParts[nameParts.length - 1];
 
-		fGetStoredProcedure = buildProcName(fObjectName + "_Get", 1);
-		fInsertStoredProcedure =buildProcName(fObjectName + "_Insert", numFields);
-		fUpdateStoredProcedure = buildProcName(fObjectName + "_Update", numFields);
-		fDeleteStoredProcedure = buildProcName(fObjectName + "_Delete", 1);
+		initialize();
+		int numFields = fFields.size();
+
+		fGetStoredProcedure = buildProcName(fObjectName + GetProcedureSuffix, 1);
+		fInsertStoredProcedure = buildProcName(fObjectName + InsertProcedureSuffix, numFields);
+		fUpdateStoredProcedure = buildProcName(fObjectName + UpdateProcedureSuffix, numFields);
+		fDeleteStoredProcedure = buildProcName(fObjectName + DeleteProcedureSuffix, 1);
 	}
 
-	public Connection getConnection() throws Exception
+	private void initialize()
+	{
+		try
+		{
+			Connection connection = getConnection();
+
+			initFields(connection);
+			confirmProcedures(connection);
+		}
+		catch(Exception e)
+		{
+			Logger.logErr(this, "ctor", e);
+		}
+	}
+
+	private void initFields(Connection connection)
+	{
+		try
+		{
+			ResultSet resultSet;
+			String fieldName;
+			int fieldPos;
+			int fieldSqlType;
+			int fieldSqlSize;
+
+			fFields = new HashMap<String, DatabaseField>();
+
+			resultSet = connection.getMetaData().getColumns(DatabaseName, SchemaName, fObjectName, null);
+			while(resultSet.next())
+			{
+				fieldName = resultSet.getString(MetaDataTableColumnName);
+				fieldPos = resultSet.getInt(MetaDataTableColumnPos);
+				fieldSqlType = resultSet.getInt(MetaDataTableColumnSqlType);
+				fieldSqlSize = resultSet.getInt(MetaDataTableColumnSqlSize);
+
+				fFields.put(fieldName, new DatabaseField(fieldName, fieldPos, fieldSqlType, fieldSqlSize));
+			}
+		}
+		catch(Exception e)
+		{
+			Logger.logErr(this, "initFields", e);
+		}
+	}
+
+	private void confirmProcedures(Connection connection)
+	{
+		try
+		{
+			ResultSet resultSet;
+			String procedureName;
+			String procedureNameMatch = fObjectName + "%";
+			boolean allFields;
+
+			//Logger.logInfo(this, "confirmProcedures", String.format("Confirming table(%s)", fObjectName));	//TODO: convert to logDebug
+
+			resultSet = connection.getMetaData().getProcedureColumns(DatabaseName, SchemaName, procedureNameMatch,
+				"@RETURN_VALUE");
+			procedureNameMatch = fObjectName + "_";		// for search '_' is wildcard, so must manually match against '_'
+			while(resultSet.next())
+			{
+				procedureName = resultSet.getString(MetaDataProcedureName);
+				if(procedureName.startsWith(procedureNameMatch))
+				{
+					//Logger.logInfo(this, "confirmProcedures", String.format("Confirming procedure(%s)", procedureName));	//TODO: convert to logDebug
+
+					allFields = (procedureName.endsWith(InsertProcedureSuffix)
+						|| procedureName.endsWith(UpdateProcedureSuffix));
+					confirmProcedureParms(connection, procedureName, allFields);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			Logger.logErr(this, "confirmProcedureParms", e);
+		}
+	}
+
+	private void confirmProcedureParms(Connection connection, String procedureName, boolean allFields)
+	{
+		try
+		{
+			ResultSet resultSet;
+			DatabaseField databaseField;
+			String fieldName;
+			int fieldPos = 0;
+			int fieldSqlType;
+			int fieldSqlSize;
+
+			resultSet = connection.getMetaData().getProcedureColumns(DatabaseName, SchemaName, procedureName, null);
+			while(resultSet.next())
+			{
+				fieldName = resultSet.getString(MetaDataProcedureColumnName).replaceAll("@", "");
+				fieldSqlType = resultSet.getInt(MetaDataProcedureColumnSqlType);
+				fieldSqlSize = resultSet.getInt(MetaDataProcedureColumnSqlSize);
+
+				if("RETURN_VALUE".equals(fieldName))
+					continue;
+
+				databaseField = fFields.get(fieldName);
+
+				if(allFields)
+				{
+					// if this case, databaseField should not be null
+
+					fieldPos++;
+					if(fieldPos != databaseField.Position)
+						Logger.logWarn(this, "confirmProcedureParms", String.format("Database field(%s) position mismatch(%d/%d) for procedure(%s)",
+							fieldName, fieldPos, databaseField.Position, procedureName));
+				}
+				else if(databaseField == null)
+					continue;
+
+				if(fieldSqlType != databaseField.SqlType)
+					Logger.logWarn(this, "confirmProcedureParms", String.format("Database field(%s) sqlType mismatch(%d/%d) for procedure(%s)",
+						fieldName, fieldSqlType, databaseField.SqlType, procedureName));
+				if(fieldSqlSize != databaseField.SqlSize)
+					Logger.logWarn(this, "confirmProcedureParms", String.format("Database field(%s) sqlSize mismatch(%d/%d) for procedure(%s)",
+						fieldName, fieldSqlSize, databaseField.SqlSize, procedureName));
+			}
+		}
+		catch(Exception e)
+		{
+			Logger.logErr(this, "confirmProcedureParms", e);
+		}
+	}
+
+	private Connection getConnection() throws Exception
 	{
 		Class.forName("com.microsoft.jdbc.sqlserver.SQLServerDriver");
 		Connection conn = DriverManager.getConnection("jdbc:microsoft:sqlserver://localhost","sa","st&r3uc");
-		conn.setCatalog("iNetVOD");
+		conn.setCatalog(DatabaseName);
 		return conn;
 	}
 
@@ -248,8 +392,9 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			else
 				statement = connection.prepareStatement(fUpdateStoredProcedure);
 
-			writer = new DatabaseFieldWriter(statement);
+			writer = new DatabaseFieldWriter(statement, fFields);
 			databaseObject.writeTo(writer);
+			writer.close();
 
 			int result = statement.executeUpdate();
 			if(result != 1)
@@ -300,7 +445,8 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 
 		connection = getConnection();
 		//resultSet = connection.getMetaData().getSchemas();
-		resultSet = connection.getMetaData().getProcedureColumns("iNetVOD", "dbo", null, null);
+		resultSet = connection.getMetaData().getProcedureColumns("iNetVOD", "dbo", fObjectName + "_Insert", null);
+		//resultSet = connection.getMetaData().getColumns(DatabaseName, SchemaName, fObjectName, null);
 		while(resultSet.next())
 		{
 			for(int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++)

@@ -8,7 +8,6 @@ import java.lang.reflect.Constructor;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import com.inetvod.common.core.DataID;
@@ -17,23 +16,22 @@ import com.inetvod.common.core.Readable;
 
 public class DatabaseFieldReader extends DataReader
 {
-	protected ResultSet fResultSet;
-	protected List fFieldNamePrefixList = new ArrayList();
+	private ResultSet fResultSet;
+	private List<String> fFieldNamePrefixList = new ArrayList<String>();
 
 	public DatabaseFieldReader(ResultSet resultSet)
 	{
 		fResultSet = resultSet;
 	}
 
-	protected String buildFullFieldName(String fieldName)
+	private String buildFullFieldName(String fieldName)
 	{
 		if(fFieldNamePrefixList.size() == 0)
 			return fieldName;
 
 		StringBuffer sb = new StringBuffer();
-		Iterator iter = fFieldNamePrefixList.iterator();
-		while(iter.hasNext())
-			sb.append((String)iter.next());
+		for(String namePrefix : fFieldNamePrefixList)
+			sb.append(namePrefix);
 		sb.append(fieldName);
 
 		return sb.toString();
@@ -186,6 +184,8 @@ public class DatabaseFieldReader extends DataReader
 	 */
 	public Readable readObject(String fieldName, Constructor ctorDataReader) throws Exception
 	{
+		//TODO: using the DatabaseAdaptor.fFields, test of all field staring if fieldName_ are null, if so, return null object.
+
 		fFieldNamePrefixList.add(fieldName + "_");
 		Readable readable = (Readable)ctorDataReader.newInstance(new Object[] { this });
 		fFieldNamePrefixList.remove(fFieldNamePrefixList.size() - 1);
