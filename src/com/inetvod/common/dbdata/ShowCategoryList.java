@@ -8,6 +8,12 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.inetvod.common.data.CategoryID;
+import com.inetvod.common.data.CategoryIDList;
+import com.inetvod.common.data.MemberID;
+import com.inetvod.common.data.ShowCategoryID;
+import com.inetvod.common.data.ShowID;
+
 public class ShowCategoryList extends ArrayList<ShowCategory>
 {
 	/* Constuction Methods */

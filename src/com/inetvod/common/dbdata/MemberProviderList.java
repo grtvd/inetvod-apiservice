@@ -7,6 +7,8 @@ package com.inetvod.common.dbdata;
 import java.sql.Types;
 import java.util.ArrayList;
 
+import com.inetvod.common.data.MemberID;
+
 public class MemberProviderList extends ArrayList<MemberProvider>
 {
 	/* Constuction Methods */

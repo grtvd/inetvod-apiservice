@@ -6,9 +6,9 @@ package com.inetvod.providerClient.request;
 
 import com.inetvod.common.core.DataWriter;
 import com.inetvod.common.core.Writeable;
-import com.inetvod.common.dbdata.ShowID;
-import com.inetvod.common.dbdata.ProviderShowID;
-import com.inetvod.common.dbdata.ShowFormat;
+import com.inetvod.common.data.ProviderShowID;
+import com.inetvod.common.data.ShowFormat;
+import com.inetvod.common.data.ShowID;
 
 public class CheckShowAvailRqst implements Writeable
 {

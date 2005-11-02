@@ -1,11 +1,10 @@
+/**
+ * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Confidential and Proprietary
+ */
 package com.inetvod.common.dbdata;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Bob
- * Date: Jan 16, 2004
- * Time: 11:31:16 AM
- *
  * This exception should be used when searching for data is not expected to fail.
  * As the condition when searching via a primary key.
  */

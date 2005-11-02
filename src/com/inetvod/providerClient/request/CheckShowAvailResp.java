@@ -6,8 +6,8 @@ package com.inetvod.providerClient.request;
 
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.Readable;
-import com.inetvod.common.dbdata.ShowCost;
-import com.inetvod.common.dbdata.ShowCostList;
+import com.inetvod.common.data.ShowCost;
+import com.inetvod.common.data.ShowCostList;
 
 public class CheckShowAvailResp implements Readable
 {

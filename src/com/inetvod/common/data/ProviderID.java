@@ -2,19 +2,19 @@
  * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
-package com.inetvod.common.dbdata;
+package com.inetvod.common.data;
 
 import java.lang.reflect.Constructor;
 
 import com.inetvod.common.core.CtorUtil;
 import com.inetvod.common.core.StringID;
 
-public class ManufacturerID extends StringID
+public class ProviderID extends StringID
 {
-	public static final Constructor<ManufacturerID> CtorString = CtorUtil.getCtorString(ManufacturerID.class);
+	public static final Constructor<ProviderID> CtorString = CtorUtil.getCtorString(ProviderID.class);
 	public static final int MaxLength = 32;
 
-	public ManufacturerID(String value)
+	public ProviderID(String value)
 	{
 		super(value);
 	}

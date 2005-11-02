@@ -10,10 +10,10 @@ import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
 import com.inetvod.common.core.Readable;
 import com.inetvod.common.core.Writeable;
-import com.inetvod.common.dbdata.ShowCost;
-import com.inetvod.common.dbdata.ShowCostList;
-import com.inetvod.common.dbdata.ShowFormat;
-import com.inetvod.common.dbdata.ShowFormatList;
+import com.inetvod.common.data.ShowCost;
+import com.inetvod.common.data.ShowCostList;
+import com.inetvod.common.data.ShowFormat;
+import com.inetvod.common.data.ShowFormatList;
 
 public class ShowRental implements Readable, Writeable
 {

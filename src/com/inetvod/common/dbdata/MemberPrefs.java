@@ -7,6 +7,8 @@ package com.inetvod.common.dbdata;
 import com.inetvod.common.core.DataExists;
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
+import com.inetvod.common.data.IncludeAdult;
+import com.inetvod.common.data.MemberID;
 
 public class MemberPrefs extends DatabaseObject
 {

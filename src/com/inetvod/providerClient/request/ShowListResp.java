@@ -6,8 +6,8 @@ package com.inetvod.providerClient.request;
 
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.Readable;
-import com.inetvod.common.dbdata.ShowID;
-import com.inetvod.common.dbdata.ShowIDList;
+import com.inetvod.common.data.ShowID;
+import com.inetvod.common.data.ShowIDList;
 
 public class ShowListResp implements Readable
 {

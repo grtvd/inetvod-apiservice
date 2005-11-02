@@ -4,17 +4,17 @@
  */
 package com.inetvod.providerClient;
 
+import com.inetvod.common.data.ProviderShowID;
+import com.inetvod.common.data.ShowCostList;
+import com.inetvod.common.data.ShowFormat;
+import com.inetvod.common.data.ShowIDList;
 import com.inetvod.common.dbdata.Provider;
-import com.inetvod.common.dbdata.ShowIDList;
-import com.inetvod.common.dbdata.ShowCostList;
-import com.inetvod.common.dbdata.ProviderShowID;
-import com.inetvod.common.dbdata.ShowFormat;
-import com.inetvod.providerClient.request.DataRequestor;
-import com.inetvod.providerClient.request.ShowListResp;
-import com.inetvod.providerClient.request.ShowDetailRqst;
-import com.inetvod.providerClient.request.ShowDetailResp;
-import com.inetvod.providerClient.request.CheckShowAvailRqst;
 import com.inetvod.providerClient.request.CheckShowAvailResp;
+import com.inetvod.providerClient.request.CheckShowAvailRqst;
+import com.inetvod.providerClient.request.DataRequestor;
+import com.inetvod.providerClient.request.ShowDetailResp;
+import com.inetvod.providerClient.request.ShowDetailRqst;
+import com.inetvod.providerClient.request.ShowListResp;
 import com.inetvod.providerClient.rqdata.ProviderStatusCode;
 import com.inetvod.providerClient.rqdata.ShowDetailList;
 

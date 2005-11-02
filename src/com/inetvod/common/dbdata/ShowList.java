@@ -4,9 +4,16 @@
  */
 package com.inetvod.common.dbdata;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.sql.Types;
+
+import com.inetvod.common.data.CategoryID;
+import com.inetvod.common.data.CategoryIDList;
+import com.inetvod.common.data.MemberID;
+import com.inetvod.common.data.ProviderID;
+import com.inetvod.common.data.ProviderIDList;
+import com.inetvod.common.data.ShowID;
 
 public class ShowList extends ArrayList<Show>
 {

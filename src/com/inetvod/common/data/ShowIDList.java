@@ -2,15 +2,14 @@
  * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
-package com.inetvod.common.dbdata;
+package com.inetvod.common.data;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import com.inetvod.common.core.CtorUtil;
 
-public class ShowCostList extends ArrayList<ShowCost>
+public class ShowIDList extends ArrayList<ShowID>
 {
-	/* Constants */
-	public static final Constructor<ShowCostList> Ctor = CtorUtil.getCtorDefault(ShowCostList.class);
+	public static final Constructor<ShowIDList> Ctor = CtorUtil.getCtorDefault(ShowIDList.class);
 }

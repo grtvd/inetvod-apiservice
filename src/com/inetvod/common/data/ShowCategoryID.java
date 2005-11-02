@@ -2,7 +2,7 @@
  * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
-package com.inetvod.common.dbdata;
+package com.inetvod.common.data;
 
 import java.lang.reflect.Constructor;
 import java.util.UUID;
@@ -10,18 +10,18 @@ import java.util.UUID;
 import com.inetvod.common.core.CtorUtil;
 import com.inetvod.common.core.StringID;
 
-public class ShowProviderID extends StringID
+public class ShowCategoryID extends StringID
 {
-	public static final Constructor<ShowProviderID> CtorString = CtorUtil.getCtorString(ShowProviderID.class);
+	public static final Constructor<ShowCategoryID> CtorString = CtorUtil.getCtorString(ShowCategoryID.class);
 	public static final int MaxLength = 64;
 
-	public ShowProviderID(String value)
+	public ShowCategoryID(String value)
 	{
 		super(value);
 	}
 
-	public static ShowProviderID newInstance()
+	public static ShowCategoryID newInstance()
 	{
-		return new ShowProviderID(UUID.randomUUID().toString());
+		return new ShowCategoryID(UUID.randomUUID().toString());
 	}
 }

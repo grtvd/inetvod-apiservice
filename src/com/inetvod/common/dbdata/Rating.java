@@ -4,16 +4,17 @@
  */
 package com.inetvod.common.dbdata;
 
+import com.inetvod.common.core.DataExists;
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
-import com.inetvod.common.core.DataExists;
+import com.inetvod.common.data.RatingID;
 
 public class Rating extends DatabaseObject
 {
 	/* Constants */
 	private static final int NameMaxLength = 64;
 
- 	/* Properties */
+	 /* Properties */
 	private RatingID fRatingID;
 	private String fName;
 

@@ -5,17 +5,17 @@
 package com.inetvod.providerClient.rqdata;
 
 import java.lang.reflect.Constructor;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.LanguageID;
 import com.inetvod.common.core.Readable;
-import com.inetvod.common.dbdata.CategoryID;
-import com.inetvod.common.dbdata.CategoryIDList;
-import com.inetvod.common.dbdata.ProviderShowID;
-import com.inetvod.common.dbdata.RatingID;
+import com.inetvod.common.data.CategoryID;
+import com.inetvod.common.data.CategoryIDList;
+import com.inetvod.common.data.ProviderShowID;
+import com.inetvod.common.data.RatingID;
 import com.inetvod.common.dbdata.Show;
 
 public class ShowDetail implements Readable

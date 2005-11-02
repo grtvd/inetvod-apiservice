@@ -9,6 +9,9 @@ import java.sql.Types;
 import com.inetvod.common.core.DataExists;
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
+import com.inetvod.common.data.MemberID;
+import com.inetvod.common.data.MemberProviderID;
+import com.inetvod.common.data.ProviderID;
 
 public class MemberProvider extends DatabaseObject
 {

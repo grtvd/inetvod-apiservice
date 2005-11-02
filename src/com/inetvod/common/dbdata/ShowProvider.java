@@ -9,6 +9,11 @@ import java.sql.Types;
 import com.inetvod.common.core.DataExists;
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
+import com.inetvod.common.data.ProviderID;
+import com.inetvod.common.data.ProviderShowID;
+import com.inetvod.common.data.ShowCost;
+import com.inetvod.common.data.ShowID;
+import com.inetvod.common.data.ShowProviderID;
 
 public class ShowProvider extends DatabaseObject
 {
