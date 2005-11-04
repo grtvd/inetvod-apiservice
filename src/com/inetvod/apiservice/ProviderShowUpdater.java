@@ -12,7 +12,6 @@ import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.ShowID;
 import com.inetvod.common.data.ShowIDList;
-import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.Show;
 import com.inetvod.common.dbdata.ShowCategory;
 import com.inetvod.common.dbdata.ShowCategoryList;
@@ -42,8 +41,7 @@ public class ProviderShowUpdater
 	public void doUpdate(ProviderID providerID) throws Exception
 	{
 		final String METHOD_NAME = "doUpdate";
-		Provider provider = Provider.get(providerID);
-		ProviderRequestor providerRequestor = ProviderRequestor.newInstance(provider);
+		ProviderRequestor providerRequestor = ProviderRequestor.newInstance(providerID);
 
 		//TODO: set all ShowProvider Status of Available to Confirming
 

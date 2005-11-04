@@ -147,4 +147,9 @@ public class DataRequestor
 	{
 		return (CheckShowAvailResp)sendRequest(checkShowAvailRqst, fRequestTimeoutMillis);
 	}
+
+	public RentShowResp rentShow(RentShowRqst rentShowRqst)
+	{
+		return (RentShowResp)sendRequest(rentShowRqst, fRequestTimeoutMillis);
+	}
 }
