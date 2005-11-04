@@ -26,6 +26,14 @@ public class MediaEncoding
 		return fValue;
 	}
 
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof MediaEncoding))
+			return false;
+
+		return fValue.equals(((MediaEncoding)obj).fValue);
+	}
+
 	public static MediaEncoding convertFromString(String value)
 	{
 		if((value == null) || (value.length() == 0))

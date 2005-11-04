@@ -26,6 +26,14 @@ public class MediaContainer
 		return fValue;
 	}
 
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof MediaContainer))
+			return false;
+
+		return fValue.equals(((MediaContainer)obj).fValue);
+	}
+
 	public static MediaContainer convertFromString(String value)
 	{
 		if((value == null) || (value.length() == 0))

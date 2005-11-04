@@ -11,6 +11,7 @@ import com.inetvod.common.core.DataWriter;
 import com.inetvod.common.core.Money;
 import com.inetvod.common.core.Readable;
 import com.inetvod.common.core.Writeable;
+import com.inetvod.common.core.CompUtil;
 
 public class ShowCost implements Readable, Writeable
 {
@@ -18,11 +19,11 @@ public class ShowCost implements Readable, Writeable
 	public static Constructor<ShowCost> CtorDataReader = DataReader.getCtor(ShowCost.class);
 	public static final int DescriptionMaxLength = 32;
 
-	/* Properties */
-	protected ShowCostType fShowCostType;
-	protected Money fCost;
-	protected String fCostDisplay;
-	protected Short fRentalHours;
+	/* Fields */
+	private ShowCostType fShowCostType;
+	private Money fCost;
+	private String fCostDisplay;
+	private Short fRentalHours;
 
 	/* Getters and Setters */
 	public ShowCostType getShowCostType() { return fShowCostType; }
@@ -32,12 +33,12 @@ public class ShowCost implements Readable, Writeable
 	public void setCost(Money cost) { fCost = cost; }
 
 	public String getCostDisplay() { return fCostDisplay; }
-	public void setCostDisplay(String description) { fCostDisplay = description; }
+	public void setCostDisplay(String costDisplay) { fCostDisplay = costDisplay; }
 
 	public Short getRentalHours() { return fRentalHours; }
 	public void setRentalHours(Short rentalHours) { fRentalHours = rentalHours; }
 
-	/* Constuction Methods */
+	/* Constuction */
 	public ShowCost()
 	{
 	}
@@ -45,6 +46,20 @@ public class ShowCost implements Readable, Writeable
 	public ShowCost(DataReader reader) throws Exception
 	{
 		readFrom(reader);
+	}
+
+	/* Implementation */
+	@SuppressWarnings({"NonFinalFieldReferenceInEquals"})
+	@Override public boolean equals(Object obj)
+	{
+		if(!(obj instanceof ShowCost))
+			return false;
+		ShowCost showCost = (ShowCost)obj;
+
+		return CompUtil.areEqual(fShowCostType, showCost.fShowCostType)
+			&& CompUtil.areEqual(fCost, showCost.fCost)
+			&& CompUtil.areEqual(fCostDisplay, showCost.fCostDisplay)
+			&& CompUtil.areEqual(fRentalHours, showCost.fRentalHours);
 	}
 
 	public void readFrom(DataReader reader) throws Exception

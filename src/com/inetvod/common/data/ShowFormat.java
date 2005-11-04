@@ -10,6 +10,7 @@ import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
 import com.inetvod.common.core.Readable;
 import com.inetvod.common.core.Writeable;
+import com.inetvod.common.core.CompUtil;
 
 public class ShowFormat implements Readable, Writeable
 {
@@ -43,7 +44,7 @@ public class ShowFormat implements Readable, Writeable
 	public Short getBitRate() { return fBitRate; }
 	public void setBitRate(Short bitRate) { fBitRate = bitRate; }
 
-	/* Constuction Methods */
+	/* Constuction */
 	public ShowFormat()
 	{
 	}
@@ -54,6 +55,21 @@ public class ShowFormat implements Readable, Writeable
 	}
 
 	/* Implementation */
+	@SuppressWarnings({"NonFinalFieldReferenceInEquals"})
+	@Override public boolean equals(Object obj)
+	{
+		if(!(obj instanceof ShowFormat))
+			return false;
+		ShowFormat showFormat = (ShowFormat)obj;
+
+		return CompUtil.areEqual(fMediaEncoding, showFormat.fMediaEncoding)
+			&& CompUtil.areEqual(fMediaContainer, showFormat.fMediaContainer)
+			&& CompUtil.areEqual(fHorzResolution, showFormat.fHorzResolution)
+			&& CompUtil.areEqual(fVertResolution, showFormat.fVertResolution)
+			&& CompUtil.areEqual(fFramesPerSecond, showFormat.fFramesPerSecond)
+			&& CompUtil.areEqual(fBitRate, showFormat.fBitRate);
+	}
+
 	public void readFrom(DataReader reader) throws Exception
 	{
 		fMediaEncoding = MediaEncoding.convertFromString(reader.readString("MediaEncoding", MediaEncoding.MaxLength));
