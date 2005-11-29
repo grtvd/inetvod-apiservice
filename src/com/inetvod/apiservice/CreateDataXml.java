@@ -331,7 +331,8 @@ public class CreateDataXml
 		}
 
 		writeString("CostDisplay", showCost.getCostDisplay(), ShowCost.DescriptionMaxLength);
-		writeShort("RentalHours", showCost.getRentalHours());
+		writeShort("RentalWindowDays", showCost.getRentalWindowDays());
+		writeShort("RentalPeriodHours", showCost.getRentalPeriodHours());
 
 		writeEndElement("ShowCost");
 	}

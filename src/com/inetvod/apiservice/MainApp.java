@@ -11,6 +11,8 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 import com.inetvod.common.core.Logger;
+import com.inetvod.common.dbdata.Provider;
+import com.inetvod.common.dbdata.ProviderList;
 import org.apache.log4j.xml.DOMConfigurator;
 
 public class MainApp
@@ -57,6 +59,7 @@ public class MainApp
 		DOMConfigurator.configure(new File(properties.getProperty("log4j")).toURL());
 	}
 
+	@SuppressWarnings({"UNUSED_SYMBOL"})
 	private boolean processArgs(String[] args)
 	{
 		return true;
@@ -66,6 +69,87 @@ public class MainApp
 	{
 		Logger.logInfo(this, "doWork", "Start...");
 
+		updateAllProviders();
+
 		Logger.logInfo(this, "doWork", "Done!");
 	}
+
+	private void updateAllProviders() throws Exception
+	{
+		ProviderList providerList = ProviderList.find();
+
+		for(Provider provider : providerList)
+			ProviderShowUpdater.getThe().doUpdate(provider.getProviderID());
+	}
+
+//	private void testWork() throws Exception
+//	{
+//		ShowProvider.getDatabaseAdaptor().metaDataCheck();
+
+//		Provider.getDatabaseAdaptor();
+//		Category.getDatabaseAdaptor();
+//		Rating.getDatabaseAdaptor();
+//		Show.getDatabaseAdaptor();
+//		ShowProvider.getDatabaseAdaptor();
+//		ShowCategory.getDatabaseAdaptor();
+//		Member.getDatabaseAdaptor();
+//		MemberPrefs.getDatabaseAdaptor();
+//		MemberProvider.getDatabaseAdaptor();
+//		MemberSession.getDatabaseAdaptor();
+//		SerialNumber.getDatabaseAdaptor();
+//		RentedShow.getDatabaseAdaptor();
+
+		/**************************************************************************************************************/
+
+//		ShowID showID = new ShowID("107d3f17-6a9c-46de-b0dc-2b4757a8dd7d");
+//		ProviderID providerID = new ProviderID("moviesmovies");
+//
+//		ShowProvider showProvider = ShowProvider.findByShowIDProviderID(showID, providerID);
+//		if(showProvider != null)
+//			showProvider.delete();
+//
+//		showProvider = ShowProvider.newInstance(showID, providerID, new ProviderShowID("mf123"));
+//		ShowCost showCost = new ShowCost();
+//		showCost.setShowCostType(ShowCostType.PayPerView);
+//		showCost.setCostDisplay("$3.95");
+//		showCost.setCost(new Money(CurrencyID.USD, 3.95));
+//		showCost.setRentalHours((short)72);
+//		showProvider.setShowCost(showCost);
+//		showProvider.update();
+//
+//		showProvider = ShowProvider.findByShowIDProviderID(showID, providerID);
+//		showCost = showProvider.getShowCost();
+//		showCost.setShowCostType(ShowCostType.Free);
+//		showCost.setCostDisplay("Free");
+//		showCost.setCost(null);
+//		showProvider.update();
+
+		/**************************************************************************************************************/
+
+//		ProviderShowUpdater.getThe().doUpdate(new ProviderID("excellentvideos"));
+//		ProviderShowUpdater.getThe().doUpdate(new ProviderID("internetvideos"));
+//		ProviderShowUpdater.getThe().doUpdate(new ProviderID("mlb"));
+//		ProviderShowUpdater.getThe().doUpdate(new ProviderID("moviesmovies"));
+//		ProviderShowUpdater.getThe().doUpdate(new ProviderID("vodflicks"));
+
+//		CreateDataXml.doIt(new ProviderID("moviesmovies"));
+//		CreateDataXml.confirm(new ProviderID("moviesmovies"));
+//		CreateDataXml.doIt(new ProviderID("excellentvideos"));
+//		CreateDataXml.confirm(new ProviderID("excellentvideos"));
+//		CreateDataXml.doIt(new ProviderID("internetvideos"));
+//		CreateDataXml.confirm(new ProviderID("internetvideos"));
+//		CreateDataXml.doIt(new ProviderID("vodflicks"));
+//		CreateDataXml.confirm(new ProviderID("vodflicks"));
+
+//		Provider provider = Provider.get(new ProviderID("moviesmovies"));
+//		ProviderRequestor providerRequestor = ProviderRequestor.newInstance(provider);
+//		if(providerRequestor.pingServer())
+//		{
+//			ShowIDList showIDList = providerRequestor.showList();
+//			ShowDetailList showDetailList = providerRequestor.showDetail(showIDList);
+//
+//		}
+//		else
+//			Logger.logErr(this, "doWork", "Can't ping server", null);
+//	}
 }

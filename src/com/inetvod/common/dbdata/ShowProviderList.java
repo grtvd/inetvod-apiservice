@@ -22,6 +22,15 @@ public class ShowProviderList extends ArrayList<ShowProvider>
 	{
 	}
 
+	public static ShowProviderList findByShowID(ShowID showID) throws Exception
+	{
+		DatabaseProcParam params[] = new DatabaseProcParam[1];
+
+		params[0] = new DatabaseProcParam(Types.VARCHAR, showID.toString());
+
+		return ShowProvider.getDatabaseAdaptor().selectManyByProc("ShowProvider_GetByShowID", params);
+	}
+
 	public static ShowProviderList findByShowName(String partialName) throws Exception
 	{
 		DatabaseProcParam params[] = new DatabaseProcParam[1];
