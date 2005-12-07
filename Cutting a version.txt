@@ -1,0 +1,28 @@
+* apiservice
+
+- In IDEA
+	- Open apiservice.ipr
+	- Run "Build -> Build Jars..."
+	- Will create "C:\projects\iNetVOD\apiservice\trunk\build\apiservice.jar"
+	- Close IDEA
+
+- Comfirm files in Build folder
+	- Check for current versions in "C:\projects\iNetVOD\apiservice\trunk\build".
+		- apiservice.xml
+		- log4j.xml
+		- libs
+
+- Commit all changed files, use label: "apiservice: Cut version CCYY-MM-DD."
+
+- Deploy to Server
+	- Copy to local FTP, copy down from apiservice.inetvod.com.
+		- ftp://alpha.inetvod.com
+
+	- Copy files to "C:\Program Files\iNetVOD\apiservice".
+
+	- Confirm Scheduled Task
+		- Run: "C:\Program Files\Java\jre1.5.0_06\bin\java.exe" -jar "C:\Program Files\iNetVOD\apiservice\apiservice.jar"
+		- Start in: "C:\Program Files\iNetVOD\apiservice"
+		- Run as: APISERVER\inetvod
+		- At 4:00 AM every day
+
