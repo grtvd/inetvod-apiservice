@@ -97,30 +97,52 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 
 	private void initFields(Connection connection)
 	{
+		fFields = new HashMap<String, DatabaseField>();
+
+		getFieldsFromUpdateProcedures(connection, true);
+		if(fFields.size() == 0)
+			getFieldsFromUpdateProcedures(connection, false);
+
+		if(fFields.size() == 0)
+			Logger.logWarn(this, "initFields", String.format("No write procedures found for table(%s)", fObjectName));	//TODO: convert to logDebug
+	}
+
+	private void getFieldsFromUpdateProcedures(Connection connection, boolean useInsert)
+	{
+		String procedureName = fObjectName + (useInsert ? InsertProcedureSuffix : UpdateProcedureSuffix);
+		ResultSet resultSet;
+		String fieldName;
+		int fieldPos;
+		int fieldSqlType;
+		int fieldSqlSize;
+
 		try
 		{
-			ResultSet resultSet;
-			String fieldName;
-			int fieldPos;
-			int fieldSqlType;
-			int fieldSqlSize;
+			if(fFields.size() > 0)
+				throw new Exception(String.format("Table (%s) already initialized", fObjectName));
 
-			fFields = new HashMap<String, DatabaseField>();
+			//Logger.logInfo(this, "getFieldsFromUpdateProcedures", String.format("Confirming table (%s) via (%s)", fObjectName, procedureName));	//TODO: convert to logDebug
 
-			resultSet = connection.getMetaData().getColumns(DatabaseName, SchemaName, fObjectName, null);
+			fieldPos = 0;
+			resultSet = connection.getMetaData().getProcedureColumns(DatabaseName, SchemaName, procedureName, null);
 			while(resultSet.next())
 			{
-				fieldName = resultSet.getString(MetaDataTableColumnName);
-				fieldPos = resultSet.getInt(MetaDataTableColumnPos);
-				fieldSqlType = resultSet.getInt(MetaDataTableColumnSqlType);
-				fieldSqlSize = resultSet.getInt(MetaDataTableColumnSqlSize);
+				fieldName = resultSet.getString(MetaDataProcedureColumnName).replaceAll("@", "");
+
+				if("RETURN_VALUE".equals(fieldName))
+					continue;
+
+				fieldSqlType = resultSet.getInt(MetaDataProcedureColumnSqlType);
+				fieldSqlSize = resultSet.getInt(MetaDataProcedureColumnSqlSize);
+				fieldPos++;
+				//Logger.logInfo(this, "getFieldsFromUpdateProcedures", String.format("Field: %s/%d/%d/%d", fieldName, fieldPos, fieldSqlType, fieldSqlSize));
 
 				fFields.put(fieldName, new DatabaseField(fieldName, fieldPos, fieldSqlType, fieldSqlSize));
 			}
 		}
 		catch(Exception e)
 		{
-			Logger.logErr(this, "initFields", e);
+			Logger.logErr(this, "getFieldsFromUpdateProcedures", e);
 		}
 	}
 
@@ -132,6 +154,9 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			String procedureName;
 			String procedureNameMatch = fObjectName + "%";
 			boolean allFields;
+
+			if(fFields.size() == 0)
+				return;
 
 			//Logger.logInfo(this, "confirmProcedures", String.format("Confirming table(%s)", fObjectName));	//TODO: convert to logDebug
 
@@ -174,6 +199,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 				fieldName = resultSet.getString(MetaDataProcedureColumnName).replaceAll("@", "");
 				fieldSqlType = resultSet.getInt(MetaDataProcedureColumnSqlType);
 				fieldSqlSize = resultSet.getInt(MetaDataProcedureColumnSqlSize);
+				//Logger.logInfo(this, "confirmProcedureParms", String.format("Field: %s/%d/%d", fieldName, fieldSqlType, fieldSqlSize));
 
 				if("RETURN_VALUE".equals(fieldName))
 					continue;
