@@ -11,8 +11,19 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 import com.inetvod.common.core.Logger;
+import com.inetvod.common.dbdata.Category;
+import com.inetvod.common.dbdata.Member;
+import com.inetvod.common.dbdata.MemberPrefs;
+import com.inetvod.common.dbdata.MemberProvider;
+import com.inetvod.common.dbdata.MemberSession;
 import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderList;
+import com.inetvod.common.dbdata.Rating;
+import com.inetvod.common.dbdata.RentedShow;
+import com.inetvod.common.dbdata.SerialNumber;
+import com.inetvod.common.dbdata.Show;
+import com.inetvod.common.dbdata.ShowCategory;
+import com.inetvod.common.dbdata.ShowProvider;
 import org.apache.log4j.xml.DOMConfigurator;
 
 public class MainApp
@@ -57,6 +68,20 @@ public class MainApp
 		}
 
 		DOMConfigurator.configure(new File(properties.getProperty("log4j")).toURL());
+
+		// Preload DatabaseAdaptors
+		Provider.getDatabaseAdaptor();
+		Category.getDatabaseAdaptor();
+		Rating.getDatabaseAdaptor();
+		Member.getDatabaseAdaptor();
+		MemberPrefs.getDatabaseAdaptor();
+		SerialNumber.getDatabaseAdaptor();
+		MemberSession.getDatabaseAdaptor();
+		MemberProvider.getDatabaseAdaptor();
+		Show.getDatabaseAdaptor();
+		ShowProvider.getDatabaseAdaptor();
+		ShowCategory.getDatabaseAdaptor();
+		RentedShow.getDatabaseAdaptor();
 	}
 
 	@SuppressWarnings({"UNUSED_SYMBOL"})
@@ -85,19 +110,6 @@ public class MainApp
 //	private void testWork() throws Exception
 //	{
 //		ShowProvider.getDatabaseAdaptor().metaDataCheck();
-
-//		Provider.getDatabaseAdaptor();
-//		Category.getDatabaseAdaptor();
-//		Rating.getDatabaseAdaptor();
-//		Show.getDatabaseAdaptor();
-//		ShowProvider.getDatabaseAdaptor();
-//		ShowCategory.getDatabaseAdaptor();
-//		Member.getDatabaseAdaptor();
-//		MemberPrefs.getDatabaseAdaptor();
-//		MemberProvider.getDatabaseAdaptor();
-//		MemberSession.getDatabaseAdaptor();
-//		SerialNumber.getDatabaseAdaptor();
-//		RentedShow.getDatabaseAdaptor();
 
 		/**************************************************************************************************************/
 

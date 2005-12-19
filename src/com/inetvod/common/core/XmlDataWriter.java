@@ -65,7 +65,7 @@ public class XmlDataWriter extends DataWriter
 		{
 			newVal = newVal.replaceAll("&", "&amp;");
 			newVal = newVal.replaceAll("<", "&lt;");
-			newVal = newVal.replaceAll(">", "&lt;");
+			newVal = newVal.replaceAll(">", "&gt;");
 		}
 
 		return newVal;
