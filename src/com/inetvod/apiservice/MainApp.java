@@ -142,6 +142,7 @@ public class MainApp
 //		ProviderShowUpdater.getThe().doUpdate(new ProviderID("internetvideos"));
 //		ProviderShowUpdater.getThe().doUpdate(new ProviderID("mlb"));
 //		ProviderShowUpdater.getThe().doUpdate(new ProviderID("moviesmovies"));
+//		ProviderShowUpdater.getThe().doUpdate(new ProviderID("rocketboom"));
 //		ProviderShowUpdater.getThe().doUpdate(new ProviderID("vodflicks"));
 
 //		CreateDataXml.doIt(new ProviderID("moviesmovies"));
