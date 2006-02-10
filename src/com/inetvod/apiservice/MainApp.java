@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.apiservice;
@@ -10,9 +10,12 @@ import java.io.IOException;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
+import org.apache.log4j.xml.DOMConfigurator;
+
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.dbdata.Category;
 import com.inetvod.common.dbdata.Member;
+import com.inetvod.common.dbdata.MemberLogon;
 import com.inetvod.common.dbdata.MemberPrefs;
 import com.inetvod.common.dbdata.MemberProvider;
 import com.inetvod.common.dbdata.MemberSession;
@@ -20,11 +23,9 @@ import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderList;
 import com.inetvod.common.dbdata.Rating;
 import com.inetvod.common.dbdata.RentedShow;
-import com.inetvod.common.dbdata.SerialNumber;
 import com.inetvod.common.dbdata.Show;
 import com.inetvod.common.dbdata.ShowCategory;
 import com.inetvod.common.dbdata.ShowProvider;
-import org.apache.log4j.xml.DOMConfigurator;
 
 public class MainApp
 {
@@ -74,8 +75,8 @@ public class MainApp
 		Category.getDatabaseAdaptor();
 		Rating.getDatabaseAdaptor();
 		Member.getDatabaseAdaptor();
+		MemberLogon.getDatabaseAdaptor();
 		MemberPrefs.getDatabaseAdaptor();
-		SerialNumber.getDatabaseAdaptor();
 		MemberSession.getDatabaseAdaptor();
 		MemberProvider.getDatabaseAdaptor();
 		Show.getDatabaseAdaptor();
@@ -110,6 +111,48 @@ public class MainApp
 //	private void testWork() throws Exception
 //	{
 //		ShowProvider.getDatabaseAdaptor().metaDataCheck();
+
+		/**************************************************************************************************************/
+
+//		Member member = Member.newInstance();
+//
+//		try
+//		{
+//			member.update();
+//
+//			MemberLogon memberLogon = MemberLogon.newInstance(member.getMemberID());
+//			memberLogon.setEmail("ROBERT@inetvod.com");
+//			memberLogon.setPassword("hope");
+//			memberLogon.setPIN("123456");
+//			memberLogon.setSecretQuestion("What's your favoriate color?");
+//			memberLogon.setSecretAnswer("black");
+//
+//			memberLogon.setTermsAcceptedOn(new Date());
+//			memberLogon.setTermsAcceptedVersion("20060115");
+//			memberLogon.update();
+//
+//			memberLogon = null;
+//			memberLogon = MemberLogon.get(member.getMemberID());
+//			int logonID = memberLogon.getLogonID();
+//
+//			memberLogon = null;
+//			memberLogon = MemberLogon.findByLogonIDPIN(logonID, "123456");
+//			memberLogon.setLogonFailedAt(new Date());
+//			memberLogon.setLogonFailedCount(1);
+//			memberLogon.setLogonDisabled(true);
+//			memberLogon.update();
+//
+//			memberLogon = null;
+//			memberLogon = MemberLogon.findByEmail("robert@INETVOD.com");
+//			memberLogon = null;
+//			memberLogon = MemberLogon.findByEmailPassword("robert@INETVOD.com", null);
+//			memberLogon = MemberLogon.findByEmailPassword("robert@INETVOD.com", "hope");
+//			memberLogon = null;
+//		}
+//		finally
+//		{
+//			member.delete();
+//		}
 
 		/**************************************************************************************************************/
 

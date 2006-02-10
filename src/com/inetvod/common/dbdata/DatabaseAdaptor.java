@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -24,10 +24,10 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 {
 	private static final String DatabaseName = "iNetVOD";	//TODO: move to configuration
 	private static final String SchemaName = "dbo";	//TODO: move to configuration
-	private static final int MetaDataTableColumnName = 4;
-	private static final int MetaDataTableColumnSqlType = 5;
-	private static final int MetaDataTableColumnSqlSize = 7;
-	private static final int MetaDataTableColumnPos = 17;
+	//private static final int MetaDataTableColumnName = 4;
+	//private static final int MetaDataTableColumnSqlType = 5;
+	//private static final int MetaDataTableColumnSqlSize = 7;
+	//private static final int MetaDataTableColumnPos = 17;
 	private static final int MetaDataProcedureName = 3;
 	private static final int MetaDataProcedureColumnName = 4;
 	private static final int MetaDataProcedureColumnSqlType = 6;
@@ -38,9 +38,11 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 	private static final String UpdateProcedureSuffix = "_Update";
 	private static final String DeleteProcedureSuffix = "_Delete";
 
+	@SuppressWarnings({"FieldCanBeLocal"})
 	private Class<T> fObjectType;
 	private String fObjectName;
 	private Constructor<T> fObjectCtor;
+	@SuppressWarnings({"FieldCanBeLocal"})
 	private Class<L> fListType;
 	private Constructor<L> fListCtor;
 
@@ -58,8 +60,8 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 
 		try
 		{
-			fObjectCtor = fObjectType.getConstructor(new Class[] { DataReader.class } );
-			fListCtor = fListType.getConstructor(new Class[]{});
+			fObjectCtor = fObjectType.getConstructor(DataReader.class);
+			fListCtor = fListType.getConstructor();
 		}
 		catch(NoSuchMethodException e)
 		{
@@ -315,7 +317,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 
 	public L selectManyByProc(String prodecure, DatabaseProcParam[] params) throws Exception
 	{
-		L newList = fListCtor.newInstance(new Object[] {});
+		L newList = fListCtor.newInstance();
 		Connection connection = null;
 		CallableStatement statement = null;
 		ResultSet resultSet;
@@ -374,6 +376,8 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 					statement.setString(i + 1, (String)param.Value);
 				else if(param.SqlType == Types.SMALLINT)
 					statement.setShort(i + 1, (Short)param.Value);
+				else if(param.SqlType == Types.INTEGER)
+					statement.setInt(i + 1, (Integer)param.Value);
 				else
 					throw new IllegalArgumentException();
 			}
@@ -392,7 +396,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 		try
 		{
 			DatabaseFieldReader reader = new DatabaseFieldReader(resultSet);
-			T newObject = fObjectCtor.newInstance(new Object[] { reader });
+			T newObject = fObjectCtor.newInstance(reader);
 			newObject.setNewRecord(false);
 			return newObject;
 		}

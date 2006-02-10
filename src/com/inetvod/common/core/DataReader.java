@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.core;
@@ -14,7 +14,7 @@ public abstract class DataReader
 	{
 		try
 		{
-			return cl.getConstructor(new Class[] { DataReader.class } );
+			return cl.getConstructor(DataReader.class);
 		}
 		catch(Exception e)
 		{
@@ -43,6 +43,22 @@ public abstract class DataReader
 	 * @return may return null
 	 */
 	public abstract Integer readInt(String fieldName) throws Exception;
+
+	/**
+	 * Read a Integer.
+	 * @param fieldName
+	 * @return will throw exception on null value
+	 * @exception Exception
+	 */
+	public int readIntValue(String fieldName) throws Exception
+	{
+		Integer value = readInt(fieldName);
+
+		if(value == null)
+			throw new Exception("value is null");
+
+		return value;
+	}
 
 	/**
 	 * Read a Float.

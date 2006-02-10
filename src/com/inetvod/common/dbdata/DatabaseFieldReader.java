@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -72,7 +72,12 @@ public class DatabaseFieldReader extends DataReader
 	 */
 	public Integer readInt(String fieldName) throws Exception
 	{
-		throw new UnsupportedOperationException("need to implement");	//TODO: need to implement
+		int value = fResultSet.getInt(buildFullFieldName(fieldName));
+
+		if(fResultSet.wasNull())
+			return null;
+
+		return value;
 	}
 
 	/**
@@ -187,7 +192,7 @@ public class DatabaseFieldReader extends DataReader
 		//TODO: using the DatabaseAdaptor.fFields, test of all field staring if fieldName_ are null, if so, return null object.
 
 		fFieldNamePrefixList.add(fieldName + "_");
-		Readable readable = (Readable)ctorDataReader.newInstance(new Object[] { this });
+		Readable readable = (Readable)ctorDataReader.newInstance(this);
 		fFieldNamePrefixList.remove(fFieldNamePrefixList.size() - 1);
 
 		return readable;
@@ -235,6 +240,6 @@ public class DatabaseFieldReader extends DataReader
 		if (data == null)
 			return null;
 
-		return ctorString.newInstance(new Object[] { data });
+		return ctorString.newInstance(data);
 	}
 }

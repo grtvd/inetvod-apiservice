@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -95,7 +95,11 @@ public class DatabaseFieldWriter extends DataWriter
 	 */
 	public void writeInt(String fieldName, Integer data) throws Exception
 	{
-		throw new UnsupportedOperationException("need to implement");	//TODO: need to implement
+		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
+		if (data != null)
+			fStatement.setInt(fieldPosition, data);
+		else
+			fStatement.setNull(fieldPosition, Types.INTEGER);
 	}
 
 	/**

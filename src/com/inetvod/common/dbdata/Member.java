@@ -1,10 +1,8 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
-
-import java.util.Date;
 
 import com.inetvod.common.core.DataExists;
 import com.inetvod.common.core.DataReader;
@@ -16,25 +14,11 @@ public class Member extends DatabaseObject
 	/* Constants */
 	private static final int FirstNameMaxLength = 32;
 	private static final int LastNameMaxLength = 32;
-	private static final int AddrStreetMaxLength = 64;
-	private static final int CityMaxLength = 64;
-	private static final int StateMaxLength = 64;
-	private static final int PostalCodeMaxLength = 32;
-	private static final int CountryMaxLength = 64;
-	private static final int PhoneMaxLength = 32;
 
 	/* Properties */
 	private MemberID fMemberID;
 	private String fFirstName;
 	private String fLastName;
-	private String fAddrStreet1;
-	private String fAddrStreet2;
-	private String fCity;
-	private String fState;
-	private String fPostalCode;
-	private String fCountry;
-	private String fPhone;
-	private Date fBirthDate;
 
 	private static DatabaseAdaptor<Member, MemberList> fDatabaseAdaptor
 		= new DatabaseAdaptor<Member, MemberList>(Member.class, MemberList.class);
@@ -48,30 +32,6 @@ public class Member extends DatabaseObject
 
 	public String getLastName() { return fLastName; }
 	public void setLastName(String lastName) { fLastName = lastName; }
-
-	public String getAddrStreet1() { return fAddrStreet1; }
-	public void setAddrStreet1(String addrStreet1) { fAddrStreet1 = addrStreet1; }
-
-	public String getAddrStreet2() { return fAddrStreet2; }
-	public void setAddrStreet2(String addrStreet2) { fAddrStreet2 = addrStreet2; }
-
-	public String getCity() { return fCity; }
-	public void setCity(String city) { fCity = city; }
-
-	public String getState() { return fState; }
-	public void setState(String state) { fState = state; }
-
-	public String getPostalCode() { return fPostalCode; }
-	public void setPostalCode(String postalCode) { fPostalCode = postalCode; }
-
-	public String getCountry() { return fCountry; }
-	public void setCountry(String country) { fCountry = country; }
-
-	public String getPhone() { return fPhone; }
-	public void setPhone(String phone) { fPhone = phone; }
-
-	public Date getBirthDate() { return fBirthDate; }
-	public void setBirthDate(Date birthDate) { fBirthDate = birthDate; }
 
 	/* Constuction Methods */
 	protected Member()
@@ -106,14 +66,6 @@ public class Member extends DatabaseObject
 		fMemberID = reader.readDataID("MemberID", MemberID.MaxLength, MemberID.CtorString);
 		fFirstName = reader.readString("FirstName", FirstNameMaxLength);
 		fLastName = reader.readString("LastName", LastNameMaxLength);
-		fAddrStreet1 = reader.readString("AddrStreet1", AddrStreetMaxLength);
-		fAddrStreet2 = reader.readString("AddrStreet2", AddrStreetMaxLength);
-		fCity = reader.readString("City", CityMaxLength);
-		fState = reader.readString("State", StateMaxLength);
-		fPostalCode = reader.readString("PostalCode", PostalCodeMaxLength);
-		fCountry = reader.readString("Country", CountryMaxLength);
-		fPhone = reader.readString("Phone", PhoneMaxLength);
-		fBirthDate = reader.readDate("BirthDate");
 	}
 
 	public void writeTo(DataWriter writer) throws Exception
@@ -121,14 +73,6 @@ public class Member extends DatabaseObject
 		writer.writeDataID("MemberID", fMemberID, MemberID.MaxLength);
 		writer.writeString("FirstName", fFirstName, FirstNameMaxLength);
 		writer.writeString("LastName", fLastName, LastNameMaxLength);
-		writer.writeString("AddrStreet1", fAddrStreet1, AddrStreetMaxLength);
-		writer.writeString("AddrStreet2", fAddrStreet2, AddrStreetMaxLength);
-		writer.writeString("City", fCity, CityMaxLength);
-		writer.writeString("State", fState, StateMaxLength);
-		writer.writeString("PostalCode", fPostalCode, PostalCodeMaxLength);
-		writer.writeString("Country", fCountry, CountryMaxLength);
-		writer.writeString("Phone", fPhone, PhoneMaxLength);
-		writer.writeDate("BirthDate", fBirthDate);
 	}
 
 	public void update() throws Exception
