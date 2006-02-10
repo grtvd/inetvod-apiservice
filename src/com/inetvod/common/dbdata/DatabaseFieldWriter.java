@@ -225,7 +225,16 @@ public class DatabaseFieldWriter extends DataWriter
 	 */
 	public void writeStringList(String fieldName, List data, int maxLength) throws Exception
 	{
-		throw new UnsupportedOperationException("writeStringList not supported for databases");
+		StringBuilder sb = new StringBuilder();
+
+		for(Object item : data)
+		{
+			if(sb.length() > 0)
+				sb.append(",");
+			sb.append(item.toString());
+		}
+
+		writeString(fieldName, sb.toString(), maxLength);
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -9,12 +9,24 @@ import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
 import com.inetvod.common.data.IncludeAdult;
 import com.inetvod.common.data.MemberID;
+import com.inetvod.common.data.RatingIDList;
+import com.inetvod.common.data.ConnectionSpeed;
+import com.inetvod.common.data.RatingID;
 
 public class MemberPrefs extends DatabaseObject
 {
-	/* Properties */
+	/* Constants */
+	private static final int AdultPINMaxLength = 16;
+	private static final int IncludeRatingIDListMaxLength = 126;
+
+	/* Fields */
 	private MemberID fMemberID;
 	private IncludeAdult fIncludeAdult;
+	private String fAdultPIN;
+	private RatingIDList fIncludeRatingIDList = new RatingIDList();
+	private boolean fIncludeDownload;
+	private boolean fIncludeStreaming;
+	private ConnectionSpeed fConnectionSpeed;
 
 	private static DatabaseAdaptor<MemberPrefs, MemberPrefsList> fDatabaseAdaptor =
 		new DatabaseAdaptor<MemberPrefs, MemberPrefsList>(MemberPrefs.class, MemberPrefsList.class);
@@ -26,8 +38,22 @@ public class MemberPrefs extends DatabaseObject
 	public IncludeAdult getIncludeAdult() { return fIncludeAdult; }
 	public void setIncludeAdult(IncludeAdult includeAdult) { fIncludeAdult = includeAdult; }
 
+	public String getAdultPIN() { return fAdultPIN; }
+	public void setAdultPIN(String adultPIN) { fAdultPIN = adultPIN; }
+
+	public RatingIDList getIncludeRatingIDList() { return fIncludeRatingIDList; }
+
+	public boolean getIncludeDownload() { return fIncludeDownload; }
+	public void setIncludeDownload(boolean includeDownload) { fIncludeDownload = includeDownload; }
+
+	public boolean getIncludeStreaming() { return fIncludeStreaming; }
+	public void setIncludeStreaming(boolean includeStreaming) { fIncludeStreaming = includeStreaming; }
+
+	public ConnectionSpeed getConnectionSpeed() { return fConnectionSpeed; }
+	public void setConnectionSpeed(ConnectionSpeed connectionSpeed) { fConnectionSpeed = connectionSpeed; }
+
 	/* Constuction Methods */
-	protected MemberPrefs(MemberID memberID)
+	private MemberPrefs(MemberID memberID)
 	{
 		super(true);
 		fMemberID = memberID;
@@ -45,7 +71,7 @@ public class MemberPrefs extends DatabaseObject
 		return new MemberPrefs(memberID);
 	}
 
-	protected static MemberPrefs load(MemberID memberID, DataExists exists) throws Exception
+	private static MemberPrefs load(MemberID memberID, DataExists exists) throws Exception
 	{
 		return fDatabaseAdaptor.selectByKey(memberID, exists);
 	}
@@ -64,12 +90,22 @@ public class MemberPrefs extends DatabaseObject
 	{
 		fMemberID = reader.readDataID("MemberID", MemberID.MaxLength, MemberID.CtorString);
 		fIncludeAdult = IncludeAdult.convertFromString(reader.readString("IncludeAdult", IncludeAdult.MaxLength));
+		fAdultPIN = reader.readString("AdultPIN", AdultPINMaxLength);
+		fIncludeRatingIDList = reader.readStringList("IncludeRatingIDList", RatingID.MaxLength, RatingIDList.Ctor, RatingID.CtorString);
+		fIncludeDownload = reader.readBooleanValue("IncludeDownload");
+		fIncludeStreaming = reader.readBooleanValue("IncludeStreaming");
+		fConnectionSpeed = ConnectionSpeed.convertFromString(reader.readString("ConnectionSpeed", ConnectionSpeed.MaxLength));
 	}
 
 	public void writeTo(DataWriter writer) throws Exception
 	{
 		writer.writeDataID("MemberID", fMemberID, MemberID.MaxLength);
 		writer.writeString("IncludeAdult", IncludeAdult.convertToString(fIncludeAdult), IncludeAdult.MaxLength);
+		writer.writeString("AdultPIN", fAdultPIN, AdultPINMaxLength);
+		writer.writeStringList("IncludeRatingIDList", fIncludeRatingIDList, IncludeRatingIDListMaxLength);
+		writer.writeBooleanValue("IncludeDownload", fIncludeDownload);
+		writer.writeBooleanValue("IncludeStreaming", fIncludeStreaming);
+		writer.writeString("ConnectionSpeed", ConnectionSpeed.convertToString(fConnectionSpeed), ConnectionSpeed.MaxLength);
 	}
 
 	public void update() throws Exception

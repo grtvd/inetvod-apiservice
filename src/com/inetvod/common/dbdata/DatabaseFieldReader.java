@@ -220,9 +220,24 @@ public class DatabaseFieldReader extends DataReader
 	 * @param itemCtorString
 	 * @return will never return null, may return an empty list
 	 */
-	public List readStringList(String fieldName, int maxLength, Constructor listCtor, Constructor itemCtorString) throws Exception
+	public <T, L extends List<T>> L readStringList(String fieldName, int maxLength, Constructor<L> listCtor,
+		Constructor<T> itemCtorString) throws Exception
 	{
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
+		L list = listCtor.newInstance();
+
+		String data = fResultSet.getString(buildFullFieldName(fieldName));
+		if ((data == null) || (data.length() == 0))
+			return list;
+
+		String[] items = data.split(",");
+
+		for(String itemStr : items)
+		{
+			T item = itemCtorString.newInstance(itemStr);
+			list.add(item);
+		}
+
+		return list;
 	}
 
 	/**
