@@ -44,7 +44,7 @@ public class RentShowRqst implements Writeable
 	/* Implementation */
 	public void writeTo(DataWriter writer) throws Exception
 	{
-		writer.writeDataID("ShowID", fShowID, ShowID.MaxLength);
+		writer.writeDataID("ShowID", fShowID, ProviderShowID.MaxLength);
 		writer.writeString("PlayerIPAddress", fPlayerIPAddress, PlayerIPAddressMaxLength);
 		writer.writeObject("ShowFormat", fShowFormat);
 		writer.writeObject("ApprovedCost", fApprovedCost);

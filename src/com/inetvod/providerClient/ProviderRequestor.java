@@ -8,7 +8,6 @@ import com.inetvod.common.data.MemberID;
 import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.ProviderShowID;
 import com.inetvod.common.data.ShowCost;
-import com.inetvod.common.data.ShowCostList;
 import com.inetvod.common.data.ShowFormat;
 import com.inetvod.common.data.ShowIDList;
 import com.inetvod.common.dbdata.MemberProvider;
@@ -16,11 +15,15 @@ import com.inetvod.common.dbdata.Provider;
 import com.inetvod.providerClient.request.CheckShowAvailResp;
 import com.inetvod.providerClient.request.CheckShowAvailRqst;
 import com.inetvod.providerClient.request.DataRequestor;
+import com.inetvod.providerClient.request.EnrollRqst;
+import com.inetvod.providerClient.request.ReleaseShowRqst;
 import com.inetvod.providerClient.request.RentShowResp;
 import com.inetvod.providerClient.request.RentShowRqst;
 import com.inetvod.providerClient.request.ShowDetailResp;
 import com.inetvod.providerClient.request.ShowDetailRqst;
 import com.inetvod.providerClient.request.ShowListResp;
+import com.inetvod.providerClient.request.WatchShowResp;
+import com.inetvod.providerClient.request.WatchShowRqst;
 import com.inetvod.providerClient.rqdata.Payment;
 import com.inetvod.providerClient.rqdata.ProviderStatusCode;
 import com.inetvod.providerClient.rqdata.ShowDetailList;
@@ -70,7 +73,8 @@ public class ProviderRequestor
 
 		MemberProvider memberProvider = MemberProvider.findByMemberIDProviderID(memberID, providerID);
 		//TODO: need to decrypt Member's Provider credentials
-		providerRequestor.setMemberUser(memberProvider.getEncryptedUserName(), memberProvider.getEncryptedPassword());
+		if(memberProvider != null)
+			providerRequestor.setMemberUser(memberProvider.getEncryptedUserName(), memberProvider.getEncryptedPassword());
 
 		return providerRequestor;
 	}
@@ -90,6 +94,15 @@ public class ProviderRequestor
 	{
 		DataRequestor dataRequestor = newDataRequestor(false);
 		dataRequestor.pingServer();
+
+		fStatusCode = dataRequestor.getStatusCode();
+		return ProviderStatusCode.sc_Success.equals(fStatusCode);
+	}
+
+	public boolean enroll(EnrollRqst enrollRqst)
+	{
+		DataRequestor dataRequestor = newDataRequestor(false);
+		dataRequestor.enroll(enrollRqst);
 
 		fStatusCode = dataRequestor.getStatusCode();
 		return ProviderStatusCode.sc_Success.equals(fStatusCode);
@@ -118,15 +131,15 @@ public class ProviderRequestor
 		return null;
 	}
 
-	public ShowCostList checkShowAvail(ProviderShowID providerShowID, ShowFormat showFormat)
+	public ShowCost checkShowAvail(ProviderShowID providerShowID, ShowFormat showFormat, ShowCost showCost)
 	{
 		DataRequestor dataRequestor = newDataRequestor(true);
-		CheckShowAvailRqst checkShowAvailRqst = CheckShowAvailRqst.newInstance(providerShowID, showFormat);
+		CheckShowAvailRqst checkShowAvailRqst = CheckShowAvailRqst.newInstance(providerShowID, showFormat, showCost);
 		CheckShowAvailResp checkShowAvailResp = dataRequestor.checkShowAvail(checkShowAvailRqst);
 
 		fStatusCode = dataRequestor.getStatusCode();
 		if(checkShowAvailResp != null)
-			return checkShowAvailResp.getShowCostList();
+			return checkShowAvailResp.getShowCost();
 		return null;
 	}
 
@@ -140,5 +153,25 @@ public class ProviderRequestor
 
 		fStatusCode = dataRequestor.getStatusCode();
 		return rentShowResp;
+	}
+
+	public WatchShowResp watchShow(ProviderShowID showID, String playerIPAddress)
+	{
+		DataRequestor dataRequestor = newDataRequestor(true);
+		WatchShowRqst watchShowRqst = WatchShowRqst.newInstance(showID, playerIPAddress);
+		WatchShowResp watchShowResp = dataRequestor.watchShow(watchShowRqst);
+
+		fStatusCode = dataRequestor.getStatusCode();
+		return watchShowResp;
+	}
+
+	public boolean releaseShow(ProviderShowID showID)
+	{
+		DataRequestor dataRequestor = newDataRequestor(true);
+		ReleaseShowRqst releaseShowRqst = ReleaseShowRqst.newInstance(showID);
+		dataRequestor.releaseShow(releaseShowRqst);
+
+		fStatusCode = dataRequestor.getStatusCode();
+		return ProviderStatusCode.sc_Success.equals(fStatusCode);
 	}
 }

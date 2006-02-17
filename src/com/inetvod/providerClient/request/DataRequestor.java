@@ -133,6 +133,11 @@ public class DataRequestor
 		return fStatusCode;
 	}
 
+	public EnrollResp enroll(EnrollRqst enrollRqst)
+	{
+		return (EnrollResp)sendRequest(enrollRqst, fRequestTimeoutMillis);
+	}
+
 	public ShowListResp showList()
 	{
 		return (ShowListResp)sendRequest(ShowListRqst.newInstance(), fRequestTimeoutMillis);
@@ -151,5 +156,15 @@ public class DataRequestor
 	public RentShowResp rentShow(RentShowRqst rentShowRqst)
 	{
 		return (RentShowResp)sendRequest(rentShowRqst, fRequestTimeoutMillis);
+	}
+
+	public WatchShowResp watchShow(WatchShowRqst watchShowRqst)
+	{
+		return (WatchShowResp)sendRequest(watchShowRqst, fRequestTimeoutMillis);
+	}
+
+	public ReleaseShowResp releaseShow(ReleaseShowRqst releaseShowRqst)
+	{
+		return (ReleaseShowResp)sendRequest(releaseShowRqst, fRequestTimeoutMillis);
 	}
 }

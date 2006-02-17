@@ -17,9 +17,9 @@ public class Authenticate implements Readable, Writeable
 	public static final Constructor<Authenticate> CtorDataReader = DataReader.getCtor(Authenticate.class);
 
 	private static final int AdminUserIDMaxLength = 64;
-	private static final int AdminPasswordMaxLength = 32;
+	private static final int AdminPasswordMaxLength = 16;
 	private static final int MemberUserIDMaxLength = 64;
-	private static final int MemberPasswordMaxLength = 32;
+	private static final int MemberPasswordMaxLength = 16;
 
 	/* Fields */
 	private String fAdminUserID;
