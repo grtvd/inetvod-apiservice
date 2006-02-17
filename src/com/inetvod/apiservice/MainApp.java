@@ -15,6 +15,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.dbdata.Category;
 import com.inetvod.common.dbdata.Member;
+import com.inetvod.common.dbdata.MemberAccount;
 import com.inetvod.common.dbdata.MemberLogon;
 import com.inetvod.common.dbdata.MemberPrefs;
 import com.inetvod.common.dbdata.MemberProvider;
@@ -76,6 +77,7 @@ public class MainApp
 		Rating.getDatabaseAdaptor();
 		Member.getDatabaseAdaptor();
 		MemberLogon.getDatabaseAdaptor();
+		MemberAccount.getDatabaseAdaptor();
 		MemberPrefs.getDatabaseAdaptor();
 		MemberSession.getDatabaseAdaptor();
 		MemberProvider.getDatabaseAdaptor();
@@ -114,40 +116,61 @@ public class MainApp
 
 		/**************************************************************************************************************/
 
-//		Member member = Member.newInstance();
+//		Member member = Member.get(new MemberID("F2C3E739-85C9-4B61-B906-230986C656C5"));
+//		//Member member = Member.newInstance();
 //
 //		try
 //		{
 //			member.update();
 //
-//			MemberLogon memberLogon = MemberLogon.newInstance(member.getMemberID());
-//			memberLogon.setEmail("ROBERT@inetvod.com");
-//			memberLogon.setPassword("hope");
-//			memberLogon.setPIN("123456");
-//			memberLogon.setSecretQuestion("What's your favoriate color?");
-//			memberLogon.setSecretAnswer("black");
-//
+//			MemberLogon memberLogon = MemberLogon.getCreate(member.getMemberID());
+//			memberLogon.setEmail("bobd@bob.com");
+//			memberLogon.setPassword("123456");
+//			memberLogon.setSecretQuestion("hi");
+//			memberLogon.setSecretAnswer("hi");
 //			memberLogon.setTermsAcceptedOn(new Date());
-//			memberLogon.setTermsAcceptedVersion("20060115");
+//			memberLogon.setTermsAcceptedVersion("1");
 //			memberLogon.update();
-//
-//			memberLogon = null;
-//			memberLogon = MemberLogon.get(member.getMemberID());
-//			int logonID = memberLogon.getLogonID();
-//
-//			memberLogon = null;
-//			memberLogon = MemberLogon.findByLogonIDPIN(logonID, "123456");
-//			memberLogon.setLogonFailedAt(new Date());
-//			memberLogon.setLogonFailedCount(1);
-//			memberLogon.setLogonDisabled(true);
 //			memberLogon.update();
+//			memberLogon.delete();
 //
-//			memberLogon = null;
-//			memberLogon = MemberLogon.findByEmail("robert@INETVOD.com");
-//			memberLogon = null;
-//			memberLogon = MemberLogon.findByEmailPassword("robert@INETVOD.com", null);
-//			memberLogon = MemberLogon.findByEmailPassword("robert@INETVOD.com", "hope");
-//			memberLogon = null;
+//			MemberPrefs memberPrefs = MemberPrefs.getCreate(member.getMemberID());
+//			memberPrefs.update();
+//			memberPrefs.update();
+//			memberPrefs.delete();
+//
+//			MemberAccount memberAccount = MemberAccount.getCreate(member.getMemberID());
+//
+//			Address home = new Address();
+//			home.setAddrStreet1("1000 Hoy Cir");
+//			home.setAddrStreet2("Suite 100");
+//			home.setCity("Collegeville");
+//			home.setState("PA");
+//			home.setPostalCode("19426-4302");
+//			home.setCountry(CountryID.US);
+//			home.setPhone("610-757-0092");
+//			memberAccount.setHomeAddress(home);
+//
+//			CreditCard creditCard = new CreditCard();
+//			creditCard.setNameOnCC("Robert S Davidson");
+//			creditCard.setCCType(CreditCardType.Visa);
+//			creditCard.setCCNumber("1234-5678-9012-2345");
+//			creditCard.setCCSIC("3210");
+//			creditCard.setExpireDate(7, 2008);
+//			creditCard.setBillingAddress(home);
+//			memberAccount.setCreditCard(creditCard);
+//
+//			Calendar cal = Calendar.getInstance();
+//			cal.set(1968, 6, 13, 0, 0, 0);
+//			memberAccount.setBirthDate(cal.getTime());
+//			memberAccount.update();
+//
+//			memberAccount = MemberAccount.getCreate(member.getMemberID());
+//			if(memberAccount.isNewRecord())
+//			{
+//				memberAccount.update();
+//			}
+//			memberAccount.delete();
 //		}
 //		finally
 //		{

@@ -109,9 +109,14 @@ public class MemberLogon extends DatabaseObject
 		return fDatabaseAdaptor.selectByKey(memberID, exists);
 	}
 
-	public static MemberLogon get(MemberID memberID) throws Exception
+	public static MemberLogon getCreate(MemberID memberID) throws Exception
 	{
-		return load(memberID, DataExists.MustExist);
+		MemberLogon memberLogon = load(memberID, DataExists.MayNotExist);
+
+		if(memberLogon == null)
+			memberLogon = newInstance(memberID);
+
+		return memberLogon;
 	}
 
 	public static MemberLogon findByEmail(String email) throws Exception
@@ -189,6 +194,11 @@ public class MemberLogon extends DatabaseObject
 
 	public void delete() throws Exception
 	{
-		fDatabaseAdaptor.delete(fLogonID);
+		fDatabaseAdaptor.delete(fMemberID);
+	}
+
+	static public void delete(MemberID memberID) throws Exception
+	{
+		fDatabaseAdaptor.delete(memberID);
 	}
 }

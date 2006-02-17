@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.data;
@@ -32,7 +32,7 @@ public class Address implements Readable, Writeable
 	private CountryID fCountry;
 	private String fPhone;
 
-	/* Getters/Setters */
+	/* Getters and Setters */
 	public String getAddrStreet1() { return fAddrStreet1; }
 	public void setAddrStreet1(String addrStreet1) { fAddrStreet1 = addrStreet1; }
 
@@ -79,7 +79,7 @@ public class Address implements Readable, Writeable
 	public void writeTo(DataWriter writer) throws Exception
 	{
 		writer.writeString("AddrStreet1", fAddrStreet1, AddrStreetMaxLength);
-		writer.writeString("AddrStreet1", fAddrStreet2, AddrStreetMaxLength);
+		writer.writeString("AddrStreet2", fAddrStreet2, AddrStreetMaxLength);
 		writer.writeString("City", fCity, CityMaxLength);
 		writer.writeString("State", fState, StateMaxLength);
 		writer.writeString("PostalCode", fPostalCode, PostalCodeMaxLength);
