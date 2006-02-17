@@ -71,11 +71,6 @@ public class ShowCost implements Readable, Writeable
 	{
 		fShowCostType = ShowCostType.convertFromString(reader.readString("ShowCostType", ShowCostType.MaxLength));
 		fCost = reader.readObject("Cost", Money.CtorDataReader);
-		//TODO: Update DatabaseFieldReader to consider a object (null) if all members are null
-		if(fCost != null)
-			if((fCost.getAmount() == null) && (fCost.getCurrencyID() == null))
-				fCost = null;
-		//TODO: Update DatabaseFieldReader to consider a object (null) if all members are null
 		fCostDisplay = reader.readString("CostDisplay", DescriptionMaxLength);
 		fRentalWindowDays = reader.readShort("RentalWindowDays");
 		fRentalPeriodHours = reader.readShort("RentalPeriodHours");

@@ -6,8 +6,10 @@ package com.inetvod.common.dbdata;
 
 import java.lang.reflect.Constructor;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.inetvod.common.core.DataID;
@@ -17,11 +19,14 @@ import com.inetvod.common.core.Readable;
 public class DatabaseFieldReader extends DataReader
 {
 	private ResultSet fResultSet;
+	String[] fFieldNameList;
 	private List<String> fFieldNamePrefixList = new ArrayList<String>();
 
-	public DatabaseFieldReader(ResultSet resultSet)
+	public DatabaseFieldReader(ResultSet resultSet, HashMap<String, DatabaseField> fields)
 	{
 		fResultSet = resultSet;
+		fFieldNameList = new String[fields.size()];
+		fields.keySet().toArray(fFieldNameList);
 	}
 
 	private String buildFullFieldName(String fieldName)
@@ -35,6 +40,23 @@ public class DatabaseFieldReader extends DataReader
 		sb.append(fieldName);
 
 		return sb.toString();
+	}
+
+	private boolean areAllChildrenNull(String parentName) throws SQLException
+	{
+		String childPrefix = buildFullFieldName(parentName + "_");
+
+		for(String fieldName : fFieldNameList)
+		{
+			if(fieldName.startsWith(childPrefix))
+			{
+				fResultSet.getObject(fieldName);
+				if(!fResultSet.wasNull())
+					return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -189,7 +211,9 @@ public class DatabaseFieldReader extends DataReader
 	 */
 	public Readable readObject(String fieldName, Constructor ctorDataReader) throws Exception
 	{
-		//TODO: using the DatabaseAdaptor.fFields, test of all field staring if fieldName_ are null, if so, return null object.
+		// If all child fields of object are null, consider object to be null
+		if(areAllChildrenNull(fieldName))
+			return null;
 
 		fFieldNamePrefixList.add(fieldName + "_");
 		Readable readable = (Readable)ctorDataReader.newInstance(this);

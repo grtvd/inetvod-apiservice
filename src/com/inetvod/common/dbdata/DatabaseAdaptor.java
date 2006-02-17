@@ -351,7 +351,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 
 		if(numParams > 0)
 		{
-			StringBuffer sb = new StringBuffer("?");
+			StringBuilder sb = new StringBuilder("?");
 			for(int i = 1; i < numParams; i++)
 				sb.append(", ?");
 			fields = sb.toString();
@@ -395,7 +395,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 
 		try
 		{
-			DatabaseFieldReader reader = new DatabaseFieldReader(resultSet);
+			DatabaseFieldReader reader = new DatabaseFieldReader(resultSet, fFields);
 			T newObject = fObjectCtor.newInstance(reader);
 			newObject.setNewRecord(false);
 			return newObject;
