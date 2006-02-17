@@ -12,6 +12,7 @@ import com.inetvod.common.core.StringID;
 public class RatingID extends StringID
 {
 	public static final Constructor<RatingID> CtorString = CtorUtil.getCtorString(RatingID.class);
+	public static final RatingID NotRated = new RatingID("notrated");
 	public static final int MaxLength = 32;
 
 	public RatingID(String value)
