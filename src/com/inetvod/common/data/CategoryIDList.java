@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.data;
@@ -12,4 +12,10 @@ import com.inetvod.common.core.CtorUtil;
 public class CategoryIDList extends ArrayList<CategoryID>
 {
 	public static final Constructor<CategoryIDList> Ctor = CtorUtil.getCtorDefault(CategoryIDList.class);
+
+	public void copy(CategoryIDList categoryIDList)
+	{
+		clear();
+		addAll(categoryIDList);
+	}
 }
