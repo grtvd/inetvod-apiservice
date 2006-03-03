@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.core;
@@ -8,18 +8,55 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class XmlDataReader extends DataReader
 {
-	protected Document fDocument;
-	protected ArrayList<Node> fCurNodeList;
+	private static class ReaderItem
+	{
+		@SuppressWarnings({"FieldCanBeLocal"})
+		private XmlClassMeta fXmlClassMeta;
+
+		private Node fNode;
+		private Set<String> fAttributeList;
+
+		public Node getNode() { return fNode; }
+
+		public boolean isAttribute(String name)
+		{
+			if(fAttributeList == null)
+				return false;
+			return fAttributeList.contains(name);
+		}
+
+		public ReaderItem(Node node, Class<?> itemClass)
+		{
+			fNode = node;
+
+			if(itemClass == null)
+				return;
+
+			fXmlClassMeta = itemClass.getAnnotation(XmlClassMeta.class);
+			if(fXmlClassMeta != null)
+			{
+				fAttributeList = new HashSet<String>();
+				for(String attribute : fXmlClassMeta.attributeList())
+					fAttributeList.add(attribute);
+			}
+		}
+	}
+
+	private ArrayList<ReaderItem> fCurItemList;
 
 	public XmlDataReader(InputStream stream) throws Exception
 	{
@@ -27,17 +64,31 @@ public class XmlDataReader extends DataReader
 		//dbf.setIgnoringElementContentWhitespace(true);
 		//dbf.setNamespaceAware(true);
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		fDocument = db.parse(stream);
-		fCurNodeList = new ArrayList<Node>();
-		fCurNodeList.add(fDocument);
+		Document document = db.parse(stream);
+		fCurItemList = new ArrayList<ReaderItem>();
+		fCurItemList.add(new ReaderItem(document, null));
 	}
 
-	protected Node findChildNode(String fieldName) throws Exception
+	private ReaderItem getCurItem() throws Exception
 	{
-		if(fCurNodeList.size() == 0)
+		if(fCurItemList.size() == 0)
 			throw new Exception("No current node");
 
-		NodeList nodeList = fCurNodeList.get(fCurNodeList.size() - 1).getChildNodes();
+		return fCurItemList.get(fCurItemList.size() - 1);
+	}
+
+	private Node findAttribute(String fieldName) throws Exception
+	{
+		NamedNodeMap namedNodeMap = getCurItem().getNode().getAttributes();
+		if(namedNodeMap == null)
+			return null;
+
+		return namedNodeMap.getNamedItem(fieldName);
+	}
+
+	private Node findChildNode(String fieldName) throws Exception
+	{
+		NodeList nodeList = getCurItem().getNode().getChildNodes();
 		Node node;
 
 		for(int i = 0; i < nodeList.getLength(); i++)
@@ -50,12 +101,9 @@ public class XmlDataReader extends DataReader
 		return null;
 	}
 
-	protected ArrayList<Node> findChildNodes(String fieldName) throws Exception
+	private ArrayList<Node> findChildNodes(String fieldName) throws Exception
 	{
-		if(fCurNodeList.size() == 0)
-			throw new Exception("No current node");
-
-		NodeList nodeList = fCurNodeList.get(fCurNodeList.size() - 1).getChildNodes();
+		NodeList nodeList = getCurItem().getNode().getChildNodes();
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		Node node;
 
@@ -69,18 +117,24 @@ public class XmlDataReader extends DataReader
 		return nodes;
 	}
 
-	protected String getNodeText(Node node)
+	private String getNodeText(Node node)
 	{
 		NodeList nodeList = node.getChildNodes();
 		Node childNode;
+		short nodeType;
+		StringBuilder sb = new StringBuilder();
 
 		for(int i = 0; i < nodeList.getLength(); i++)
 		{
 			childNode = nodeList.item(i);
-			if(childNode.getNodeType() == Node.TEXT_NODE)
-				return childNode.getNodeValue();
+			nodeType = childNode.getNodeType();
+
+			if((nodeType == Node.TEXT_NODE) || (nodeType == Node.CDATA_SECTION_NODE))
+				sb.append(childNode.getNodeValue());
 		}
 
+		if(sb.length() > 0)
+			return sb.toString();
 		return null;
 	}
 	/**
@@ -163,11 +217,21 @@ public class XmlDataReader extends DataReader
 	 * @param fieldName
 	 * @return may return null
 	 */
-	protected String readString(String fieldName) throws Exception
+	private String readString(String fieldName) throws Exception
 	{
-		Node node = findChildNode(fieldName);
-		if(node == null)
-			return null;
+		Node node;
+
+		if(fieldName != null)
+		{
+			if(getCurItem().isAttribute(fieldName))
+				node = findAttribute(fieldName);
+			else
+				node = findChildNode(fieldName);
+			if(node == null)
+				return null;
+		}
+		else
+			node = getCurItem().getNode();
 
 		String data = getNodeText(node);
 		if (data == null)
@@ -255,9 +319,9 @@ public class XmlDataReader extends DataReader
 		if(node == null)
 			return null;
 
-		fCurNodeList.add(node);
-		T readable = ctorDataReader.newInstance(new Object[] { this });
-		fCurNodeList.remove(fCurNodeList.size() - 1);
+		fCurItemList.add(new ReaderItem(node, ctorDataReader.getDeclaringClass()));
+		T readable = ctorDataReader.newInstance(this);
+		fCurItemList.remove(fCurItemList.size() - 1);
 
 		return readable;
 	}
@@ -271,7 +335,7 @@ public class XmlDataReader extends DataReader
 	 */
 	public <T, L extends List<T>> L readList(String fieldName, Constructor<L> listCtor, Constructor<T> itemCtorDataReader) throws Exception
 	{
-		L list = listCtor.newInstance(new Object[] {});
+		L list = listCtor.newInstance();
 
 		ArrayList<Node> nodes = findChildNodes(fieldName);
 		if(nodes.size() == 0)
@@ -279,10 +343,10 @@ public class XmlDataReader extends DataReader
 
 		for(Node node: nodes)
 		{
-			fCurNodeList.add(node);
-			T item = itemCtorDataReader.newInstance(new Object[] { this });
+			fCurItemList.add(new ReaderItem(node, itemCtorDataReader.getDeclaringClass()));
+			T item = itemCtorDataReader.newInstance(this);
 			list.add(item);
-			fCurNodeList.remove(fCurNodeList.size() - 1);
+			fCurItemList.remove(fCurItemList.size() - 1);
 		}
 
 		return list;
@@ -299,7 +363,7 @@ public class XmlDataReader extends DataReader
 	public <T, L extends List<T>> L readStringList(String fieldName, int maxLength, Constructor<L> listCtor,
 		Constructor<T> itemCtorString) throws Exception
 	{
-		L list = listCtor.newInstance(new Object[] {});
+		L list = listCtor.newInstance();
 
 		ArrayList<Node> nodes = findChildNodes(fieldName);
 		if(nodes.size() == 0)
@@ -307,7 +371,7 @@ public class XmlDataReader extends DataReader
 
 		for(Node node: nodes)
 		{
-			T item = itemCtorString.newInstance(new Object[] { getNodeText(node) });
+			T item = itemCtorString.newInstance(getNodeText(node));
 			list.add(item);
 		}
 
@@ -328,6 +392,6 @@ public class XmlDataReader extends DataReader
 		if (data == null)
 			return null;
 
-		return ctorString.newInstance(new Object[] { data });
+		return ctorString.newInstance(data);
 	}
 }
