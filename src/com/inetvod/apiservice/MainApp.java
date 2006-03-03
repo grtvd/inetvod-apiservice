@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import org.apache.log4j.xml.DOMConfigurator;
 
+import com.inetvod.apiClient.connection.ConnectionShowUpdater;
 import com.inetvod.apiClient.providerapi.ProviderShowUpdater;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.dbdata.Category;
@@ -22,6 +23,8 @@ import com.inetvod.common.dbdata.MemberPrefs;
 import com.inetvod.common.dbdata.MemberProvider;
 import com.inetvod.common.dbdata.MemberSession;
 import com.inetvod.common.dbdata.Provider;
+import com.inetvod.common.dbdata.ProviderConnection;
+import com.inetvod.common.dbdata.ProviderConnectionList;
 import com.inetvod.common.dbdata.ProviderList;
 import com.inetvod.common.dbdata.Rating;
 import com.inetvod.common.dbdata.RentedShow;
@@ -74,6 +77,7 @@ public class MainApp
 
 		// Preload DatabaseAdaptors
 		Provider.getDatabaseAdaptor();
+		ProviderConnection.getDatabaseAdaptor();
 		Category.getDatabaseAdaptor();
 		Rating.getDatabaseAdaptor();
 		Member.getDatabaseAdaptor();
@@ -106,13 +110,31 @@ public class MainApp
 	private void updateAllProviders() throws Exception
 	{
 		ProviderList providerList = ProviderList.find();
+		ProviderConnectionList providerConnectionList;
 
 		for(Provider provider : providerList)
-			ProviderShowUpdater.newInstance(provider.getProviderID()).doUpdate();
+		{
+			providerConnectionList = ProviderConnectionList.findByProviderID(provider.getProviderID());
+
+			if(providerConnectionList.size() == 0)
+				ProviderShowUpdater.newInstance(provider.getProviderID()).doUpdate();
+			else
+			{
+				for(ProviderConnection providerConnection : providerConnectionList)
+					ConnectionShowUpdater.newInstance(providerConnection).doUpdate();
+			}
+		}
 	}
 
 //	private void testWork() throws Exception
 //	{
+//		ProviderConnection providerConnection = ProviderConnection.newInstance(new ProviderID("rocketboom"),
+//			new ProviderConnectionType("Rss2"));
+//		providerConnection.update();
+//		providerConnection.setConnectionURL("http://");
+//		providerConnection.update();
+//		providerConnection.delete();
+//
 //		ProviderConnection providerConnection = new ProviderConnection();
 //		ConnectionShowUpdater connectionShowUpdater = ConnectionShowUpdater.newInstance(providerConnection);
 //		connectionShowUpdater.doUpdate();
