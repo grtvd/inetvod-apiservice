@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import org.apache.log4j.xml.DOMConfigurator;
 
+import com.inetvod.apiClient.providerapi.ProviderShowUpdater;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.dbdata.Category;
 import com.inetvod.common.dbdata.Member;
@@ -107,11 +108,43 @@ public class MainApp
 		ProviderList providerList = ProviderList.find();
 
 		for(Provider provider : providerList)
-			ProviderShowUpdater.getThe().doUpdate(provider.getProviderID());
+			ProviderShowUpdater.newInstance(provider.getProviderID()).doUpdate();
 	}
 
 //	private void testWork() throws Exception
 //	{
+//		ProviderConnection providerConnection = new ProviderConnection();
+//		ConnectionShowUpdater connectionShowUpdater = ConnectionShowUpdater.newInstance(providerConnection);
+//		connectionShowUpdater.doUpdate();
+//
+//		Rss20 rss20 = Rss2Connection.newInstance("").process();
+//		if(rss20 == null)
+//			return;
+//		Channel channel = rss20.getChannel();
+//		if(channel == null)
+//			return;
+//
+//		System.out.println("Channel");
+//		System.out.println(String.format("Title: %s", channel.getTitle()));
+//		System.out.println(String.format("Desc: %s", channel.getDescription()));
+//
+//		for(Item item : channel.getItemList())
+//		{
+//			System.out.println();
+//			System.out.println("Item");
+//			System.out.println(String.format("Title: %s", item.getTitle()));
+//			System.out.println(String.format("Link: %s", item.getLink()));
+//
+//			Enclosure enclosure = item.getEnclosure();
+//			System.out.println(String.format("url: %s", enclosure.getURL()));
+//			System.out.println(String.format("type: %s", enclosure.getType()));
+//
+//			System.out.println(String.format("Desc: %s", item.getDescription()));
+//			System.out.println(String.format("Guid: %s", item.getGuid()));
+//		}
+
+		/**************************************************************************************************************/
+
 //		ShowProvider.getDatabaseAdaptor().metaDataCheck();
 
 		/**************************************************************************************************************/
