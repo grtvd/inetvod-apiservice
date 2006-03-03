@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -19,7 +19,7 @@ public class MemberProvider extends DatabaseObject
 	public static final int EncryptedUserIDMaxLength = 128;
 	public static final int EncryptedPasswordMaxLength = 32;
 
-	/* Properties */
+	/* Fields */
 	private MemberProviderID fMemberProviderID;
 	private MemberID fMemberID;
 	private ProviderID fProviderID;
@@ -42,7 +42,7 @@ public class MemberProvider extends DatabaseObject
 	public String getEncryptedPassword() { return fEncryptedPassword; }
 	public void setEncryptedPassword(String encryptedPassword) { fEncryptedPassword = encryptedPassword; }
 
-	/* Constuction Methods */
+	/* Construction */
 	protected MemberProvider(MemberID memberID, ProviderID providerID)
 	{
 		super(true);
@@ -88,7 +88,7 @@ public class MemberProvider extends DatabaseObject
 		return loadByMemberIDProviderID(memberID, providerID, DataExists.MayNotExist);
 	}
 
-	/* DatabaseObject Members */
+	/* Implementation */
 	public void readFrom(DataReader reader) throws Exception
 	{
 		fMemberProviderID = reader.readDataID("MemberProviderID", MemberProviderID.MaxLength,

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.providerClient.request;
@@ -10,7 +10,7 @@ import com.inetvod.common.data.ProviderShowID;
 
 public class ReleaseShowRqst implements Writeable
 {
-	/* Properties */
+	/* Fields */
 	protected ProviderShowID fShowID;
 
 	/* Construction */

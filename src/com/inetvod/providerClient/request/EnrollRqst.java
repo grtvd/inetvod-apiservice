@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.providerClient.request;
@@ -19,7 +19,7 @@ public class EnrollRqst implements Writeable
 	private static final int LastNameMaxLength = 32;
 	private static final int EmailMaxLength = 64;
 
-	/* Properties */
+	/* Fields */
 	private String fUserID;
 	private String fPassword;
 	private String fFirstName;

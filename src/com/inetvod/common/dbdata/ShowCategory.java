@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -26,7 +26,7 @@ public class ShowCategory extends DatabaseObject
 	public ShowID getShowID() { return fShowID; }
 	public CategoryID getCategoryID() { return fCategoryID; }
 
-	/* Constuction Methods */
+	/* Construction */
 	private ShowCategory(ShowID showID, CategoryID categoryID)
 	{
 		super(true);

@@ -23,7 +23,7 @@ public class Address implements Readable, Writeable
 	private static final int PostalCodeMaxLength = 32;
 	private static final int PhoneMaxLength = 32;
 
-	/* Properties */
+	/* Fields */
 	private String fAddrStreet1;
 	private String fAddrStreet2;
 	private String fCity;

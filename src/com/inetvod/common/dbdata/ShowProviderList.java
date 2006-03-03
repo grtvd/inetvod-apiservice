@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -17,7 +17,7 @@ import com.inetvod.common.data.ShowProviderID;
 
 public class ShowProviderList extends ArrayList<ShowProvider>
 {
-	/* Constuction Methods */
+	/* Construction */
 	public ShowProviderList()
 	{
 	}

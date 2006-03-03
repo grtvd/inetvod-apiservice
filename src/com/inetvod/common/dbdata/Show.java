@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -72,7 +72,7 @@ public class Show extends DatabaseObject
 	public Boolean getIsAdult() { return fIsAdult; }
 	public void setIsAdult(Boolean isAdult) { fIsAdult = isAdult; }
 
-	/* Constuction Methods */
+	/* Construction */
 	private Show(String name, boolean isAdult)
 	{
 		super(true);
@@ -102,7 +102,7 @@ public class Show extends DatabaseObject
 		return load(showID, DataExists.MustExist);
 	}
 
-	/* DatabaseObject Members */
+	/* Implementation */
 	public void readFrom(DataReader reader) throws Exception
 	{
 		fShowID = reader.readDataID("ShowID", ShowID.MaxLength, ShowID.CtorString);

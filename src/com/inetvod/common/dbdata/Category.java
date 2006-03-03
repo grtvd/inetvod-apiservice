@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -14,7 +14,7 @@ public class Category extends DatabaseObject
 	/* Constants */
 	private static final int NameMaxLength = 64;
 
-	/* Properties */
+	/* Fields */
 	private CategoryID fCategoryID;
 	private String fName;
 
@@ -22,7 +22,7 @@ public class Category extends DatabaseObject
 		= new DatabaseAdaptor<Category, CategoryList>(Category.class, CategoryList.class);
 	public static DatabaseAdaptor<Category, CategoryList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
-	/* Constuction Methods */
+	/* Construction */
 	public Category(DataReader reader) throws Exception
 	{
 		super(reader);

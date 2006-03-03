@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.providerClient.rqdata;
@@ -21,7 +21,7 @@ public class Payment implements Readable, Writeable
 	private PaymentType fPaymentType;
 	private CreditCard fCreditCard;
 
-	/* Constuction Methods */
+	/* Construction */
 	private Payment(PaymentType paymentType, CreditCard creditCard)
 	{
 		if(paymentType == null)

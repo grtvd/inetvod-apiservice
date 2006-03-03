@@ -52,7 +52,7 @@ public class MemberPrefs extends DatabaseObject
 	public ConnectionSpeed getConnectionSpeed() { return fConnectionSpeed; }
 	public void setConnectionSpeed(ConnectionSpeed connectionSpeed) { fConnectionSpeed = connectionSpeed; }
 
-	/* Constuction Methods */
+	/* Construction */
 	private MemberPrefs(MemberID memberID)
 	{
 		super(true);

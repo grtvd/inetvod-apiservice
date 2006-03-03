@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -51,7 +51,7 @@ public class RentedShow extends DatabaseObject
 	public Date getAvailableUntil() { return fAvailableUntil; }
 	public void setAvailableUntil(Date availableUntil) { fAvailableUntil = availableUntil; }
 
-	/* Constuction Methods */
+	/* Construction */
 	public RentedShow(MemberID memberID, ShowID showID, ProviderID providerID)
 	{
 		super(true);
@@ -82,7 +82,7 @@ public class RentedShow extends DatabaseObject
 		return load(rentedShowID, DataExists.MustExist);
 	}
 
-	/* DatabaseObject Members */
+	/* Implementation */
 	public void readFrom(DataReader reader) throws Exception
 	{
 		fRentedShowID = reader.readDataID("RentedShowID", RentedShowID.MaxLength, RentedShowID.CtorString);

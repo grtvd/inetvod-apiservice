@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -17,7 +17,7 @@ import com.inetvod.common.data.ShowProviderID;
 
 public class ShowProvider extends DatabaseObject
 {
-	/* Properties */
+	/* Fields */
 	private ShowProviderID fShowProviderID;
 	private ShowID fShowID;
 	private ProviderID fProviderID;
@@ -41,7 +41,7 @@ public class ShowProvider extends DatabaseObject
 	public ShowCost getShowCost() { return fShowCost; }
 	public void setShowCost(ShowCost showCost) { fShowCost = showCost; }
 
-	/* Constuction Methods */
+	/* Construction */
 	private ShowProvider(ShowID showID, ProviderID providerID, ProviderShowID providerShowID)
 	{
 		super(true);

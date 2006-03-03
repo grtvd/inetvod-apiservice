@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -11,7 +11,7 @@ import com.inetvod.common.data.MemberID;
 
 public class MemberProviderList extends ArrayList<MemberProvider>
 {
-	/* Constuction Methods */
+	/* Construction */
 	public static MemberProviderList findByMemberID(MemberID memberID) throws Exception
 	{
 		DatabaseProcParam params[] = new DatabaseProcParam[1];

@@ -86,7 +86,7 @@ public class MemberLogon extends DatabaseObject
 	public boolean getLogonDisabled() { return fLogonDisabled; }
 	public void setLogonDisabled(boolean logonDisabled) { fLogonDisabled = logonDisabled; }
 
-	/* Constuction Methods */
+	/* Construction */
 	private MemberLogon(MemberID memberID)
 	{
 		super(true);

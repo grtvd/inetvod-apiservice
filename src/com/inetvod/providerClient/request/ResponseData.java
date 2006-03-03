@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.providerClient.request;
@@ -15,7 +15,7 @@ public class ResponseData implements Readable
 	public static final Constructor<ResponseData> CtorDataReader = DataReader.getCtor(ResponseData.class);
 	private static final int ResponseTypeMaxLength = 64;
 
-	/* Properties */
+	/* Fields */
 	private Readable fResponse;
 
 	/* Construction */

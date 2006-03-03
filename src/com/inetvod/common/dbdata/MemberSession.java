@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -16,7 +16,7 @@ import com.inetvod.common.data.PlayerID;
 
 public class MemberSession extends DatabaseObject
 {
-	/* Properties */
+	/* Fields */
 	private MemberSessionID fMemberSessionID;
 	private MemberID fMemberID;
 	private PlayerID fPlayerID;
@@ -39,7 +39,7 @@ public class MemberSession extends DatabaseObject
 	public boolean getShowAdult() { return fShowAdult; }
 	public void setShowAdult(boolean showAdult) { fShowAdult = showAdult; }
 
-	/* Constuction Methods */
+	/* Construction */
 	protected MemberSession(MemberID memberID, PlayerID playerID)
 	{
 		super(true);
@@ -72,7 +72,7 @@ public class MemberSession extends DatabaseObject
 		return load(memberSessionID, DataExists.MayNotExist);
 	}
 
-	/* DatabaseObject Members */
+	/* Implementation */
 	public void readFrom(DataReader reader) throws Exception
 	{
 		fMemberSessionID = reader.readDataID("MemberSessionID", MemberSessionID.MaxLength, MemberSessionID.CtorString);

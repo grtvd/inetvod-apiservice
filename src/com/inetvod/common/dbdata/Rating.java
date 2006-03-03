@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.dbdata;
@@ -14,7 +14,7 @@ public class Rating extends DatabaseObject
 	/* Constants */
 	private static final int NameMaxLength = 64;
 
-	 /* Properties */
+	 /* Fields */
 	private RatingID fRatingID;
 	private String fName;
 
@@ -25,7 +25,7 @@ public class Rating extends DatabaseObject
 	/* Getters and Setters */
 
 
-	/* Constuction Methods */
+	/* Construction */
 	public Rating(DataReader reader) throws Exception
 	{
 		super(reader);

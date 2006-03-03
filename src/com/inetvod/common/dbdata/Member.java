@@ -15,7 +15,7 @@ public class Member extends DatabaseObject
 	private static final int FirstNameMaxLength = 32;
 	private static final int LastNameMaxLength = 32;
 
-	/* Properties */
+	/* Fields */
 	private MemberID fMemberID;
 	private String fFirstName;
 	private String fLastName;
@@ -33,7 +33,7 @@ public class Member extends DatabaseObject
 	public String getLastName() { return fLastName; }
 	public void setLastName(String lastName) { fLastName = lastName; }
 
-	/* Constuction Methods */
+	/* Construction */
 	protected Member()
 	{
 		super(true);

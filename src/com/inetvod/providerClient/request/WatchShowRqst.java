@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.providerClient.request;
@@ -13,7 +13,7 @@ public class WatchShowRqst implements Writeable
 	/* Constants */
 	private static final int PlayerIPAddressMaxLength = 16;
 
-	/* Properties */
+	/* Fields */
 	private ProviderShowID fShowID;
 	private String fPlayerIPAddress;
 
