@@ -1,8 +1,8 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
-package com.inetvod.providerClient.rqdata;
+package com.inetvod.common.data;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;

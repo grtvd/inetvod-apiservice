@@ -1,8 +1,8 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
-package com.inetvod.providerClient.rqdata;
+package com.inetvod.common.data;
 
 import java.lang.reflect.Constructor;
 
@@ -10,10 +10,6 @@ import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
 import com.inetvod.common.core.Readable;
 import com.inetvod.common.core.Writeable;
-import com.inetvod.common.data.ShowCost;
-import com.inetvod.common.data.ShowCostList;
-import com.inetvod.common.data.ShowFormat;
-import com.inetvod.common.data.ShowFormatList;
 
 public class ShowRental implements Readable, Writeable
 {

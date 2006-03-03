@@ -16,6 +16,8 @@ import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.ProviderShowID;
 import com.inetvod.common.data.RatingID;
+import com.inetvod.common.data.ShowRental;
+import com.inetvod.common.data.ShowRentalList;
 import com.inetvod.common.dbdata.Show;
 
 public class ShowDetail implements Readable
