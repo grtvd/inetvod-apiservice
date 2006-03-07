@@ -25,12 +25,13 @@ public class ShowData
 	private Short fRunningMins;
 	private String fPictureURL;
 
-	private CategoryIDList fCategoryIDList = new CategoryIDList();
+	private CategoryIDList fCategoryIDList;
 	private RatingID fRatingID;
 	private LanguageID fLanguageID;
 	private Boolean fIsAdult;
 
-	private ShowRentalList fShowRentalList = new ShowRentalList();
+	private String ShowURL;
+	private ShowRentalList fShowRentalList;
 
 	/* Getters and Setters */
 	public ProviderShowID getProviderShowID() { return fProviderShowID; }
@@ -60,7 +61,12 @@ public class ShowData
 	public String getPictureURL() { return fPictureURL; }
 	public void setPictureURL(String pictureURL) { fPictureURL = pictureURL; }
 
-	public CategoryIDList getCategoryIDList() { return fCategoryIDList; }
+	public CategoryIDList getCategoryIDList()
+	{
+		if(fCategoryIDList == null)
+			fCategoryIDList = new CategoryIDList();
+		return fCategoryIDList;
+	}
 
 	public RatingID getRatingID() { return fRatingID; }
 	public void setRatingID(RatingID ratingID) { fRatingID = ratingID; }
@@ -71,5 +77,13 @@ public class ShowData
 	public Boolean getIsAdult() { return fIsAdult; }
 	public void setIsAdult(Boolean isAdult) { fIsAdult = isAdult; }
 
-	public ShowRentalList getShowRentalList() { return fShowRentalList; }
+	public String getShowURL() { return ShowURL; }
+	public void setShowURL(String showURL) { ShowURL = showURL; }
+
+	public ShowRentalList getShowRentalList()
+	{
+		if(fShowRentalList == null)
+			fShowRentalList = new ShowRentalList();
+		return fShowRentalList;
+	}
 }

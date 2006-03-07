@@ -8,11 +8,4 @@ import java.util.ArrayList;
 
 public class ShowDataList extends ArrayList<ShowData>
 {
-	/* Fields */
-
-	/* Getters and Setters */
-
-	/* Construction */
-
-	/* Implementation */
 }

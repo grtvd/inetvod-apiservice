@@ -23,6 +23,7 @@ public class ShowProvider extends DatabaseObject
 	private ProviderID fProviderID;
 
 	private ProviderShowID fProviderShowID;
+	private String fShowURL;	// only available for 'Connection' type providers
 	private ShowCost fShowCost;
 
 	private static DatabaseAdaptor<ShowProvider, ShowProviderList> fDatabaseAdaptor =
@@ -37,6 +38,9 @@ public class ShowProvider extends DatabaseObject
 	public ProviderID getProviderID() { return fProviderID; }
 
 	public ProviderShowID getProviderShowID() { return fProviderShowID; }
+
+	public String getShowURL() { return fShowURL; }
+	public void setShowURL(String showURL) { fShowURL = showURL; }
 
 	public ShowCost getShowCost() { return fShowCost; }
 	public void setShowCost(ShowCost showCost) { fShowCost = showCost; }
@@ -107,6 +111,7 @@ public class ShowProvider extends DatabaseObject
 		fProviderID = reader.readDataID("ProviderID", ProviderID.MaxLength, ProviderID.CtorString);
 
 		fProviderShowID = reader.readDataID("ProviderShowID", ProviderShowID.MaxLength, ProviderShowID.CtorString);
+		fShowURL = reader.readString("ShowURL", Show.ShowURLMaxLength);
 		fShowCost = reader.readObject("ShowCost", ShowCost.CtorDataReader);
 	}
 
@@ -117,6 +122,7 @@ public class ShowProvider extends DatabaseObject
 		writer.writeDataID("ProviderID", fProviderID, ProviderID.MaxLength);
 
 		writer.writeDataID("ProviderShowID", fProviderShowID, ProviderShowID.MaxLength);
+		writer.writeString("ShowURL", fShowURL, Show.ShowURLMaxLength);
 		writer.writeObject("ShowCost", fShowCost);
 	}
 

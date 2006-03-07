@@ -22,6 +22,9 @@ public class Category extends DatabaseObject
 		= new DatabaseAdaptor<Category, CategoryList>(Category.class, CategoryList.class);
 	public static DatabaseAdaptor<Category, CategoryList> getDatabaseAdaptor() { return fDatabaseAdaptor; }
 
+	/* Getters & Setters */
+	public CategoryID getCategoryID() { return fCategoryID; }
+
 	/* Construction */
 	public Category(DataReader reader) throws Exception
 	{

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2004-2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2004-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.common.data;
@@ -12,7 +12,7 @@ import com.inetvod.common.core.StringID;
 public class ProviderShowID extends StringID
 {
 	public static final Constructor<ProviderShowID> CtorString = CtorUtil.getCtorString(ProviderShowID.class);
-	public static final int MaxLength = 64;
+	public static final int MaxLength = 128;
 
 	public ProviderShowID(String value)
 	{

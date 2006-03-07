@@ -100,6 +100,7 @@ public abstract class ShowUpdater
 		show.update();
 
 		// updte ShowProvider values
+		showProvider.setShowURL(showData.getShowURL());
 		//TODO: need to support multiple ShowCost/ShowFormat records
 		showProvider.setShowCost(showData.getShowRentalList().get(0).getShowCostList().get(0));
 		showProvider.update();
