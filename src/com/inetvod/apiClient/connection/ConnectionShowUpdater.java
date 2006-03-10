@@ -20,16 +20,10 @@ import com.inetvod.common.dbdata.ProviderConnection;
 
 public class ConnectionShowUpdater extends ShowUpdater
 {
-	/* Fields */
-	private ProviderConnection fProviderConnection;
-
-	/* Getters and Setters */
-
 	/* Construction */
 	private ConnectionShowUpdater(ProviderConnection providerConnection)
 	{
-		super(providerConnection.getProviderID());
-		fProviderConnection = providerConnection;
+		super(providerConnection);
 	}
 
 	public static ConnectionShowUpdater newInstance(ProviderConnection providerConnection)
@@ -40,8 +34,6 @@ public class ConnectionShowUpdater extends ShowUpdater
 	/* Implementation */
 	public void doUpdate() throws Exception
 	{
-		final String METHOD_NAME = "doUpdate";
-
 		BaseConnection connection = createConnection();
 		ShowDataList showDataList = connection.process();
 
@@ -56,7 +48,7 @@ public class ConnectionShowUpdater extends ShowUpdater
 
 	@SuppressWarnings({"unchecked"})
 	private BaseConnection createConnection() throws ClassNotFoundException, NoSuchMethodException,
-		IllegalAccessException, InvocationTargetException, InstantiationException
+		IllegalAccessException, InvocationTargetException
 	{
 		ProviderConnectionType providerConnectionType = fProviderConnection.getProviderConnectionType();
 		String connectionName = getClass().getPackage().getName() + "."

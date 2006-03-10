@@ -14,6 +14,7 @@ import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.RentedShowID;
 import com.inetvod.common.data.ShowCost;
 import com.inetvod.common.data.ShowID;
+import com.inetvod.common.data.ProviderConnectionID;
 
 public class RentedShow extends DatabaseObject
 {
@@ -22,6 +23,7 @@ public class RentedShow extends DatabaseObject
 	private MemberID fMemberID;
 	private ShowID fShowID;
 	private ProviderID fProviderID;
+	private ProviderConnectionID fProviderConnectionID;
 
 	private String fShowURL;
 	private ShowCost fShowCost;
@@ -38,6 +40,7 @@ public class RentedShow extends DatabaseObject
 	public MemberID getMemberID() { return fMemberID; }
 	public ShowID getShowID() { return fShowID; }
 	public ProviderID getProviderID() { return fProviderID; }
+	public ProviderConnectionID getProviderConnectionID() { return fProviderConnectionID; }
 
 	public String getShowURL() { return fShowURL; }
 	public void setShowURL(String showURL) { fShowURL = showURL; }
@@ -52,13 +55,14 @@ public class RentedShow extends DatabaseObject
 	public void setAvailableUntil(Date availableUntil) { fAvailableUntil = availableUntil; }
 
 	/* Construction */
-	public RentedShow(MemberID memberID, ShowID showID, ProviderID providerID)
+	public RentedShow(MemberID memberID, ShowID showID, ProviderID providerID, ProviderConnectionID providerConnectionID)
 	{
 		super(true);
 		fRentedShowID = RentedShowID.newInstance();
 		fMemberID = memberID;
 		fShowID = showID;
 		fProviderID = providerID;
+		fProviderConnectionID = providerConnectionID;
 	}
 
 	public RentedShow(DataReader reader) throws Exception
@@ -67,9 +71,10 @@ public class RentedShow extends DatabaseObject
 		readFrom(reader);
 	}
 
-	public static RentedShow newInstance(MemberID memberID, ShowID showID, ProviderID providerID)
+	public static RentedShow newInstance(MemberID memberID, ShowID showID, ProviderID providerID,
+		ProviderConnectionID providerConnectionID)
 	{
-		return new RentedShow(memberID, showID, providerID);
+		return new RentedShow(memberID, showID, providerID, providerConnectionID);
 	}
 
 	protected static RentedShow load(RentedShowID rentedShowID, DataExists exists) throws Exception
@@ -89,6 +94,8 @@ public class RentedShow extends DatabaseObject
 		fMemberID = reader.readDataID("MemberID", MemberID.MaxLength, MemberID.CtorString);
 		fShowID = reader.readDataID("ShowID", ShowID.MaxLength, ShowID.CtorString);
 		fProviderID = reader.readDataID("ProviderID", ProviderID.MaxLength, ProviderID.CtorString);
+		fProviderConnectionID = reader.readDataID("ProviderConnectionID", ProviderConnectionID.MaxLength,
+			ProviderConnectionID.CtorString);
 
 		fShowURL = reader.readString("ShowURL", Show.ShowURLMaxLength);
 		fShowCost = reader.readObject("ShowCost", ShowCost.CtorDataReader);
@@ -102,6 +109,7 @@ public class RentedShow extends DatabaseObject
 		writer.writeDataID("MemberID", fMemberID, MemberID.MaxLength);
 		writer.writeDataID("ShowID", fShowID, ShowID.MaxLength);
 		writer.writeDataID("ProviderID", fProviderID, ProviderID.MaxLength);
+		writer.writeDataID("ProviderConnectionID", fProviderConnectionID, ProviderConnectionID.MaxLength);
 
 		writer.writeString("ShowURL", fShowURL, Show.ShowURLMaxLength);
 		writer.writeObject("ShowCost", fShowCost);

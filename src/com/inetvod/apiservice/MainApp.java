@@ -15,6 +15,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import com.inetvod.apiClient.connection.ConnectionShowUpdater;
 import com.inetvod.apiClient.providerapi.ProviderShowUpdater;
 import com.inetvod.common.core.Logger;
+import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.dbdata.Category;
 import com.inetvod.common.dbdata.Member;
 import com.inetvod.common.dbdata.MemberAccount;
@@ -116,13 +117,11 @@ public class MainApp
 		{
 			providerConnectionList = ProviderConnectionList.findByProviderID(provider.getProviderID());
 
-			if(providerConnectionList.size() == 0)
-				ProviderShowUpdater.newInstance(provider.getProviderID()).doUpdate();
-			else
-			{
-				for(ProviderConnection providerConnection : providerConnectionList)
+			for(ProviderConnection providerConnection : providerConnectionList)
+				if(ProviderConnectionType.ProviderAPI.equals(providerConnection.getProviderConnectionType()))
+					ProviderShowUpdater.newInstance(providerConnection).doUpdate();
+				else
 					ConnectionShowUpdater.newInstance(providerConnection).doUpdate();
-			}
 		}
 	}
 

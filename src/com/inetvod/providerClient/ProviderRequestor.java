@@ -1,17 +1,16 @@
 /**
- * Copyright © 2005 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
  * Confidential and Proprietary
  */
 package com.inetvod.providerClient;
 
 import com.inetvod.common.data.MemberID;
-import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.ProviderShowID;
 import com.inetvod.common.data.ShowCost;
 import com.inetvod.common.data.ShowFormat;
 import com.inetvod.common.data.ShowIDList;
 import com.inetvod.common.dbdata.MemberProvider;
-import com.inetvod.common.dbdata.Provider;
+import com.inetvod.common.dbdata.ProviderConnection;
 import com.inetvod.providerClient.request.CheckShowAvailResp;
 import com.inetvod.providerClient.request.CheckShowAvailRqst;
 import com.inetvod.providerClient.request.DataRequestor;
@@ -49,29 +48,25 @@ public class ProviderRequestor
 	public ProviderStatusCode getStatusCode() { return fStatusCode; }
 
 	/* Construction */
-	private ProviderRequestor(Provider provider)
+	private ProviderRequestor(ProviderConnection providerConnection)
 	{
-		fProviderRequestURL = provider.getRequestURL();
-		fProviderAdminUserID = provider.getAdminUserID();
-		fProviderAdminPassword = provider.getAdminPassword();
+		fProviderRequestURL = providerConnection.getConnectionURL();
+		fProviderAdminUserID = providerConnection.getAdminUserID();
+		fProviderAdminPassword = providerConnection.getAdminPassword();
 	}
 
-	public static ProviderRequestor newInstance(Provider provider)
+	public static ProviderRequestor newInstance(ProviderConnection providerConnection)
 	{
-		return new ProviderRequestor(provider);
+		return new ProviderRequestor(providerConnection);
 	}
 
-	public static ProviderRequestor newInstance(ProviderID providerID) throws Exception
+	public static ProviderRequestor newInstance(ProviderConnection providerConnection,
+		MemberID memberID) throws Exception
 	{
-		Provider provider = Provider.get(providerID);
-		return new ProviderRequestor(provider);
-	}
+		ProviderRequestor providerRequestor = newInstance(providerConnection);
 
-	public static ProviderRequestor newInstance(ProviderID providerID, MemberID memberID) throws Exception
-	{
-		ProviderRequestor providerRequestor = ProviderRequestor.newInstance(providerID);
-
-		MemberProvider memberProvider = MemberProvider.findByMemberIDProviderID(memberID, providerID);
+		MemberProvider memberProvider = MemberProvider.findByMemberIDProviderID(memberID,
+			providerConnection.getProviderID());
 		//TODO: need to decrypt Member's Provider credentials
 		if(memberProvider != null)
 			providerRequestor.setMemberUser(memberProvider.getEncryptedUserName(), memberProvider.getEncryptedPassword());

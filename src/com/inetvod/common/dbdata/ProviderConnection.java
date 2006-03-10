@@ -6,6 +6,7 @@ package com.inetvod.common.dbdata;
 
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
+import com.inetvod.common.core.DataExists;
 import com.inetvod.common.data.ProviderConnectionID;
 import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.data.ProviderID;
@@ -14,6 +15,8 @@ public class ProviderConnection extends DatabaseObject
 {
 	/* Constants */
 	private static final int ConnectionURLMaxLength = 4096;
+	private static final int AdminUserIDMaxLength = 128;	//64 if not encrypted
+	private static final int AdminPasswordMaxLength = 32;	//16 if not encrypted
 
 	/* Fields */
 	private ProviderConnectionID fProviderConnectionID;
@@ -21,6 +24,8 @@ public class ProviderConnection extends DatabaseObject
 	private ProviderConnectionType fProviderConnectionType;
 
 	private String fConnectionURL;
+	private String fAdminUserID;
+	private String fAdminPassword;
 
 	private static DatabaseAdaptor<ProviderConnection, ProviderConnectionList> fDatabaseAdaptor =
 		new DatabaseAdaptor<ProviderConnection, ProviderConnectionList>(ProviderConnection.class, ProviderConnectionList.class);
@@ -32,7 +37,8 @@ public class ProviderConnection extends DatabaseObject
 	public ProviderConnectionType getProviderConnectionType() { return fProviderConnectionType; }
 
 	public String getConnectionURL() { return fConnectionURL; }
-	public void setConnectionURL(String connectionURL) { fConnectionURL = connectionURL; }
+	public String getAdminUserID() { return fAdminUserID; }
+	public String getAdminPassword() { return fAdminPassword; }
 
 	/* Construction */
 	public ProviderConnection(ProviderID providerID, ProviderConnectionType providerConnectionType)
@@ -54,6 +60,31 @@ public class ProviderConnection extends DatabaseObject
 		return new ProviderConnection(providerID, providerConnectionType);
 	}
 
+	private static ProviderConnection load(ProviderConnectionID providerConnectionID, DataExists exists) throws Exception
+	{
+		return fDatabaseAdaptor.selectByKey(providerConnectionID, exists);
+	}
+
+	public static ProviderConnection get(ProviderConnectionID providerConnectionID) throws Exception
+	{
+		return load(providerConnectionID, DataExists.MustExist);
+	}
+
+	public static ProviderConnection findByProviderIDConnectionType(ProviderID providerID,
+		ProviderConnectionType providerConnectionType) throws Exception
+	{
+		ProviderConnectionList providerConnectionList = ProviderConnectionList.findByProviderIDConnectionType(
+			providerID, providerConnectionType);
+
+		if(providerConnectionList.size() == 1)
+			return providerConnectionList.get(0);
+
+		if(providerConnectionList.size() == 0)
+			return null;
+
+		throw new SearchException("Too Many Records Found");
+	}
+
 	/* Implementation */
 	public void readFrom(DataReader reader) throws Exception
 	{
@@ -63,6 +94,8 @@ public class ProviderConnection extends DatabaseObject
 		fProviderConnectionType = reader.readDataID("ProviderConnectionType", ProviderConnectionType.MaxLength, ProviderConnectionType.CtorString);
 
 		fConnectionURL = reader.readString("ConnectionURL", ConnectionURLMaxLength);
+		fAdminUserID = reader.readString("AdminUserID", AdminUserIDMaxLength);	//TODO: decrypt after reading
+		fAdminPassword = reader.readString("AdminPassword", AdminPasswordMaxLength);	//TODO: decrypt after reading
 	}
 
 	public void writeTo(DataWriter writer) throws Exception
@@ -72,6 +105,8 @@ public class ProviderConnection extends DatabaseObject
 		writer.writeDataID("ProviderConnectionType", fProviderConnectionType, ProviderConnectionType.MaxLength);
 
 		writer.writeString("ConnectionURL", fConnectionURL, ConnectionURLMaxLength);
+		writer.writeString("AdminUserID", fAdminUserID, AdminUserIDMaxLength);	//TODO: encrypt before writing
+		writer.writeString("AdminPassword", fAdminPassword, AdminPasswordMaxLength);	//TODO: encrypt before writing
 	}
 
 	public void update() throws Exception

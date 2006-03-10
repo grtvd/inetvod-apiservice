@@ -4,30 +4,29 @@
  */
 package com.inetvod.apiClient;
 
+import com.inetvod.common.core.Logger;
+import com.inetvod.common.data.CategoryID;
+import com.inetvod.common.data.CategoryIDList;
+import com.inetvod.common.data.ProviderID;
+import com.inetvod.common.data.ShowID;
+import com.inetvod.common.dbdata.ProviderConnection;
 import com.inetvod.common.dbdata.Show;
+import com.inetvod.common.dbdata.ShowCategory;
+import com.inetvod.common.dbdata.ShowCategoryList;
 import com.inetvod.common.dbdata.ShowList;
 import com.inetvod.common.dbdata.ShowProvider;
-import com.inetvod.common.dbdata.ShowCategoryList;
-import com.inetvod.common.dbdata.ShowCategory;
-import com.inetvod.common.data.ShowID;
-import com.inetvod.common.data.CategoryIDList;
-import com.inetvod.common.data.CategoryID;
-import com.inetvod.common.data.ProviderID;
-import com.inetvod.common.core.Logger;
 
 public abstract class ShowUpdater
 {
 	//TODO: see what methods can be combined from ProviderShowUpdater and ConnectionShowUpdater and added to this class
 
 	/* Fields */
-	protected ProviderID fProviderID;
-
-	/* Getters and Setters */
+	protected ProviderConnection fProviderConnection;
 
 	/* Construction */
-	protected ShowUpdater(ProviderID providerID)
+	protected ShowUpdater(ProviderConnection providerConnection)
 	{
-		fProviderID = providerID;
+		fProviderConnection = providerConnection;
 	}
 
 	/* Implementation */
@@ -51,10 +50,11 @@ public abstract class ShowUpdater
 	protected void updateShow(ShowData showData) throws Exception
 	{
 		final String METHOD_NAME = "updateShow";
+		ProviderID providerID = fProviderConnection.getProviderID();
 		Show show;
 		ShowProvider showProvider;
 
-		showProvider = ShowProvider.findByProviderIDProviderShowID(fProviderID, showData.getProviderShowID());
+		showProvider = ShowProvider.findByProviderIDProviderShowID(providerID, showData.getProviderShowID());
 		if(showProvider != null)
 		{
 			show = Show.get(showProvider.getShowID());
@@ -64,7 +64,7 @@ public abstract class ShowUpdater
 			show = locateExistingShow(showData);
 			if(show != null)
 			{
-				showProvider = ShowProvider.findByShowIDProviderID(show.getShowID(), fProviderID);
+				showProvider = ShowProvider.findByShowIDProviderID(show.getShowID(), providerID);
 				if(showProvider != null)
 				{
 					Logger.logWarn(this, METHOD_NAME, String.format("Provider already set for Show, possible bad ProviderShowID(%s) for ShowID(%s)",
@@ -75,7 +75,8 @@ public abstract class ShowUpdater
 			else
 				show = Show.newInstance(showData.getName(), showData.getIsAdult());
 
-			showProvider = ShowProvider.newInstance(show.getShowID(), fProviderID, showData.getProviderShowID());
+			showProvider = ShowProvider.newInstance(show.getShowID(), providerID,
+				fProviderConnection.getProviderConnectionID(), showData.getProviderShowID());
 		}
 
 		saveShowData(showData, show, showProvider);

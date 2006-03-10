@@ -10,8 +10,8 @@ import com.inetvod.apiClient.ShowData;
 import com.inetvod.apiClient.ShowUpdater;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.data.CategoryID;
-import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.ShowIDList;
+import com.inetvod.common.dbdata.ProviderConnection;
 import com.inetvod.providerClient.ProviderRequestor;
 import com.inetvod.providerClient.rqdata.ShowDetail;
 import com.inetvod.providerClient.rqdata.ShowDetailList;
@@ -26,20 +26,20 @@ public class ProviderShowUpdater extends ShowUpdater
 	/* Getters and Setters */
 
 	/* Construction */
-	private ProviderShowUpdater(ProviderID providerID)
+	private ProviderShowUpdater(ProviderConnection providerConnection)
 	{
-		super(providerID);
+		super(providerConnection);
 	}
 
-	public static ProviderShowUpdater newInstance(ProviderID providerID)
+	public static ProviderShowUpdater newInstance(ProviderConnection providerConnection)
 	{
-		return new ProviderShowUpdater(providerID);
+		return new ProviderShowUpdater(providerConnection);
 	}
 
 	/* Implementation */
 	public void doUpdate() throws Exception
 	{
-		ProviderRequestor providerRequestor = ProviderRequestor.newInstance(fProviderID);
+		ProviderRequestor providerRequestor = ProviderRequestor.newInstance(fProviderConnection);
 
 		//TODO: set all ShowProvider Status of Available to Confirming
 

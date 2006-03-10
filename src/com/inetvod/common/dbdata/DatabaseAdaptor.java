@@ -256,7 +256,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			statement.setString(1, key.toString());
 			resultSet = statement.executeQuery();
 
-			return readOne(resultSet, exists);
+			return readOne(resultSet, exists, true);
 		}
 		finally
 		{
@@ -279,7 +279,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(command);
 
-			return readOne(resultSet, exists);
+			return readOne(resultSet, exists, true);
 		}
 		finally
 		{
@@ -304,7 +304,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			setProcParams(statement, params);
 			resultSet = statement.executeQuery();
 
-			return readOne(resultSet, exists);
+			return readOne(resultSet, exists, true);
 		}
 		finally
 		{
@@ -331,7 +331,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			setProcParams(statement, params);
 			resultSet = statement.executeQuery();
 
-			while((newObject = readOne(resultSet, DataExists.MayNotExist)) != null)
+			while((newObject = readOne(resultSet, DataExists.MayNotExist, false)) != null)
 				newList.add(newObject);
 		}
 		finally
@@ -384,7 +384,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 		}
 	}
 
-	protected T readOne(ResultSet resultSet, DataExists exists) throws SQLException, SearchException
+	protected T readOne(ResultSet resultSet, DataExists exists, boolean maxOne) throws SQLException, SearchException
 	{
 		if(!resultSet.next())
 		{
@@ -398,7 +398,10 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			DatabaseFieldReader reader = new DatabaseFieldReader(resultSet, fFields);
 			T newObject = fObjectCtor.newInstance(reader);
 			newObject.setNewRecord(false);
-			return newObject;
+
+			if(!maxOne || !resultSet.next())
+				return newObject;
+			throw new SearchException("Too Many Records Found");
 		}
 		catch(Exception e)
 		{

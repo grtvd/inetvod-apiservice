@@ -14,6 +14,7 @@ import com.inetvod.common.data.ProviderShowID;
 import com.inetvod.common.data.ShowCost;
 import com.inetvod.common.data.ShowID;
 import com.inetvod.common.data.ShowProviderID;
+import com.inetvod.common.data.ProviderConnectionID;
 
 public class ShowProvider extends DatabaseObject
 {
@@ -22,6 +23,7 @@ public class ShowProvider extends DatabaseObject
 	private ShowID fShowID;
 	private ProviderID fProviderID;
 
+	private ProviderConnectionID fProviderConnectionID;
 	private ProviderShowID fProviderShowID;
 	private String fShowURL;	// only available for 'Connection' type providers
 	private ShowCost fShowCost;
@@ -32,11 +34,10 @@ public class ShowProvider extends DatabaseObject
 
 	/* Getters and Setters */
 	public ShowProviderID getShowProviderID() { return fShowProviderID; }
-
 	public ShowID getShowID() { return fShowID; }
-
 	public ProviderID getProviderID() { return fProviderID; }
 
+	public ProviderConnectionID getProviderConnectionID() { return fProviderConnectionID; }
 	public ProviderShowID getProviderShowID() { return fProviderShowID; }
 
 	public String getShowURL() { return fShowURL; }
@@ -46,12 +47,14 @@ public class ShowProvider extends DatabaseObject
 	public void setShowCost(ShowCost showCost) { fShowCost = showCost; }
 
 	/* Construction */
-	private ShowProvider(ShowID showID, ProviderID providerID, ProviderShowID providerShowID)
+	private ShowProvider(ShowID showID, ProviderID providerID, ProviderConnectionID providerConnectionID,
+		ProviderShowID providerShowID)
 	{
 		super(true);
 		fShowProviderID = ShowProviderID.newInstance();
 		fShowID = showID;
 		fProviderID = providerID;
+		fProviderConnectionID = providerConnectionID;
 		fProviderShowID = providerShowID;
 	}
 
@@ -61,9 +64,10 @@ public class ShowProvider extends DatabaseObject
 		readFrom(reader);
 	}
 
-	public static ShowProvider newInstance(ShowID showID, ProviderID providerID, ProviderShowID providerShowID)
+	public static ShowProvider newInstance(ShowID showID, ProviderID providerID,
+		ProviderConnectionID providerConnectionID, ProviderShowID providerShowID)
 	{
-		return new ShowProvider(showID, providerID, providerShowID);
+		return new ShowProvider(showID, providerID, providerConnectionID, providerShowID);
 	}
 
 	private static ShowProvider loadByShowIDProviderID(ShowID showID, ProviderID providerID, DataExists dataExists)
@@ -110,6 +114,8 @@ public class ShowProvider extends DatabaseObject
 		fShowID = reader.readDataID("ShowID", ShowID.MaxLength, ShowID.CtorString);
 		fProviderID = reader.readDataID("ProviderID", ProviderID.MaxLength, ProviderID.CtorString);
 
+		fProviderConnectionID = reader.readDataID("ProviderConnectionID", ProviderConnectionID.MaxLength,
+			ProviderConnectionID.CtorString);
 		fProviderShowID = reader.readDataID("ProviderShowID", ProviderShowID.MaxLength, ProviderShowID.CtorString);
 		fShowURL = reader.readString("ShowURL", Show.ShowURLMaxLength);
 		fShowCost = reader.readObject("ShowCost", ShowCost.CtorDataReader);
@@ -121,6 +127,7 @@ public class ShowProvider extends DatabaseObject
 		writer.writeDataID("ShowID", fShowID, ShowID.MaxLength);
 		writer.writeDataID("ProviderID", fProviderID, ProviderID.MaxLength);
 
+		writer.writeDataID("ProviderConnectionID", fProviderConnectionID, ProviderConnectionID.MaxLength);
 		writer.writeDataID("ProviderShowID", fProviderShowID, ProviderShowID.MaxLength);
 		writer.writeString("ShowURL", fShowURL, Show.ShowURLMaxLength);
 		writer.writeObject("ShowCost", fShowCost);
