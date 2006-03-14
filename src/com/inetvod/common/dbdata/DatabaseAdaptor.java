@@ -4,6 +4,9 @@
  */
 package com.inetvod.common.dbdata;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -14,7 +17,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.HashMap;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
+import java.util.Properties;
 
 import com.inetvod.common.core.DataExists;
 import com.inetvod.common.core.DataReader;
@@ -22,8 +27,12 @@ import com.inetvod.common.core.Logger;
 
 public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 {
-	private static final String DatabaseName = "iNetVOD";	//TODO: move to configuration
-	private static final String SchemaName = "dbo";	//TODO: move to configuration
+	private static String fServer;
+	private static String fDatabaseName;
+	private static String fSchemaName;
+	private static String fLogonUserID;
+	private static String fLogonPassword;
+
 	//private static final int MetaDataTableColumnName = 4;
 	//private static final int MetaDataTableColumnSqlType = 5;
 	//private static final int MetaDataTableColumnSqlSize = 7;
@@ -73,7 +82,8 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 		String[] nameParts = name.split("\\.");
 		fObjectName = nameParts[nameParts.length - 1];
 
-		initialize();
+		if(!initialize())
+			return;
 		int numFields = fFields.size();
 
 		fGetStoredProcedure = buildProcName(fObjectName + GetProcedureSuffix, 1);
@@ -82,7 +92,28 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 		fDeleteStoredProcedure = buildProcName(fObjectName + DeleteProcedureSuffix, 1);
 	}
 
-	private void initialize()
+	public static void setDBConnectFile(String dbConnectFilePath) throws IOException, InvalidPropertiesFormatException
+	{
+		//noinspection MismatchedQueryAndUpdateOfCollection
+		Properties properties = new Properties();
+		FileInputStream propertiesFile = new FileInputStream(new File(dbConnectFilePath));
+		try
+		{
+			properties.loadFromXML(propertiesFile);
+		}
+		finally
+		{
+			propertiesFile.close();
+		}
+
+		fServer = properties.getProperty("Server");
+		fDatabaseName = properties.getProperty("DatabaseName");
+		fSchemaName = properties.getProperty("SchemaName");
+		fLogonUserID = properties.getProperty("LogonUserID");
+		fLogonPassword = properties.getProperty("LogonPassword");
+	}
+
+	private boolean initialize()
 	{
 		try
 		{
@@ -90,11 +121,14 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 
 			initFields(connection);
 			confirmProcedures(connection);
+			return true;
 		}
 		catch(Exception e)
 		{
 			Logger.logErr(this, "ctor", e);
 		}
+
+		return false;
 	}
 
 	private void initFields(Connection connection)
@@ -126,7 +160,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			//Logger.logInfo(this, "getFieldsFromUpdateProcedures", String.format("Confirming table (%s) via (%s)", fObjectName, procedureName));	//TODO: convert to logDebug
 
 			fieldPos = 0;
-			resultSet = connection.getMetaData().getProcedureColumns(DatabaseName, SchemaName, procedureName, null);
+			resultSet = connection.getMetaData().getProcedureColumns(fDatabaseName, fSchemaName, procedureName, null);
 			while(resultSet.next())
 			{
 				fieldName = resultSet.getString(MetaDataProcedureColumnName).replaceAll("@", "");
@@ -162,7 +196,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 
 			//Logger.logInfo(this, "confirmProcedures", String.format("Confirming table(%s)", fObjectName));	//TODO: convert to logDebug
 
-			resultSet = connection.getMetaData().getProcedureColumns(DatabaseName, SchemaName, procedureNameMatch,
+			resultSet = connection.getMetaData().getProcedureColumns(fDatabaseName, fSchemaName, procedureNameMatch,
 				"@RETURN_VALUE");
 			procedureNameMatch = fObjectName + "_";		// for search '_' is wildcard, so must manually match against '_'
 			while(resultSet.next())
@@ -195,7 +229,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			int fieldSqlType;
 			int fieldSqlSize;
 
-			resultSet = connection.getMetaData().getProcedureColumns(DatabaseName, SchemaName, procedureName, null);
+			resultSet = connection.getMetaData().getProcedureColumns(fDatabaseName, fSchemaName, procedureName, null);
 			while(resultSet.next())
 			{
 				fieldName = resultSet.getString(MetaDataProcedureColumnName).replaceAll("@", "");
@@ -236,9 +270,13 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 
 	private Connection getConnection() throws Exception
 	{
+		if((fServer == null) || (fDatabaseName == null) || (fSchemaName == null) || (fLogonUserID == null))
+			throw new Exception("DB connection not set");
+
 		Class.forName("com.microsoft.jdbc.sqlserver.SQLServerDriver");
-		Connection conn = DriverManager.getConnection("jdbc:microsoft:sqlserver://localhost","inetvod","1v0d");
-		conn.setCatalog(DatabaseName);
+		Connection conn = DriverManager.getConnection("jdbc:microsoft:sqlserver://" + fServer,
+			fLogonUserID, fLogonPassword);
+		conn.setCatalog(fDatabaseName);
 		return conn;
 	}
 
@@ -479,7 +517,7 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 		connection = getConnection();
 		//resultSet = connection.getMetaData().getSchemas();
 		resultSet = connection.getMetaData().getProcedureColumns("iNetVOD", "dbo", fObjectName + "_Insert", null);
-		//resultSet = connection.getMetaData().getColumns(DatabaseName, SchemaName, fObjectName, null);
+		//resultSet = connection.getMetaData().getColumns(fDatabaseName, fSchemaName, fObjectName, null);
 		while(resultSet.next())
 		{
 			for(int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++)

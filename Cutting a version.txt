@@ -26,3 +26,6 @@
 		- Run as: APISERVER\inetvod
 		- At 4:00 AM every day
 
+
+- Steps for next update only (remove these items after each deployment)
+	Deploy dbconnect.xml file

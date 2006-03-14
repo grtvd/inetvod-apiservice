@@ -17,6 +17,7 @@ import com.inetvod.apiClient.providerapi.ProviderShowUpdater;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.dbdata.Category;
+import com.inetvod.common.dbdata.DatabaseAdaptor;
 import com.inetvod.common.dbdata.Member;
 import com.inetvod.common.dbdata.MemberAccount;
 import com.inetvod.common.dbdata.MemberLogon;
@@ -75,6 +76,8 @@ public class MainApp
 		}
 
 		DOMConfigurator.configure(new File(properties.getProperty("log4j")).toURL());
+
+		DatabaseAdaptor.setDBConnectFile(properties.getProperty("dbconnect"));
 
 		// Preload DatabaseAdaptors
 		Provider.getDatabaseAdaptor();
