@@ -1,6 +1,6 @@
 /**
  * Copyright © 2006 iNetVOD, Inc. All Rights Reserved.
- * Confidential and Proprietary
+ * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.common.core;
 
