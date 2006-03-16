@@ -17,6 +17,7 @@ import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.dbdata.CategoryList;
 import com.inetvod.common.dbdata.ProviderConnection;
+import com.inetvod.common.dbdata.ShowProviderList;
 
 public class ConnectionShowUpdater extends ShowUpdater
 {
@@ -36,6 +37,8 @@ public class ConnectionShowUpdater extends ShowUpdater
 	{
 		BaseConnection connection = createConnection();
 		ShowDataList showDataList = connection.process();
+
+		ShowProviderList.markUnavailByProviderConnectionID(fProviderConnection.getProviderConnectionID());
 
 		for(ShowData showData : showDataList)
 		{

@@ -12,6 +12,7 @@ import com.inetvod.common.core.Logger;
 import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.ShowIDList;
 import com.inetvod.common.dbdata.ProviderConnection;
+import com.inetvod.common.dbdata.ShowProviderList;
 import com.inetvod.providerClient.ProviderRequestor;
 import com.inetvod.providerClient.rqdata.ShowDetail;
 import com.inetvod.providerClient.rqdata.ShowDetailList;
@@ -41,10 +42,10 @@ public class ProviderShowUpdater extends ShowUpdater
 	{
 		ProviderRequestor providerRequestor = ProviderRequestor.newInstance(fProviderConnection);
 
-		//TODO: set all ShowProvider Status of Available to Confirming
-
 		ShowIDList completeShowIDList = providerRequestor.showList();
 		ArrayList<ShowIDList> updateList = makeUpdateList(completeShowIDList);
+
+		ShowProviderList.markUnavailByProviderConnectionID(fProviderConnection.getProviderConnectionID());
 
 		ShowDetailList showDetailList;
 		ShowData showData;

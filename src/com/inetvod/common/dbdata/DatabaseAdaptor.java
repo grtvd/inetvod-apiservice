@@ -450,6 +450,29 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 		}
 	}
 
+	public int executeProc(String prodecure, DatabaseProcParam[] params) throws Exception
+	{
+		Connection connection = null;
+		CallableStatement statement = null;
+
+		try
+		{
+			connection = getConnection();
+
+			statement = connection.prepareCall(buildProcName(prodecure, (params == null) ? 0 : params.length));
+			setProcParams(statement, params);
+
+			return statement.executeUpdate();	// returns number of records effected
+		}
+		finally
+		{
+			if(statement != null)
+				statement.close();
+			if(connection != null)
+				connection.close();
+		}
+	}
+
 	public void update(T databaseObject) throws Exception
 	{
 		Connection connection = null;

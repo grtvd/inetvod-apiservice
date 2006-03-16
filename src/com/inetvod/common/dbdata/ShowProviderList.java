@@ -14,6 +14,7 @@ import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.ProviderIDList;
 import com.inetvod.common.data.ShowID;
 import com.inetvod.common.data.ShowProviderID;
+import com.inetvod.common.data.ProviderConnectionID;
 
 public class ShowProviderList extends ArrayList<ShowProvider>
 {
@@ -78,6 +79,15 @@ public class ShowProviderList extends ArrayList<ShowProvider>
 		}
 
 		return showProviderList;
+	}
+
+	public static void markUnavailByProviderConnectionID(ProviderConnectionID providerConnectionID) throws Exception
+	{
+		DatabaseProcParam params[] = new DatabaseProcParam[1];
+
+		params[0] = new DatabaseProcParam(Types.VARCHAR, providerConnectionID.toString());
+
+		ShowProvider.getDatabaseAdaptor().executeProc("ShowProvider_MarkUnavailByProviderConnectionID", params);
 	}
 
 	/* Item Methods */
