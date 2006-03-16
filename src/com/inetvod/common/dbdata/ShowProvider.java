@@ -15,6 +15,7 @@ import com.inetvod.common.data.ShowCost;
 import com.inetvod.common.data.ShowID;
 import com.inetvod.common.data.ShowProviderID;
 import com.inetvod.common.data.ProviderConnectionID;
+import com.inetvod.common.data.ShowAvail;
 
 public class ShowProvider extends DatabaseObject
 {
@@ -27,6 +28,8 @@ public class ShowProvider extends DatabaseObject
 	private ProviderShowID fProviderShowID;
 	private String fShowURL;	// only available for 'Connection' type providers
 	private ShowCost fShowCost;
+
+	private ShowAvail fShowAvail;
 
 	private static DatabaseAdaptor<ShowProvider, ShowProviderList> fDatabaseAdaptor =
 		new DatabaseAdaptor<ShowProvider, ShowProviderList>(ShowProvider.class, ShowProviderList.class);
@@ -45,6 +48,9 @@ public class ShowProvider extends DatabaseObject
 
 	public ShowCost getShowCost() { return fShowCost; }
 	public void setShowCost(ShowCost showCost) { fShowCost = showCost; }
+
+	public ShowAvail getShowAvail() { return fShowAvail; }
+	public void setShowAvail(ShowAvail showAvail) { fShowAvail = showAvail; }
 
 	/* Construction */
 	private ShowProvider(ShowID showID, ProviderID providerID, ProviderConnectionID providerConnectionID,
@@ -119,6 +125,8 @@ public class ShowProvider extends DatabaseObject
 		fProviderShowID = reader.readDataID("ProviderShowID", ProviderShowID.MaxLength, ProviderShowID.CtorString);
 		fShowURL = reader.readString("ShowURL", Show.ShowURLMaxLength);
 		fShowCost = reader.readObject("ShowCost", ShowCost.CtorDataReader);
+
+		fShowAvail = ShowAvail.convertFromString(reader.readString("ShowAvail", ShowAvail.MaxLength));
 	}
 
 	public void writeTo(DataWriter writer) throws Exception
@@ -131,6 +139,8 @@ public class ShowProvider extends DatabaseObject
 		writer.writeDataID("ProviderShowID", fProviderShowID, ProviderShowID.MaxLength);
 		writer.writeString("ShowURL", fShowURL, Show.ShowURLMaxLength);
 		writer.writeObject("ShowCost", fShowCost);
+
+		writer.writeString("ShowAvail", ShowAvail.convertToString(fShowAvail), ShowAvail.MaxLength);
 	}
 
 	public void update() throws Exception
