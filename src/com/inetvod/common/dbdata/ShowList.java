@@ -15,6 +15,7 @@ import com.inetvod.common.data.MemberID;
 import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.ProviderIDList;
 import com.inetvod.common.data.ShowID;
+import com.inetvod.common.core.DateUtil;
 
 public class ShowList extends ArrayList<Show>
 {
@@ -55,7 +56,7 @@ public class ShowList extends ArrayList<Show>
 
 		params[0] = new DatabaseProcParam(Types.VARCHAR, name);
 		params[1] = new DatabaseProcParam(Types.VARCHAR, episodeName);
-		params[2] = new DatabaseProcParam(Types.DATE, releasedOn);	//TODO: convert to GMT date
+		params[2] = new DatabaseProcParam(Types.DATE, DateUtil.convertToDBDate(releasedOn));
 
 		return Show.getDatabaseAdaptor().selectManyByProc("Show_GetByNameReleasedOn", params);
 	}

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -416,6 +417,8 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 					statement.setShort(i + 1, (Short)param.Value);
 				else if(param.SqlType == Types.INTEGER)
 					statement.setInt(i + 1, (Integer)param.Value);
+				else if(param.SqlType == Types.DATE)
+					statement.setDate(i + 1, (Date)param.Value);
 				else
 					throw new IllegalArgumentException();
 			}

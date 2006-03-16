@@ -5,17 +5,17 @@
 package com.inetvod.common.dbdata;
 
 import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.sql.Types;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
 
 import com.inetvod.common.core.DataID;
 import com.inetvod.common.core.DataWriter;
+import com.inetvod.common.core.DateUtil;
 import com.inetvod.common.core.Writeable;
 
 public class DatabaseFieldWriter extends DataWriter
@@ -156,7 +156,7 @@ public class DatabaseFieldWriter extends DataWriter
 	public void writeDate(String fieldName, Date data) throws Exception
 	{
 		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
-		fStatement.setDate(fieldPosition, (data != null) ? new java.sql.Date (data.getTime()) : null);
+		fStatement.setDate(fieldPosition, (data != null) ? DateUtil.convertToDBDate(data) : null);
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class DatabaseFieldWriter extends DataWriter
 	public void writeDateTime(String fieldName, Date data) throws Exception
 	{
 		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
-		fStatement.setTimestamp(fieldPosition, (data != null) ? new Timestamp (data.getTime()) : null);
+		fStatement.setTimestamp(fieldPosition, (data != null) ? DateUtil.convertToDBTimestamp(data) : null);
 	}
 
 	/**

@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.inetvod.common.core.DataID;
 import com.inetvod.common.core.DataReader;
+import com.inetvod.common.core.DateUtil;
 import com.inetvod.common.core.Readable;
 
 public class DatabaseFieldReader extends DataReader
@@ -178,7 +179,7 @@ public class DatabaseFieldReader extends DataReader
 	 */
 	public Date readDateTime(String fieldName) throws Exception
 	{
-		Date value = fResultSet.getTimestamp(buildFullFieldName(fieldName));
+		Date value = DateUtil.convertFromDBTimestamp(fResultSet.getTimestamp(buildFullFieldName(fieldName)));
 
 		if(fResultSet.wasNull())
 			return null;

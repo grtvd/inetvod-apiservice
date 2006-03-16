@@ -35,11 +35,17 @@ public abstract class ShowUpdater
 
 	protected Show locateExistingShow(ShowData showData) throws Exception
 	{
-		if(showData.getReleasedYear() == null)
+		if((showData.getReleasedYear() == null) && (showData.getReleasedOn() == null))
 			return null;
 
-		ShowList showList = ShowList.findByNameReleasedYear(showData.getName(), showData.getEpisodeName(),
-			showData.getReleasedYear());
+		ShowList showList;
+
+		if(showData.getReleasedOn() != null)
+			showList = ShowList.findByNameReleasedOn(showData.getName(), showData.getEpisodeName(),
+				showData.getReleasedOn());
+		else
+			showList = ShowList.findByNameReleasedYear(showData.getName(), showData.getEpisodeName(),
+				showData.getReleasedYear());
 
 		//TODO: how do we handle more than one result?
 		if(showList.size() >= 1)

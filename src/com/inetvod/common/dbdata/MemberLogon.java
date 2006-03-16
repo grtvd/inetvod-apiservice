@@ -163,9 +163,9 @@ public class MemberLogon extends DatabaseObject
 
 		fSecretQuestion = reader.readString("SecretQuestion", SecretQuestionMaxLength);
 		fSecretAnswer = reader.readString("SecretAnswer", SecretAnswerMaxLength);
-		fTermsAcceptedOn = reader.readDate("TermsAcceptedOn");
+		fTermsAcceptedOn = reader.readDateTime("TermsAcceptedOn");
 		fTermsAcceptedVersion = reader.readString("TermsAcceptedVersion", TermsAcceptedVersionMaxLength);
-		fLogonFailedAt = reader.readDate("LogonFailedAt");
+		fLogonFailedAt = reader.readDateTime("LogonFailedAt");
 		fLogonFailedCount = reader.readIntValue("LogonFailedCount");
 		fLogonDisabled = reader.readBooleanValue("LogonDisabled");
 	}
@@ -180,9 +180,9 @@ public class MemberLogon extends DatabaseObject
 
 		writer.writeString("SecretQuestion", fSecretQuestion, SecretQuestionMaxLength);
 		writer.writeString("SecretAnswer", fSecretAnswer, SecretAnswerMaxLength);
-		writer.writeDate("TermsAcceptedOn", fTermsAcceptedOn);
+		writer.writeDateTime("TermsAcceptedOn", fTermsAcceptedOn);
 		writer.writeString("TermsAcceptedVersion", fTermsAcceptedVersion, TermsAcceptedVersionMaxLength);
-		writer.writeDate("LogonFailedAt", fLogonFailedAt);
+		writer.writeDateTime("LogonFailedAt", fLogonFailedAt);
 		writer.writeInt("LogonFailedCount", fLogonFailedCount);
 		writer.writeBooleanValue("LogonDisabled", fLogonDisabled);
 	}
