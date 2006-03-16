@@ -29,3 +29,4 @@
 
 - Steps for next update only (remove these items after each deployment)
 	Deploy dbconnect.xml file
+	Deploy hrtlib.dll to /program files/inetvod/common

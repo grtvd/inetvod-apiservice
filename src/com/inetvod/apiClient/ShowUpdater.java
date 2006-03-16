@@ -9,6 +9,7 @@ import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.ShowID;
+import com.inetvod.common.data.ShowAvail;
 import com.inetvod.common.dbdata.ProviderConnection;
 import com.inetvod.common.dbdata.Show;
 import com.inetvod.common.dbdata.ShowCategory;
@@ -104,6 +105,7 @@ public abstract class ShowUpdater
 		showProvider.setShowURL(showData.getShowURL());
 		//TODO: need to support multiple ShowCost/ShowFormat records
 		showProvider.setShowCost(showData.getShowRentalList().get(0).getShowCostList().get(0));
+		showProvider.setShowAvail(ShowAvail.Available);
 		showProvider.update();
 
 		// update ShowCategory entries

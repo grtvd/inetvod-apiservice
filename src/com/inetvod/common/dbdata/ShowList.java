@@ -6,6 +6,7 @@ package com.inetvod.common.dbdata;
 
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import com.inetvod.common.data.CategoryID;
@@ -31,8 +32,11 @@ public class ShowList extends ArrayList<Show>
 		return Show.getDatabaseAdaptor().selectManyByProc("Show_Search", params);
 	}
 
-	public static ShowList findByNameReleasedYear(String name, String episodeName, short releasedYear) throws Exception
+	public static ShowList findByNameReleasedYear(String name, String episodeName, Short releasedYear) throws Exception
 	{
+		if((releasedYear == null) || (releasedYear == 0))
+			throw new IllegalArgumentException("ReleaseOn cannot be null or 0");
+
 		DatabaseProcParam params[] = new DatabaseProcParam[3];
 
 		params[0] = new DatabaseProcParam(Types.VARCHAR, name);
@@ -40,6 +44,20 @@ public class ShowList extends ArrayList<Show>
 		params[2] = new DatabaseProcParam(Types.SMALLINT, releasedYear);
 
 		return Show.getDatabaseAdaptor().selectManyByProc("Show_GetByNameReleasedYear", params);
+	}
+
+	public static ShowList findByNameReleasedOn(String name, String episodeName, Date releasedOn) throws Exception
+	{
+		if(releasedOn == null)
+			throw new IllegalArgumentException("ReleaseOn cannot be null");
+
+		DatabaseProcParam params[] = new DatabaseProcParam[3];
+
+		params[0] = new DatabaseProcParam(Types.VARCHAR, name);
+		params[1] = new DatabaseProcParam(Types.VARCHAR, episodeName);
+		params[2] = new DatabaseProcParam(Types.DATE, releasedOn);	//TODO: convert to GMT date
+
+		return Show.getDatabaseAdaptor().selectManyByProc("Show_GetByNameReleasedOn", params);
 	}
 
 	public static ShowList findByRentedShowMemberID(MemberID memberID) throws Exception
