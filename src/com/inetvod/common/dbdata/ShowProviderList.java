@@ -15,6 +15,7 @@ import com.inetvod.common.data.ProviderIDList;
 import com.inetvod.common.data.ShowID;
 import com.inetvod.common.data.ShowProviderID;
 import com.inetvod.common.data.ProviderConnectionID;
+import com.inetvod.common.data.ShowAvail;
 
 public class ShowProviderList extends ArrayList<ShowProvider>
 {
@@ -126,11 +127,12 @@ public class ShowProviderList extends ArrayList<ShowProvider>
 	}
 
 	/* Group Methods */
-	/// <summary>
-	/// Returns a sub-set of items from this list that have the specified ShowID
-	/// </summary>
-	/// <param name="showID"></param>
-	/// <returns></returns>
+
+	/**
+	 * Returns a sub-set of items from this list that have the specified ShowID
+	 * @param showID
+	 * @return sub-set of ShowProviderList
+	 */
 	public ShowProviderList findItemsByShowID(ShowID showID)
 	{
 		ShowProviderList showProviderList = new ShowProviderList();
@@ -147,11 +149,11 @@ public class ShowProviderList extends ArrayList<ShowProvider>
 		return showProviderList;
 	}
 
-	/// <summary>
-	/// Returns a sub-set of items from this list that have the specified ProviderID
-	/// </summary>
-	/// <param name="providerIDList"></param>
-	/// <returns></returns>
+	/**
+	 * Returns a sub-set of items from this list that have the specified ProviderID
+	 * @param providerIDList
+	 * @return sub-set of ShowProviderList
+	 */
 	public ShowProviderList findItemsByProviderIDList(ProviderIDList providerIDList)
 	{
 		ShowProviderList showProviderList = new ShowProviderList();
@@ -162,6 +164,23 @@ public class ShowProviderList extends ArrayList<ShowProvider>
 		{
 			showProvider = (ShowProvider)iter.next();
 			if(providerIDList.contains(showProvider.getProviderID()))
+				showProviderList.add(showProvider);
+		}
+
+		return showProviderList;
+	}
+
+	/**
+	 * Returns a sub-set of items from this list that whose ShowAvail is Available
+	 * @return sub-set of ShowProviderList
+	 */
+	public ShowProviderList findItemsByAvailable()
+	{
+		ShowProviderList showProviderList = new ShowProviderList();
+
+		for(ShowProvider showProvider : this)
+		{
+			if(ShowAvail.Available.equals(showProvider.getShowAvail()))
 				showProviderList.add(showProvider);
 		}
 
