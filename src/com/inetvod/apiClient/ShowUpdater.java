@@ -8,8 +8,9 @@ import com.inetvod.common.core.Logger;
 import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.ProviderID;
-import com.inetvod.common.data.ShowID;
 import com.inetvod.common.data.ShowAvail;
+import com.inetvod.common.data.ShowID;
+import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
 import com.inetvod.common.dbdata.Show;
 import com.inetvod.common.dbdata.ShowCategory;
@@ -22,11 +23,13 @@ public abstract class ShowUpdater
 	//TODO: see what methods can be combined from ProviderShowUpdater and ConnectionShowUpdater and added to this class
 
 	/* Fields */
+	protected Provider fProvider;
 	protected ProviderConnection fProviderConnection;
 
 	/* Construction */
-	protected ShowUpdater(ProviderConnection providerConnection)
+	protected ShowUpdater(Provider provider, ProviderConnection providerConnection)
 	{
+		fProvider = provider;
 		fProviderConnection = providerConnection;
 	}
 

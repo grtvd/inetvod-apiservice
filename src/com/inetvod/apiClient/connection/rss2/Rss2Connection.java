@@ -18,23 +18,30 @@ import com.inetvod.common.data.ShowCost;
 import com.inetvod.common.data.ShowCostType;
 import com.inetvod.common.data.ShowFormat;
 import com.inetvod.common.data.ShowRental;
+import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
 
 public class Rss2Connection extends BaseConnection
 {
+	/* Constants */
+	private static final String ProviderNameField = "provider.name";
+	private static final String ChannelTitleField = "channel.title";
+	private static final String ChannelDescriptionField = "channel.description";
+	private static final String ItemTitleField = "item.title";
+
 	/* Fields */
 
 	/* Getters and Setters */
 
 	/* Construction */
-	private Rss2Connection(ProviderConnection providerConnection)
+	private Rss2Connection(Provider provider, ProviderConnection providerConnection)
 	{
-		super(providerConnection);
+		super(provider, providerConnection);
 	}
 
-	public static Rss2Connection newInstance(ProviderConnection providerConnection)
+	public static Rss2Connection newInstance(Provider provider, ProviderConnection providerConnection)
 	{
-		return new Rss2Connection(providerConnection);
+		return new Rss2Connection(provider, providerConnection);
 	}
 
 	/* Implementation */
@@ -71,8 +78,8 @@ public class Rss2Connection extends BaseConnection
 
 				showData = new ShowData();
 				showData.setProviderShowID(new ProviderShowID(item.getGuid()));
-				showData.setName(channel.getDescription());
-				showData.setEpisodeName(item.getTitle());
+				showData.setName(getShowName(channel, item));
+				showData.setEpisodeName(getEpisodeName(channel, item));
 				showData.setReleasedOn(item.getPubDate());
 				showData.setDescription(item.getDescription().getText());
 
@@ -101,5 +108,35 @@ public class Rss2Connection extends BaseConnection
 		}
 
 		return null;
+	}
+
+	private String getShowName(Channel channel, Item item)
+	{
+		String field = fProviderConnection.getUseFieldForName();
+		if(field == null)
+			return channel.getTitle();
+		return getFieldValue(field, channel, item);
+	}
+
+	private String getEpisodeName(Channel channel, Item item)
+	{
+		String field = fProviderConnection.getUseFieldForEpisodeName();
+		if(field == null)
+			return item.getTitle();
+		return getFieldValue(field, channel, item);
+	}
+
+	private String getFieldValue(String field, Channel channel, Item item)
+	{
+		if(ProviderNameField.equals(field))
+			return fProvider.getName();
+		if(ChannelTitleField.equals(field))
+			return channel.getTitle();
+		if(ChannelDescriptionField.equals(field))
+			return channel.getDescription();
+		if(ItemTitleField.equals(field))
+			return item.getTitle();
+
+		throw new IllegalArgumentException(String.format("Unknown field(%s)", field));
 	}
 }

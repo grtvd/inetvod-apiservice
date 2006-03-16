@@ -16,27 +16,37 @@ import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.dbdata.CategoryList;
+import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
 import com.inetvod.common.dbdata.ShowProviderList;
 
 public class ConnectionShowUpdater extends ShowUpdater
 {
 	/* Construction */
-	private ConnectionShowUpdater(ProviderConnection providerConnection)
+	private ConnectionShowUpdater(Provider provider, ProviderConnection providerConnection)
 	{
-		super(providerConnection);
+		super(provider, providerConnection);
 	}
 
-	public static ConnectionShowUpdater newInstance(ProviderConnection providerConnection)
+	public static ConnectionShowUpdater newInstance(Provider provider, ProviderConnection providerConnection)
 	{
-		return new ConnectionShowUpdater(providerConnection);
+		return new ConnectionShowUpdater(provider, providerConnection);
 	}
 
 	/* Implementation */
 	public void doUpdate() throws Exception
 	{
+		if(!fProviderConnection.isEnabled())
+		{
+			ShowProviderList.markUnavailByProviderConnectionID(fProviderConnection.getProviderConnectionID());
+			return;
+		}
+
 		BaseConnection connection = createConnection();
 		ShowDataList showDataList = connection.process();
+
+		// Note: fetch the new ShowDateList before marking Unavailable.  If connection is down, will leave
+		// current data unchanged.
 
 		ShowProviderList.markUnavailByProviderConnectionID(fProviderConnection.getProviderConnectionID());
 
@@ -59,8 +69,8 @@ public class ConnectionShowUpdater extends ShowUpdater
 			+ "Connection";
 
 		Class<BaseConnection> cl = (Class<BaseConnection>)Class.forName(connectionName);
-		Method method = cl.getMethod("newInstance", ProviderConnection.class);
-		return (BaseConnection)method.invoke(cl, fProviderConnection);
+		Method method = cl.getMethod("newInstance", Provider.class, ProviderConnection.class);
+		return (BaseConnection)method.invoke(cl, fProvider, fProviderConnection);
 	}
 
 	private boolean confirmShowData(ShowData showData /*TODO, RatingIDList validRatingIDList*/) throws Exception

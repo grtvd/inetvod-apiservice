@@ -121,10 +121,20 @@ public class MainApp
 			providerConnectionList = ProviderConnectionList.findByProviderID(provider.getProviderID());
 
 			for(ProviderConnection providerConnection : providerConnectionList)
-				if(ProviderConnectionType.ProviderAPI.equals(providerConnection.getProviderConnectionType()))
-					ProviderShowUpdater.newInstance(providerConnection).doUpdate();
-				else
-					ConnectionShowUpdater.newInstance(providerConnection).doUpdate();
+			{
+				try
+				{
+					if(ProviderConnectionType.ProviderAPI.equals(providerConnection.getProviderConnectionType()))
+						ProviderShowUpdater.newInstance(provider, providerConnection).doUpdate();
+					else
+						ConnectionShowUpdater.newInstance(provider, providerConnection).doUpdate();
+				}
+				catch(Exception e)
+				{
+					Logger.logErr(this, "updateAllProviders", String.format("Failed during update of Provider(%s)/ProviderConnection(%s)",
+						provider.getProviderID().toString(), providerConnection.getProviderConnectionID().toString()), e);
+				}
+			}
 		}
 	}
 

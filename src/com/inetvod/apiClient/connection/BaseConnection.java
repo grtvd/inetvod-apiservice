@@ -14,11 +14,13 @@ import com.inetvod.apiClient.ShowDataList;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.core.Readable;
 import com.inetvod.common.core.XmlDataReader;
+import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
 
 public abstract class BaseConnection
 {
 	/* Fields */
+	protected Provider fProvider;
 	protected ProviderConnection fProviderConnection;
 	protected String fConnectionURL;
 	protected static final int TimeoutMillis = 60000;	//TODO: config?
@@ -26,8 +28,9 @@ public abstract class BaseConnection
 	/* Getters and Setters */
 
 	/* Construction */
-	protected BaseConnection(ProviderConnection providerConnection)
+	protected BaseConnection(Provider provider, ProviderConnection providerConnection)
 	{
+		fProvider = provider;
 		fProviderConnection = providerConnection;
 		fConnectionURL = fProviderConnection.getConnectionURL();
 	}

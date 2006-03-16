@@ -11,6 +11,7 @@ import com.inetvod.apiClient.ShowUpdater;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.ShowIDList;
+import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
 import com.inetvod.common.dbdata.ShowProviderList;
 import com.inetvod.providerClient.ProviderRequestor;
@@ -27,23 +28,32 @@ public class ProviderShowUpdater extends ShowUpdater
 	/* Getters and Setters */
 
 	/* Construction */
-	private ProviderShowUpdater(ProviderConnection providerConnection)
+	private ProviderShowUpdater(Provider provider, ProviderConnection providerConnection)
 	{
-		super(providerConnection);
+		super(provider, providerConnection);
 	}
 
-	public static ProviderShowUpdater newInstance(ProviderConnection providerConnection)
+	public static ProviderShowUpdater newInstance(Provider provider, ProviderConnection providerConnection)
 	{
-		return new ProviderShowUpdater(providerConnection);
+		return new ProviderShowUpdater(provider, providerConnection);
 	}
 
 	/* Implementation */
 	public void doUpdate() throws Exception
 	{
+		if(!fProviderConnection.isEnabled())
+		{
+			ShowProviderList.markUnavailByProviderConnectionID(fProviderConnection.getProviderConnectionID());
+			return;
+		}
+
 		ProviderRequestor providerRequestor = ProviderRequestor.newInstance(fProviderConnection);
 
 		ShowIDList completeShowIDList = providerRequestor.showList();
 		ArrayList<ShowIDList> updateList = makeUpdateList(completeShowIDList);
+
+		// Note: fetch the new ShowIDList before marking Unavailable.  If connection is down, will leave
+		// current data unchanged.
 
 		ShowProviderList.markUnavailByProviderConnectionID(fProviderConnection.getProviderConnectionID());
 
