@@ -18,6 +18,10 @@
         <attribute name="method" value="2" />
         <attribute name="URI" value="/" />
       </containerElement>
+      <containerElement type="library" level="application" name="javamail-1.3.2">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/" />
+      </containerElement>
       <containerElement type="library" level="application" name="logging-log4j-1.2.11">
         <attribute name="method" value="2" />
         <attribute name="URI" value="/" />

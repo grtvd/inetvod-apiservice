@@ -24,9 +24,8 @@
 		- Run: "C:\Program Files\Java\jre1.5.0_06\bin\java.exe" -jar "C:\Program Files\iNetVOD\apiservice\apiservice.jar"
 		- Start in: "C:\Program Files\iNetVOD\apiservice"
 		- Run as: APISERVER\inetvod
-		- At 4:00 AM every day
+		- Run every 6 hours starting at 4 AM MT.
 
 
 - Steps for next update only (remove these items after each deployment)
-	Deploy dbconnect.xml file
-	Deploy hrtlib.dll to /program files/inetvod/common
+	(none)

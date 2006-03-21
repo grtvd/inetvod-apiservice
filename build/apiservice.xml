@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
+	<entry key="dbconnect">/program files/inetvod/common/dbconnect.xml</entry>
 	<entry key="log4j">log4j.xml</entry>
 </properties>
