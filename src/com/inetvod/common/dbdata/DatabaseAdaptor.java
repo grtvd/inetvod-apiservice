@@ -274,8 +274,8 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 		if((fServer == null) || (fDatabaseName == null) || (fSchemaName == null) || (fLogonUserID == null))
 			throw new Exception("DB connection not set");
 
-		Class.forName("com.microsoft.jdbc.sqlserver.SQLServerDriver");
-		Connection conn = DriverManager.getConnection("jdbc:microsoft:sqlserver://" + fServer,
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://" + fServer,
 			fLogonUserID, fLogonPassword);
 		conn.setCatalog(fDatabaseName);
 		return conn;

@@ -26,7 +26,7 @@
         <attribute name="method" value="2" />
         <attribute name="URI" value="/" />
       </containerElement>
-      <containerElement type="library" level="application" name="microsoft sql server for jdbc">
+      <containerElement type="library" level="application" name="microsoft sql server 2005 jdbc driver">
         <attribute name="method" value="2" />
         <attribute name="URI" value="/" />
       </containerElement>
@@ -45,12 +45,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="microsoft sql server for jdbc" level="application" />
     <orderEntry type="library" name="logging-log4j-1.2.11" level="application" />
     <orderEntry type="library" name="commons-logging-1.0.4" level="application" />
     <orderEntry type="library" name="commons-httpclient-3.0-rc3" level="application" />
     <orderEntry type="library" name="commons-codec-1.3" level="application" />
     <orderEntry type="library" name="javamail-1.3.2" level="application" />
+    <orderEntry type="library" name="microsoft sql server 2005 jdbc driver" level="application" />
     <orderEntryProperties />
   </component>
 </module>
