@@ -38,10 +38,4 @@ public class Enclosure implements Readable
 		fURL = reader.readString("url", URLMaxLength);
 		fType = reader.readString("type", TypeMaxLength);
 	}
-
-//	public void writeTo(DataWriter writer) throws Exception
-//	{
-//		writer.writeString("url", fURL, 256);
-//		writer.writeString("type", fType, 256);
-//	}
 }

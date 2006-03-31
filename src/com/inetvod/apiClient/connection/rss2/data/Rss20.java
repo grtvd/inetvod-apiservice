@@ -31,9 +31,4 @@ public class Rss20 implements Readable
 	{
 		fChannel = reader.readObject("channel", Channel.CtorDataReader);
 	}
-
-//	public void writeTo(DataWriter writer) throws Exception
-//	{
-//		writer.writeObject("channel", fChannel);
-//	}
 }

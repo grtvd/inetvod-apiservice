@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.Readable;
+import com.inetvod.common.core.StrUtil;
 
 public class Description implements Readable
 {
@@ -34,34 +35,6 @@ public class Description implements Readable
 	{
 //		fLink = reader.readString("a", 256);
 //		fImage = reader.readString("img", 256);
-		fText = removeHtml(reader.readString(null, TextMaxLength));
-	}
-
-//	public void writeTo(DataWriter writer) throws Exception
-//	{
-//	}
-
-	private String removeHtml(String html)
-	{
-		StringBuilder sb = new StringBuilder();
-
-		boolean inTag = false;
-
-		for(char ch : html.toCharArray())
-		{
-			if(ch == '<')
-				inTag = true;
-			else if(ch == '>')
-				inTag = false;
-			else if((ch == '\n') || (ch == '\r'))
-				;
-			else
-			{
-				if(!inTag)
-					sb.append(ch);
-			}
-		}
-
-		return sb.toString().trim();
+		fText = StrUtil.removeHtml(reader.readString(null, TextMaxLength));
 	}
 }

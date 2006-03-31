@@ -6,11 +6,11 @@ package com.inetvod.apiClient;
 
 import java.util.Date;
 
-import com.inetvod.common.data.RatingID;
-import com.inetvod.common.data.ProviderShowID;
-import com.inetvod.common.data.ShowRentalList;
-import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.core.LanguageID;
+import com.inetvod.common.data.CategoryIDList;
+import com.inetvod.common.data.ProviderShowID;
+import com.inetvod.common.data.RatingID;
+import com.inetvod.common.data.ShowRentalList;
 
 public class ShowData
 {
@@ -30,7 +30,6 @@ public class ShowData
 	private LanguageID fLanguageID;
 	private Boolean fIsAdult;
 
-	private String ShowURL;
 	private ShowRentalList fShowRentalList;
 
 	/* Getters and Setters */
@@ -76,9 +75,6 @@ public class ShowData
 
 	public Boolean getIsAdult() { return fIsAdult; }
 	public void setIsAdult(Boolean isAdult) { fIsAdult = isAdult; }
-
-	public String getShowURL() { return ShowURL; }
-	public void setShowURL(String showURL) { ShowURL = showURL; }
 
 	public ShowRentalList getShowRentalList()
 	{
