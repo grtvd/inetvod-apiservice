@@ -139,7 +139,7 @@ public class DatabaseFieldWriter extends DataWriter
 	public void writeString(String fieldName, String data, int maxLength) throws Exception
 	{
 		if((data != null) && (data.length() > maxLength))
-			throw new Exception("invalid len(" + data.length() + "), maxLength(" + maxLength +" )");
+			throw new Exception(String.format("invalid len(%d), maxLength(%d), for fieldName(%s)", data.length(), maxLength, fieldName));
 
 		//TODO: might need to update this to handle 'text' (blob) fields larger than 4000 chars
 		int fieldPosition = getField(buildFullFieldName(fieldName)).Position;
