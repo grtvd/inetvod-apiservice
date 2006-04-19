@@ -58,7 +58,7 @@ public class CreditCard implements Readable, Writeable
 		if((fExpireDate == null) || (fExpireDate.length() != 6))
 			return 0;
 
-		return Integer.parseInt(fExpireDate.substring(2, 4));
+		return Integer.parseInt(fExpireDate.substring(2, 6));
 	}
 
 	public void setExpireDate(int expireMonth, int expireYear)
