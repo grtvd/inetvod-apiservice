@@ -6,15 +6,15 @@ package com.inetvod.apiservice;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 import org.apache.log4j.xml.DOMConfigurator;
 
+import com.inetvod.apiClient.CategoryMapper;
 import com.inetvod.apiClient.connection.ConnectionShowUpdater;
 import com.inetvod.apiClient.providerapi.ProviderShowUpdater;
 import com.inetvod.common.core.Logger;
+import com.inetvod.common.data.ProviderConnectionID;
 import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.dbdata.Category;
 import com.inetvod.common.dbdata.DatabaseAdaptor;
@@ -61,7 +61,7 @@ public class MainApp
 		}
 	}
 
-	private void init() throws IOException, InvalidPropertiesFormatException
+	private void init() throws Exception
 	{
 		//noinspection MismatchedQueryAndUpdateOfCollection
 		Properties properties = new Properties();
@@ -94,6 +94,8 @@ public class MainApp
 		ShowProvider.getDatabaseAdaptor();
 		ShowCategory.getDatabaseAdaptor();
 		RentedShow.getDatabaseAdaptor();
+
+		CategoryMapper.load(properties.getProperty("categoryMapper"));
 	}
 
 	@SuppressWarnings({"UNUSED_SYMBOL"})
@@ -136,6 +138,18 @@ public class MainApp
 				}
 			}
 		}
+	}
+
+	@SuppressWarnings({"UNUSED_SYMBOL"})
+	private void updateProviderConnection(ProviderConnectionID providerConnectionID) throws Exception
+	{
+		ProviderConnection providerConnection = ProviderConnection.get(providerConnectionID);
+		Provider provider = Provider.get(providerConnection.getProviderID());
+
+		if(ProviderConnectionType.ProviderAPI.equals(providerConnection.getProviderConnectionType()))
+			ProviderShowUpdater.newInstance(provider, providerConnection).doUpdate();
+		else
+			ConnectionShowUpdater.newInstance(provider, providerConnection).doUpdate();
 	}
 
 //	private void testWork() throws Exception

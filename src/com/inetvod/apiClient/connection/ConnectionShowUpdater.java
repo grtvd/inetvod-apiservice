@@ -50,6 +50,9 @@ public class ConnectionShowUpdater extends ShowUpdater
 
 		ShowProviderList.markUnavailByProviderConnectionID(fProviderConnection.getProviderConnectionID());
 
+		if(showDataList == null)
+			return;
+
 		for(ShowData showData : showDataList)
 		{
 			if(!confirmShowData(showData))

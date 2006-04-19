@@ -1,0 +1,10 @@
+<CategoryMapper>
+	<CategoryMap>
+		<CategoryID>technology</CategoryID>
+		<Category>Technology</Category>
+	</CategoryMap>
+	<CategoryMap>
+		<CategoryID>daily</CategoryID>
+		<Category>daily</Category>
+	</CategoryMap>
+</CategoryMapper>

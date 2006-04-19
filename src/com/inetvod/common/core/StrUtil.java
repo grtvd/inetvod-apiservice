@@ -4,8 +4,13 @@
  */
 package com.inetvod.common.core;
 
+import java.lang.reflect.Constructor;
+
 public class StrUtil
 {
+	/* Constants */
+	public static final Constructor<String> CtorString = CtorUtil.getCtorString(String.class);
+
 	public static boolean hasLen(String str)
 	{
 		return ((str != null) && (str.length() > 0));

@@ -4,18 +4,24 @@
  */
 package com.inetvod.apiClient.connection.rss2;
 
+import com.inetvod.apiClient.CategoryMapper;
 import com.inetvod.apiClient.ShowData;
 import com.inetvod.apiClient.ShowDataList;
 import com.inetvod.apiClient.ShowFormatExt;
 import com.inetvod.apiClient.connection.BaseConnection;
 import com.inetvod.apiClient.connection.rss2.data.Channel;
 import com.inetvod.apiClient.connection.rss2.data.Enclosure;
+import com.inetvod.apiClient.connection.rss2.data.ITunesCategory;
+import com.inetvod.apiClient.connection.rss2.data.ITunesCategoryList;
 import com.inetvod.apiClient.connection.rss2.data.Item;
 import com.inetvod.apiClient.connection.rss2.data.MediaContent;
 import com.inetvod.apiClient.connection.rss2.data.MediaGroup;
 import com.inetvod.apiClient.connection.rss2.data.Rss20;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.core.StrUtil;
+import com.inetvod.common.core.StringList;
+import com.inetvod.common.data.CategoryID;
+import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.MediaEncoding;
 import com.inetvod.common.data.MediaMIME;
 import com.inetvod.common.data.ProviderShowID;
@@ -28,6 +34,7 @@ import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
 import com.inetvod.common.dbdata.Show;
 
+@SuppressWarnings({"OverlyComplexClass"})
 public class Rss2Connection extends BaseConnection
 {
 	/* Constants */
@@ -97,7 +104,7 @@ public class Rss2Connection extends BaseConnection
 					continue;
 
 				showData = new ShowData();
-				showData.setProviderShowID(new ProviderShowID(item.getGuid()));
+				showData.setProviderShowID(getProviderShowID(item));
 				showData.setName(confirmMaxLength(getShowName(channel, item, mediaGroup, mediaContent),
 					Show.NameMaxLength));
 				showData.setEpisodeName(confirmMaxLength(getEpisodeName(channel, item, mediaGroup, mediaContent),
@@ -105,9 +112,9 @@ public class Rss2Connection extends BaseConnection
 				showData.setReleasedOn(item.getPubDate());
 				showData.setDescription(confirmMaxLength(getDescription(channel, item, mediaGroup, mediaContent),
 					Show.DescriptionMaxLength));
-				showData.setRunningMins(getRunningMins(mediaGroup, mediaContent));
+				showData.setRunningMins(getRunningMins(item, mediaGroup, mediaContent));
 
-				showData.getCategoryIDList().copy(item.getCategoryIDList());
+				showData.getCategoryIDList().copy(getCategories(channel, item));
 
 				showRental = new ShowRental();
 				showRental.getShowFormatList().copy(showFormatList);
@@ -126,6 +133,23 @@ public class Rss2Connection extends BaseConnection
 		}
 
 		return null;
+	}
+
+	private ProviderShowID getProviderShowID(Item item) throws Exception
+	{
+		String guid = item.getGuid();
+
+		if(!StrUtil.hasLen(guid))
+		{
+			Enclosure enclosure = item.getEnclosure();
+			if(enclosure != null)
+				guid = enclosure.getURL();
+		}
+
+		if(StrUtil.hasLen(guid))
+			return new ProviderShowID(guid);
+
+		throw new Exception("No GUID found for Item");
 	}
 
 	private String getShowName(Channel channel, Item item, MediaGroup mediaGroup, MediaContent mediaContent)
@@ -163,13 +187,16 @@ public class Rss2Connection extends BaseConnection
 		if(channel.getMediaDescription() != null)
 			return channel.getMediaDescription().toString();
 
+		if(item.getITunesSummary() != null)
+			return item.getITunesSummary();
+
 		if(item.getDescription() != null)
 			return item.getDescription().getText();
 
 		return null;
 	}
 
-	private Short getRunningMins(MediaGroup mediaGroup, MediaContent mediaContent)
+	private Short getRunningMins(Item item, MediaGroup mediaGroup, MediaContent mediaContent)
 	{
 		Integer durationSecs = null;
 
@@ -178,11 +205,106 @@ public class Rss2Connection extends BaseConnection
 		if((mediaGroup != null) && (mediaGroup.getMediaContentList().size() > 0))
 			durationSecs = mediaGroup.getMediaContentList().get(0).getDurationSecs();
 
+		if(item.getITunesDuration() != null)
+			durationSecs = parseITunesDuration(item.getITunesDuration());
+
 		if(durationSecs == null)
 			return null;
 
 		//noinspection MagicNumber
 		return (short)((durationSecs.doubleValue() / 60.0) + 0.5);
+	}
+
+	private Integer parseITunesDuration(String iTunesDuration)
+	{
+		try
+		{
+			if(!StrUtil.hasLen(iTunesDuration))
+				return null;
+
+			int hours = 0;
+			int minutes = 0;
+			int seconds = 0;
+
+			String[] parts = iTunesDuration.split(":");
+
+			if(parts.length >= 3)
+			{
+				hours = Integer.parseInt(parts[0]);
+				minutes = Integer.parseInt(parts[1]);
+				seconds = Integer.parseInt(parts[2]);
+			}
+			else if(parts.length == 2)
+			{
+				minutes = Integer.parseInt(parts[0]);
+				seconds = Integer.parseInt(parts[1]);
+			}
+			else if(parts.length == 1)
+				seconds = Integer.parseInt(parts[0]);
+
+			//noinspection MagicNumber
+			return (hours * 3600) + (minutes * 60) + seconds;
+		}
+		catch(Exception e)
+		{
+			Logger.logErr(this, "parseITunesDuration", String.format("Can't parse itunes:duration(%s)", iTunesDuration), e);
+			return null;
+		}
+
+	}
+
+	private CategoryIDList getCategories(Channel channel, Item item)
+	{
+		if(item.getITunesCategoryList().size() != 0)
+			return mapFromITunesCategory(item.getITunesCategoryList());
+		if(item.getCategoryList().size() != 0)
+			return mapFromMiscCategory(item.getCategoryList());
+
+		if(channel.getITunesCategoryList().size() != 0)
+			return mapFromITunesCategory(channel.getITunesCategoryList());
+		if(channel.getCategoryList().size() != 0)
+			return mapFromMiscCategory(channel.getCategoryList());
+
+		return null;
+	}
+
+	private CategoryIDList mapFromITunesCategory(ITunesCategoryList iTunesCategoryList)
+	{
+		CategoryMapper categoryMapper = CategoryMapper.getThe();
+		CategoryIDList categoryIDList = new CategoryIDList();
+		CategoryID categoryID;
+
+		for(ITunesCategory iTunesCategory : iTunesCategoryList)
+		{
+			categoryID = categoryMapper.mapCategory(iTunesCategory.getText());
+			if(categoryID != null)
+				categoryIDList.add(categoryID);
+		}
+
+		return categoryIDList;
+	}
+
+	@SuppressWarnings({"UNUSED_SYMBOL"})
+	private CategoryIDList mapFromMediaCategory()
+	{
+		//TODO:
+		return null;
+	}
+
+	private CategoryIDList mapFromMiscCategory(StringList categoryList)
+	{
+		CategoryMapper categoryMapper = CategoryMapper.getThe();
+		CategoryIDList categoryIDList = new CategoryIDList();
+		CategoryID categoryID;
+
+		for(String category : categoryList)
+		{
+			categoryID = categoryMapper.mapCategory(category);
+			if(categoryID != null)
+				categoryIDList.add(categoryID);
+		}
+
+		return categoryIDList;
 	}
 
 	private String getFieldValue(String field, Channel channel, Item item, MediaGroup mediaGroup, MediaContent mediaContent)
@@ -326,6 +448,8 @@ public class Rss2Connection extends BaseConnection
 			return MediaEncoding.DivX5;
 		if(MediaMIME.video_mp4.equals(type))
 			return MediaEncoding.SVQ3;
+		if(MediaMIME.audio_mpeg.equals(type))
+			return MediaEncoding.MP3;
 
 		Logger.logInfo(this, "determineMediaEncodingFromMIME", String.format("Skipping type(%s)", type));
 		return null;

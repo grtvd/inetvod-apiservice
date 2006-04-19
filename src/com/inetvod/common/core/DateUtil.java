@@ -4,15 +4,18 @@
  */
 package com.inetvod.common.core;
 
-import java.util.Date;
-import java.util.Calendar;
-import java.util.TimeZone;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class DateUtil
 {
 	/* Fields */
 	public static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+	private static final String RFC2822DateFormat = "EEE, d MMM yyyy HH:mm:ss Z";
+	private static final String RFC2822AltDateFormat = "EEE, ddMMMyyyy HH:mm:ss Z";
 
 	/* Implementation */
 
@@ -75,5 +78,20 @@ public class DateUtil
 		cal.add(Calendar.MILLISECOND, offsetGMT);
 
 		return cal.getTime();
+	}
+
+	public static Date convertFromRFC2822(String dateStr)
+	{
+		if(!StrUtil.hasLen(dateStr))
+			return null;
+
+		Date date = null;
+
+		try { date = (new SimpleDateFormat(RFC2822DateFormat)).parse(dateStr); } catch(Exception e) {}
+
+		if(date == null)
+			try { date = (new SimpleDateFormat(RFC2822AltDateFormat)).parse(dateStr); } catch(Exception e) {}
+
+		return date;
 	}
 }

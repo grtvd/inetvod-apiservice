@@ -4,6 +4,8 @@
  */
 package com.inetvod.common.data;
 
+import java.util.HashMap;
+
 public class MediaEncoding
 {
 	public static final int MaxLength = 32;
@@ -13,12 +15,17 @@ public class MediaEncoding
 	public static final MediaEncoding SVQ3 = new MediaEncoding("SVQ3");
 	public static final MediaEncoding DivX5 = new MediaEncoding("DivX5");
 	public static final MediaEncoding Xvid = new MediaEncoding("Xvid");
+	public static final MediaEncoding MP3 = new MediaEncoding("MP3");
+	private static HashMap<String, MediaEncoding> fAllValues;
 
 	private final String fValue;
 
 	private MediaEncoding(String name)
 	{
+		if(fAllValues == null)
+			fAllValues = new HashMap<String, MediaEncoding>();
 		fValue = name;
+		fAllValues.put(name, this);
 	}
 
 	public String toString()
@@ -39,16 +46,9 @@ public class MediaEncoding
 		if((value == null) || (value.length() == 0))
 			return null;
 
-		if(WMV9.fValue.equals(value))
-			return WMV9;
-		if(RV9.fValue.equals(value))
-			return RV9;
-		if(SVQ3.fValue.equals(value))
-			return SVQ3;
-		if(DivX5.fValue.equals(value))
-			return DivX5;
-		if(Xvid.fValue.equals(value))
-			return Xvid;
+		MediaEncoding mediaEncoding = fAllValues.get(value);
+		if(mediaEncoding != null)
+			return mediaEncoding;
 
 		throw new IllegalArgumentException("bad value(" + value + ")");
 	}

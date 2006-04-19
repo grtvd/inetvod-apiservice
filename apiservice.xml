@@ -3,4 +3,5 @@
 <properties version="1.0">
 	<entry key="dbconnect">/program files/inetvod/common/dbconnect.xml</entry>
 	<entry key="log4j">log4j.xml</entry>
+	<entry key="categoryMapper">/program files/inetvod/common/categoryMapper.xml</entry>
 </properties>
