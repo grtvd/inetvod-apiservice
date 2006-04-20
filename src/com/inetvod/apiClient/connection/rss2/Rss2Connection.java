@@ -48,6 +48,7 @@ public class Rss2Connection extends BaseConnection
 	private static final String MediaGroupMediaDescriptionField = "mediagroup.media:decription";
 	private static final String MediaContentMediaTitleField = "mediacontent.media:title";
 	private static final String MediaContentMediaDescriptionField = "mediacontent.media:decription";
+	private static final String[] EpisodeNameSeparatorList = { ": ", " - " };
 
 	/* Fields */
 
@@ -107,8 +108,8 @@ public class Rss2Connection extends BaseConnection
 				showData.setProviderShowID(getProviderShowID(item));
 				showData.setName(confirmMaxLength(getShowName(channel, item, mediaGroup, mediaContent),
 					Show.NameMaxLength));
-				showData.setEpisodeName(confirmMaxLength(getEpisodeName(channel, item, mediaGroup, mediaContent),
-					Show.EpisodeNameMaxLength));
+				showData.setEpisodeName(confirmMaxLength(getEpisodeName(showData.getName(), channel, item, mediaGroup,
+					mediaContent), Show.EpisodeNameMaxLength));
 				showData.setReleasedOn(item.getPubDate());
 				showData.setDescription(confirmMaxLength(getDescription(channel, item, mediaGroup, mediaContent),
 					Show.DescriptionMaxLength));
@@ -161,7 +162,26 @@ public class Rss2Connection extends BaseConnection
 		return channel.getTitle();
 	}
 
-	private String getEpisodeName(Channel channel, Item item, MediaGroup mediaGroup, MediaContent mediaContent)
+	private String getEpisodeName(String showName, Channel channel, Item item, MediaGroup mediaGroup, MediaContent mediaContent)
+	{
+		String episodeName = getEpisodeNameValue(channel, item, mediaGroup, mediaContent);
+
+		if(!StrUtil.hasLen(showName) || !StrUtil.hasLen(episodeName)
+				|| !episodeName.toLowerCase().startsWith(showName.toLowerCase()))
+			return episodeName;
+
+		episodeName = episodeName.substring(showName.length());
+
+		for(String prefix : EpisodeNameSeparatorList)
+		{
+			if(episodeName.startsWith(prefix))
+				episodeName = episodeName.substring(prefix.length());
+		}
+
+		return episodeName;
+	}
+
+	private String getEpisodeNameValue(Channel channel, Item item, MediaGroup mediaGroup, MediaContent mediaContent)
 	{
 		String field = fProviderConnection.getUseFieldForEpisodeName();
 		if(field != null)
@@ -279,6 +299,8 @@ public class Rss2Connection extends BaseConnection
 			categoryID = categoryMapper.mapCategory(iTunesCategory.getText());
 			if(categoryID != null)
 				categoryIDList.add(categoryID);
+			else
+				Logger.logWarn(this, "mapFromITunesCategory", String.format("Skipping category(%s)", iTunesCategory.getText()));
 		}
 
 		return categoryIDList;
@@ -302,6 +324,8 @@ public class Rss2Connection extends BaseConnection
 			categoryID = categoryMapper.mapCategory(category);
 			if(categoryID != null)
 				categoryIDList.add(categoryID);
+			else
+				Logger.logWarn(this, "mapFromMiscCategory", String.format("Skipping category(%s)", category));
 		}
 
 		return categoryIDList;
