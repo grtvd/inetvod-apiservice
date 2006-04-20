@@ -26,6 +26,7 @@ public class Channel implements Readable
 	private TextItem fMediaDescription;
 	private StringList fCategoryList;
 	private ITunesCategoryList fITunesCategoryList;
+	private ITunesExplicit fITunesExplicit;
 	private ItemList fItemList = new ItemList();
 
 	/* Getters and Setters */
@@ -35,6 +36,7 @@ public class Channel implements Readable
 	public TextItem getMediaDescription() { return fMediaDescription; }
 	public StringList getCategoryList() { return fCategoryList; }
 	public ITunesCategoryList getITunesCategoryList() { return fITunesCategoryList; }
+	public ITunesExplicit getITunesExplicit() { return fITunesExplicit; }
 	public ItemList getItemList() { return fItemList; }
 
 	/* Construction */
@@ -53,6 +55,7 @@ public class Channel implements Readable
 		//TODO: fLanguage = reader.readString("language", 16);
 		fCategoryList = reader.readStringList("category", CategoryMaxLength, StringList.Ctor, StrUtil.CtorString);
 		fITunesCategoryList = reader.readList("itunes:category", ITunesCategoryList.Ctor, ITunesCategory.CtorDataReader);
+		fITunesExplicit = ITunesExplicit.convertFromString(reader.readString("itunes:explicit", ITunesExplicit.MaxLength));
 		fItemList = reader.readList("item", ItemList.Ctor, Item.CtorDataReader);
 	}
 }

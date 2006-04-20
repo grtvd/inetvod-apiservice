@@ -17,6 +17,7 @@ import com.inetvod.apiClient.connection.rss2.data.Item;
 import com.inetvod.apiClient.connection.rss2.data.MediaContent;
 import com.inetvod.apiClient.connection.rss2.data.MediaGroup;
 import com.inetvod.apiClient.connection.rss2.data.Rss20;
+import com.inetvod.apiClient.connection.rss2.data.ITunesExplicit;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.core.StrUtil;
 import com.inetvod.common.core.StringList;
@@ -116,6 +117,7 @@ public class Rss2Connection extends BaseConnection
 				showData.setRunningMins(getRunningMins(item, mediaGroup, mediaContent));
 
 				showData.getCategoryIDList().copy(getCategories(channel, item));
+				showData.setIsAdult(getIsAdult(channel, item));
 
 				showRental = new ShowRental();
 				showRental.getShowFormatList().copy(showFormatList);
@@ -329,6 +331,24 @@ public class Rss2Connection extends BaseConnection
 		}
 
 		return categoryIDList;
+	}
+
+	private Boolean getIsAdult(Channel channel, Item item)
+	{
+		ITunesExplicit iTunesExplicit;
+
+		iTunesExplicit = item.getITunesExplicit();
+		if(iTunesExplicit == null)
+			iTunesExplicit = channel.getITunesExplicit();
+
+		if(iTunesExplicit == null)
+			return null;
+
+		if(ITunesExplicit.Yes.equals(iTunesExplicit))
+			return true;
+		//ITunesExplicit.Clean
+		//ITunesExplicit.No
+		return false;
 	}
 
 	private String getFieldValue(String field, Channel channel, Item item, MediaGroup mediaGroup, MediaContent mediaContent)

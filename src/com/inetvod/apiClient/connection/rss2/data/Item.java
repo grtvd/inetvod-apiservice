@@ -35,6 +35,7 @@ public class Item implements Readable
 	private StringList fCategoryList;
 	private ITunesCategoryList fITunesCategoryList;
 	private String fITunesDuration;
+	private ITunesExplicit fITunesExplicit;
 	private Enclosure fEnclosure;
 	private String fGuid;
 	private Date fPubDate;
@@ -52,6 +53,7 @@ public class Item implements Readable
 	public StringList getCategoryList() { return fCategoryList; }
 	public ITunesCategoryList getITunesCategoryList() { return fITunesCategoryList; }
 	public String getITunesDuration() { return fITunesDuration; }
+	public ITunesExplicit getITunesExplicit() { return fITunesExplicit; }
 	public Enclosure getEnclosure() { return fEnclosure; }
 	public String getGuid() { return fGuid; }
 	public Date getPubDate() { return fPubDate; }
@@ -77,6 +79,7 @@ public class Item implements Readable
 		fCategoryList = reader.readStringList("category", CategoryMaxLength, StringList.Ctor, StrUtil.CtorString);
 		fITunesCategoryList = reader.readList("itunes:category", ITunesCategoryList.Ctor, ITunesCategory.CtorDataReader);
 		fITunesDuration = reader.readString("itunes:duration", ITunesDurationMaxLength);
+		fITunesExplicit = ITunesExplicit.convertFromString(reader.readString("itunes:explicit", ITunesExplicit.MaxLength));
 		fEnclosure = reader.readObject("enclosure", Enclosure.CtorDataReader);
 		fGuid = reader.readString("guid", GuidMaxLength);
 		fPubDate = DateUtil.convertFromRFC2822(reader.readString("pubDate", DateMaxLength));
