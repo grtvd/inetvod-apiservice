@@ -130,7 +130,7 @@ public class ConnectionShowUpdater extends ShowUpdater
 		{
 			//valid = false;
 			showData.setLanguageID(LanguageID.English);
-			Logger.logWarn(this, METHOD_NAME, String.format("LanguageID not provided, ProviderShowID(%s)", providerShowIDStr));
+			//Logger.logWarn(this, METHOD_NAME, String.format("LanguageID not provided, ProviderShowID(%s)", providerShowIDStr));
 		}
 
 		if(showData.getIsAdult() == null)
