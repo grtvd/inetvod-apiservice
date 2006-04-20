@@ -7,9 +7,9 @@ package com.inetvod.common.data;
 import java.lang.reflect.Constructor;
 
 import com.inetvod.common.core.CtorUtil;
-import com.inetvod.common.core.StringID;
+import com.inetvod.common.core.UUStringID;
 
-public class PlayerID extends StringID
+public class PlayerID extends UUStringID
 {
 	public static final Constructor<PlayerID> CtorString = CtorUtil.getCtorString(PlayerID.class);
 	public static final int MaxLength = 64;

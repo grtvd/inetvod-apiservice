@@ -8,9 +8,9 @@ import java.lang.reflect.Constructor;
 import java.util.UUID;
 
 import com.inetvod.common.core.CtorUtil;
-import com.inetvod.common.core.StringID;
+import com.inetvod.common.core.UUStringID;
 
-public class MemberSessionID extends StringID
+public class MemberSessionID extends UUStringID
 {
 	public static final Constructor<MemberSessionID> CtorString = CtorUtil.getCtorString(MemberSessionID.class);
 	public static final int MaxLength = 64;
