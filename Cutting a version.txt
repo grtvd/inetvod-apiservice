@@ -10,6 +10,7 @@
 	- Check for current versions in "C:\projects\iNetVOD\apiservice\trunk\build".
 		- apiservice.xml
 		- log4j.xml
+		- categoryMapper.xml
 		- libs
 
 - Commit all changed files, use label: "apiservice: Cut version CCYY-MM-DD."
@@ -19,6 +20,10 @@
 		- ftp://alpha.inetvod.com
 
 	- Copy files to "C:\Program Files\iNetVOD\apiservice".
+
+	- Confirm dbconnect.xml in "C:\Program Files\iNetVOD\Common".
+
+	- Confirm categoryMapper.xml in "C:\Program Files\iNetVOD\Common".
 
 	- Confirm Scheduled Task
 		- Run: "C:\Program Files\Java\jre1.5.0_06\bin\java.exe" -jar "C:\Program Files\iNetVOD\apiservice\apiservice.jar"
