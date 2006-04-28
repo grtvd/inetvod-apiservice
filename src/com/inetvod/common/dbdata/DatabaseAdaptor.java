@@ -203,6 +203,8 @@ public class DatabaseAdaptor<T extends DatabaseObject, L extends List<T>>
 			while(resultSet.next())
 			{
 				procedureName = resultSet.getString(MetaDataProcedureName);
+				if(procedureName.indexOf(';') >= 0)
+					procedureName = procedureName.split(";")[0];
 				if(procedureName.startsWith(procedureNameMatch))
 				{
 					//Logger.logInfo(this, "confirmProcedures", String.format("Confirming procedure(%s)", procedureName));	//TODO: convert to logDebug
