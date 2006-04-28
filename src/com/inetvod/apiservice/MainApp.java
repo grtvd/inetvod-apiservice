@@ -8,13 +8,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import org.apache.log4j.xml.DOMConfigurator;
-
 import com.inetvod.apiClient.CategoryMapper;
 import com.inetvod.apiClient.connection.ConnectionShowUpdater;
 import com.inetvod.apiClient.providerapi.ProviderShowUpdater;
 import com.inetvod.common.core.Logger;
-import com.inetvod.common.data.ProviderConnectionID;
 import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.dbdata.Category;
 import com.inetvod.common.dbdata.DatabaseAdaptor;
@@ -75,7 +72,7 @@ public class MainApp
 			propertiesFile.close();
 		}
 
-		DOMConfigurator.configure(new File(properties.getProperty("log4j")).toURL());
+		Logger.initialize(properties.getProperty("log4j"), properties.getProperty("logdir"));
 
 		DatabaseAdaptor.setDBConnectFile(properties.getProperty("dbconnect"));
 
@@ -116,40 +113,33 @@ public class MainApp
 	private void updateAllProviders() throws Exception
 	{
 		ProviderList providerList = ProviderList.find();
-		ProviderConnectionList providerConnectionList;
 
 		for(Provider provider : providerList)
-		{
-			providerConnectionList = ProviderConnectionList.findByProviderID(provider.getProviderID());
-
-			for(ProviderConnection providerConnection : providerConnectionList)
-			{
-				try
-				{
-					if(ProviderConnectionType.ProviderAPI.equals(providerConnection.getProviderConnectionType()))
-						ProviderShowUpdater.newInstance(provider, providerConnection).doUpdate();
-					else
-						ConnectionShowUpdater.newInstance(provider, providerConnection).doUpdate();
-				}
-				catch(Exception e)
-				{
-					Logger.logErr(this, "updateAllProviders", String.format("Failed during update of Provider(%s)/ProviderConnection(%s)",
-						provider.getProviderID().toString(), providerConnection.getProviderConnectionID().toString()), e);
-				}
-			}
-		}
+			updateProvider(provider);
 	}
 
-	@SuppressWarnings({"UNUSED_SYMBOL"})
-	private void updateProviderConnection(ProviderConnectionID providerConnectionID) throws Exception
+	private void updateProvider(Provider provider) throws Exception
 	{
-		ProviderConnection providerConnection = ProviderConnection.get(providerConnectionID);
-		Provider provider = Provider.get(providerConnection.getProviderID());
+		ProviderConnectionList providerConnectionList = ProviderConnectionList.findByProviderID(provider.getProviderID());
 
-		if(ProviderConnectionType.ProviderAPI.equals(providerConnection.getProviderConnectionType()))
-			ProviderShowUpdater.newInstance(provider, providerConnection).doUpdate();
-		else
-			ConnectionShowUpdater.newInstance(provider, providerConnection).doUpdate();
+		for(ProviderConnection providerConnection : providerConnectionList)
+			updateProviderConnection(provider, providerConnection);
+	}
+
+	private void updateProviderConnection(Provider provider, ProviderConnection providerConnection) throws Exception
+	{
+		try
+		{
+			if(ProviderConnectionType.ProviderAPI.equals(providerConnection.getProviderConnectionType()))
+				ProviderShowUpdater.newInstance(provider, providerConnection).doUpdate();
+			else
+				ConnectionShowUpdater.newInstance(provider, providerConnection).doUpdate();
+		}
+		catch(Exception e)
+		{
+			Logger.logErr(this, "updateProviderConnection", String.format("Failed during update of Provider(%s)/ProviderConnection(%s)",
+				provider.getProviderID().toString(), providerConnection.getProviderConnectionID().toString()), e);
+		}
 	}
 
 //	private void testWork() throws Exception

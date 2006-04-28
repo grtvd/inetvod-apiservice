@@ -4,8 +4,25 @@
  */
 package com.inetvod.common.core;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+
+import org.apache.log4j.xml.DOMConfigurator;
+
 public class Logger
 {
+	private static File fLogDir;
+
+	public static void initialize(String log4jFilePath, String logPath) throws MalformedURLException
+	{
+		fLogDir = new File(logPath).getAbsoluteFile();
+		fLogDir.mkdirs();
+
+		DOMConfigurator.configure((new File(log4jFilePath)).toURL());
+	}
+
 	private static org.apache.log4j.Logger getLogger(Class logClass)
 	{
 		return org.apache.log4j.Logger.getLogger(logClass);
@@ -69,5 +86,35 @@ public class Logger
 	public static void logErr(Object objClass, String method, Exception e)
 	{
 		logErr(objClass.getClass(), method, e);
+	}
+
+	public static void logFile(InputStream inputStream, String subDir, FileExtension fileExtension) throws IOException
+	{
+		try
+		{
+			File dir = new File(fLogDir, subDir);
+			if(!dir.isDirectory())
+				dir.mkdir();
+			File file = File.createTempFile("log", FileExtension.convertToString(fileExtension), dir);
+			StreamUtil.streamToFile(inputStream, file.getPath());
+		}
+		catch(Exception e)
+		{
+		}
+	}
+
+	public static void logFile(InputStream inputStream, String subDir, String fileName) throws IOException
+	{
+		try
+		{
+			File dir = new File(fLogDir, subDir);
+			if(!dir.isDirectory())
+				dir.mkdir();
+			File file = new File(dir, fileName);
+			StreamUtil.streamToFile(inputStream, file.getPath());
+		}
+		catch(Exception e)
+		{
+		}
 	}
 }

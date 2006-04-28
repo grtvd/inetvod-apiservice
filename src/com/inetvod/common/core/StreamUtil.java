@@ -4,6 +4,8 @@
  */
 package com.inetvod.common.core;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,6 +13,13 @@ import java.io.OutputStream;
 public class StreamUtil
 {
 	private static final int BufferSize = 4096;
+
+	public static InputStream streamCopyToMemory(InputStream input) throws Exception
+	{
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		streamCopy(input, output, false);
+		return new ByteArrayInputStream(output.toByteArray());
+	}
 
 	public static void streamCopy (InputStream input, OutputStream output, boolean keepPosition) throws Exception
 	{

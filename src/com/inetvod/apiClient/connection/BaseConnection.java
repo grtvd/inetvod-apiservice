@@ -11,8 +11,10 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
 import com.inetvod.apiClient.ShowDataList;
+import com.inetvod.common.core.FileExtension;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.core.Readable;
+import com.inetvod.common.core.StreamUtil;
 import com.inetvod.common.core.XmlDataReader;
 import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
@@ -54,7 +56,10 @@ public abstract class BaseConnection
 				httpClient.executeMethod(getMethod);
 				InputStream responseStream = getMethod.getResponseBodyAsStream();
 
-				XmlDataReader dataReader = new XmlDataReader(responseStream);
+				InputStream memoryResponseStream = StreamUtil.streamCopyToMemory(responseStream);
+				Logger.logFile(memoryResponseStream, "connection", FileExtension.xml);
+
+				XmlDataReader dataReader = new XmlDataReader(memoryResponseStream);
 				return dataReader.readObject(rootElement, ctorDataReader);
 			}
 			finally
