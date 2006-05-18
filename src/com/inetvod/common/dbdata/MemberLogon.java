@@ -109,6 +109,11 @@ public class MemberLogon extends DatabaseObject
 		return fDatabaseAdaptor.selectByKey(memberID, exists);
 	}
 
+	public static MemberLogon get(MemberID memberID) throws Exception
+	{
+		return load(memberID, DataExists.MayNotExist);
+	}
+
 	public static MemberLogon getCreate(MemberID memberID) throws Exception
 	{
 		MemberLogon memberLogon = load(memberID, DataExists.MayNotExist);
