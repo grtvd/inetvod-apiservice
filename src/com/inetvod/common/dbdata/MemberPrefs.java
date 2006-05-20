@@ -68,7 +68,27 @@ public class MemberPrefs extends DatabaseObject
 
 	public static MemberPrefs newInstance(MemberID memberID)
 	{
-		return new MemberPrefs(memberID);
+		//TODO: move default MemberPrefs to config file
+		MemberPrefs memberPrefs = new MemberPrefs(memberID);
+		memberPrefs.setIncludeAdult(IncludeAdult.Never);
+
+		RatingIDList ratingIDList = memberPrefs.getIncludeRatingIDList();
+		ratingIDList.clear();
+		ratingIDList.add(RatingID.NotRated);
+		ratingIDList.add(new RatingID("g"));
+		ratingIDList.add(new RatingID("pg"));
+		ratingIDList.add(new RatingID("pg13"));
+		ratingIDList.add(new RatingID("tvy"));
+		ratingIDList.add(new RatingID("tvy7"));
+		ratingIDList.add(new RatingID("tvy7fv"));
+		ratingIDList.add(new RatingID("tvpg"));
+		ratingIDList.add(new RatingID("tv14"));
+
+		memberPrefs.setIncludeDownload(true);
+		memberPrefs.setIncludeStreaming(true);
+		memberPrefs.setConnectionSpeed(ConnectionSpeed.S1500K);
+
+		return memberPrefs;
 	}
 
 	private static MemberPrefs load(MemberID memberID, DataExists exists) throws Exception
