@@ -167,7 +167,7 @@ public class ShowProviderList extends ArrayList<ShowProvider>
 	}
 
 	/**
-	 * Returns a sub-set of items from this list that whose ShowAvail is Available
+	 * Returns a sub-set of items from this list whose ShowAvail is Available
 	 * @return sub-set of ShowProviderList
 	 */
 	public ShowProviderList findItemsByAvailable()
@@ -178,6 +178,27 @@ public class ShowProviderList extends ArrayList<ShowProvider>
 		{
 			if(ShowAvail.Available.equals(showProvider.getShowAvail()))
 				showProviderList.add(showProvider);
+		}
+
+		return showProviderList;
+	}
+
+	/**
+	 * Returns a sub-set of items from this list whose ShowFormatMime is in mimeTypeList
+	 * @param mimeTypeList
+	 * @return sub-set of ShowProviderList
+	 */
+	public ShowProviderList findItemsByShowFormatMimeList(String[] mimeTypeList)
+	{
+		ShowProviderList showProviderList = new ShowProviderList();
+
+		for(ShowProvider showProvider : this)
+		{
+			for(String mimeType : mimeTypeList)
+			{
+				if(mimeType.equals(showProvider.getShowFormatMime()))
+					showProviderList.add(showProvider);
+			}
 		}
 
 		return showProviderList;
