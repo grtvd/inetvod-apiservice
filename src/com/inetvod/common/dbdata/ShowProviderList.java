@@ -20,10 +20,6 @@ import com.inetvod.common.data.ShowAvail;
 public class ShowProviderList extends ArrayList<ShowProvider>
 {
 	/* Construction */
-	public ShowProviderList()
-	{
-	}
-
 	public static ShowProviderList findByShowID(ShowID showID) throws Exception
 	{
 		DatabaseProcParam params[] = new DatabaseProcParam[1];
