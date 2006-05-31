@@ -23,8 +23,10 @@ public class StrUtil
 
 	public static String removeHtml(String html)
 	{
-		StringBuilder sb = new StringBuilder();
+		if(!hasLen(html))
+			return null;
 
+		StringBuilder sb = new StringBuilder();
 		boolean inTag = false;
 
 		for(char ch : html.toCharArray())
