@@ -21,10 +21,10 @@ public class MemberLogon extends DatabaseObject
 	/* Constants */
 	private static final int EmailMaxLength = 64;
 	private static final int PasswordMaxLength = 32;
-	private static final int PINMaxLength = 16;
+	private static final int PINMaxLength = 32;
 
 	private static final int SecretQuestionMaxLength = 64;
-	private static final int SecretAnswerMaxLength = 64;
+	private static final int SecretAnswerMaxLength = 32;
 	private static final int TermsAcceptedVersionMaxLength = 16;
 
 	/* Fields */

@@ -16,7 +16,7 @@ import com.inetvod.common.data.RatingID;
 public class MemberPrefs extends DatabaseObject
 {
 	/* Constants */
-	private static final int AdultPINMaxLength = 16;
+	private static final int AdultPINMaxLength = 32;
 	private static final int IncludeRatingIDListMaxLength = 126;
 
 	/* Fields */
