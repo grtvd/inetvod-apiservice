@@ -16,6 +16,11 @@ public class StrUtil
 		return ((str != null) && (str.length() > 0));
 	}
 
+	public static String noNull(String str)
+	{
+		return (str == null) ? "" : str;
+	}
+
 	public static String removeHtml(String html)
 	{
 		StringBuilder sb = new StringBuilder();
