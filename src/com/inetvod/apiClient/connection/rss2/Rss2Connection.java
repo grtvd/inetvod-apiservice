@@ -454,15 +454,11 @@ public class Rss2Connection extends BaseConnection
 		if(!StrUtil.hasLen(enclosure.getURL()))
 			return null;
 
-		MediaEncoding mediaEncoding = determineMediaEncodingFromMIME(enclosure.getType());
-		if(mediaEncoding == null)
-			return null;
-
 		//TODO: confirm MediaEncoding, set other fields
 
 		ShowFormatExt showFormatExt = new ShowFormatExt();
 		showFormatExt.setShowURL(enclosure.getURL());
-		showFormatExt.setMediaEncoding(mediaEncoding);
+		showFormatExt.setShowFormatMime(enclosure.getType());
 		return showFormatExt;
 	}
 
@@ -471,18 +467,15 @@ public class Rss2Connection extends BaseConnection
 		if(!StrUtil.hasLen(mediaContent.getURL()))
 			return null;
 
-		MediaEncoding mediaEncoding = determineMediaEncodingFromMIME(mediaContent.getType());
-		if(mediaEncoding == null)
-			return null;
-
 		//TODO: confirm MediaEncoding, set other fields
 
 		ShowFormatExt showFormatExt = new ShowFormatExt();
 		showFormatExt.setShowURL(mediaContent.getURL());
-		showFormatExt.setMediaEncoding(mediaEncoding);
+		showFormatExt.setShowFormatMime(mediaContent.getType());
 		return showFormatExt;
 	}
 
+	@SuppressWarnings({"UNUSED_SYMBOL"})
 	private MediaEncoding determineMediaEncodingFromMIME(String type)
 	{
 		//TODO: support more video formats

@@ -117,7 +117,10 @@ public abstract class ShowUpdater
 		ShowRental showRental = showData.getShowRentalList().get(0);
 		ShowFormat showFormat = showRental.getShowFormatList().get(0);
 		if(showFormat instanceof ShowFormatExt)
+		{
 			showProvider.setShowURL(((ShowFormatExt)showFormat).getShowURL());
+			showProvider.setShowFormatMime(((ShowFormatExt)showFormat).getShowFormatMime());
+		}
 		//TODO: need to support multiple ShowCost/ShowFormat records
 		showProvider.setShowCost(showRental.getShowCostList().get(0));
 		showProvider.setShowAvail(ShowAvail.Available);

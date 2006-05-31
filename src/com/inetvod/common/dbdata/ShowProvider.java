@@ -9,16 +9,19 @@ import java.sql.Types;
 import com.inetvod.common.core.DataExists;
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DataWriter;
+import com.inetvod.common.data.ProviderConnectionID;
 import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.ProviderShowID;
+import com.inetvod.common.data.ShowAvail;
 import com.inetvod.common.data.ShowCost;
 import com.inetvod.common.data.ShowID;
 import com.inetvod.common.data.ShowProviderID;
-import com.inetvod.common.data.ProviderConnectionID;
-import com.inetvod.common.data.ShowAvail;
 
 public class ShowProvider extends DatabaseObject
 {
+	/* Constants */
+	public static final int ShowFormatMimeMaxLength = 32;
+
 	/* Fields */
 	private ShowProviderID fShowProviderID;
 	private ShowID fShowID;
@@ -26,7 +29,8 @@ public class ShowProvider extends DatabaseObject
 
 	private ProviderConnectionID fProviderConnectionID;
 	private ProviderShowID fProviderShowID;
-	private String fShowURL;	// only available for 'Connection' type providers
+	private String fShowURL;			// only available for 'Connection' type providers
+	private String fShowFormatMime;		// only available for 'Connection' type providers
 	private ShowCost fShowCost;
 
 	private ShowAvail fShowAvail;
@@ -45,6 +49,9 @@ public class ShowProvider extends DatabaseObject
 
 	public String getShowURL() { return fShowURL; }
 	public void setShowURL(String showURL) { fShowURL = showURL; }
+
+	public String getShowFormatMime() { return fShowFormatMime; }
+	public void setShowFormatMime(String showFormatMime) { fShowFormatMime = showFormatMime; }
 
 	public ShowCost getShowCost() { return fShowCost; }
 	public void setShowCost(ShowCost showCost) { fShowCost = showCost; }
@@ -124,6 +131,7 @@ public class ShowProvider extends DatabaseObject
 			ProviderConnectionID.CtorString);
 		fProviderShowID = reader.readDataID("ProviderShowID", ProviderShowID.MaxLength, ProviderShowID.CtorString);
 		fShowURL = reader.readString("ShowURL", Show.ShowURLMaxLength);
+		fShowFormatMime = reader.readString("ShowFormatMime", ShowFormatMimeMaxLength);
 		fShowCost = reader.readObject("ShowCost", ShowCost.CtorDataReader);
 
 		fShowAvail = ShowAvail.convertFromString(reader.readString("ShowAvail", ShowAvail.MaxLength));
@@ -138,6 +146,7 @@ public class ShowProvider extends DatabaseObject
 		writer.writeDataID("ProviderConnectionID", fProviderConnectionID, ProviderConnectionID.MaxLength);
 		writer.writeDataID("ProviderShowID", fProviderShowID, ProviderShowID.MaxLength);
 		writer.writeString("ShowURL", fShowURL, Show.ShowURLMaxLength);
+		writer.writeString("ShowFormatMime", fShowFormatMime, ShowFormatMimeMaxLength);
 		writer.writeObject("ShowCost", fShowCost);
 
 		writer.writeString("ShowAvail", ShowAvail.convertToString(fShowAvail), ShowAvail.MaxLength);
