@@ -23,7 +23,7 @@ public class Item implements Readable
 	private static final int CategoryMaxLength = 128;
 	private static final int ITunesDurationMaxLength = 16;
 	private static final int GuidMaxLength = 128;
-	private static final int DateMaxLength = 32;
+	private static final int DateMaxLength = 64;
 
 	/* Fields */
 	private String fTitle;
