@@ -13,6 +13,8 @@ import com.inetvod.apiClient.connection.ConnectionShowUpdater;
 import com.inetvod.apiClient.providerapi.ProviderShowUpdater;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.data.ProviderConnectionType;
+import com.inetvod.common.data.ProviderID;
+import com.inetvod.common.data.ProviderConnectionID;
 import com.inetvod.common.dbdata.Category;
 import com.inetvod.common.dbdata.DatabaseAdaptor;
 import com.inetvod.common.dbdata.Member;
@@ -36,6 +38,9 @@ public class MainApp
 	/* Fields */
 	private static MainApp fMainApp = new MainApp();
 
+	private ProviderID fProviderID;
+	private ProviderConnectionID fProviderConnectionID;
+
 	/* Getters and Setters */
 	public static MainApp getThe() { return fMainApp; }
 
@@ -51,10 +56,13 @@ public class MainApp
 			fMainApp.init();
 			if(fMainApp.processArgs(args))
 				fMainApp.doWork();
+			else
+				fMainApp.printUsage();
 		}
 		catch(Exception e)
 		{
 			Logger.logErr(fMainApp, "main", e);
+			e.printStackTrace();
 		}
 	}
 
@@ -98,14 +106,66 @@ public class MainApp
 	@SuppressWarnings({"UNUSED_SYMBOL"})
 	private boolean processArgs(String[] args)
 	{
-		return true;
+		try
+		{
+			if((args == null) || (args.length == 0))
+				return true;
+
+			if(args.length != 2)
+				return false;
+
+			for(int i = 0; i < args.length; i++)
+			{
+				if("-p".equals(args[i]))
+				{
+					if(i < args.length - 1)
+					{
+						i++;
+						fProviderID = new ProviderID(args[i]);
+					}
+					else
+						return false;
+				}
+				else if("-pc".equals(args[i]))
+				{
+					if(i < args.length - 1)
+					{
+						i++;
+						fProviderConnectionID = new ProviderConnectionID(args[i]);
+					}
+					else
+						return false;
+				}
+				else
+					return false;
+			}
+
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+
+	private void printUsage()
+	{
+		System.out.println("usage: apiservice [options] [args]");
+		System.out.println("   -p <ProviderID>");
+		System.out.println("   -pc <ProviderConnectionID>");
 	}
 
 	private void doWork() throws Exception
 	{
 		Logger.logInfo(this, "doWork", "Start...");
 
-		updateAllProviders();
+		if(fProviderID != null)
+			updateProvider(fProviderID);
+		else if(fProviderConnectionID != null)
+			updateProviderConnection(fProviderConnectionID);
+		else
+			updateAllProviders();
+
 
 		Logger.logInfo(this, "doWork", "Done!");
 	}
@@ -126,6 +186,11 @@ public class MainApp
 			updateProviderConnection(provider, providerConnection);
 	}
 
+	private void updateProvider(ProviderID providerID) throws Exception
+	{
+		updateProvider(Provider.get(providerID));
+	}
+
 	private void updateProviderConnection(Provider provider, ProviderConnection providerConnection) throws Exception
 	{
 		try
@@ -140,6 +205,13 @@ public class MainApp
 			Logger.logErr(this, "updateProviderConnection", String.format("Failed during update of Provider(%s)/ProviderConnection(%s)",
 				provider.getProviderID().toString(), providerConnection.getProviderConnectionID().toString()), e);
 		}
+	}
+
+	private void updateProviderConnection(ProviderConnectionID providerConnectionID) throws Exception
+	{
+		ProviderConnection providerConnection = ProviderConnection.get(providerConnectionID);
+		Provider provider = Provider.get(providerConnection.getProviderID());
+		updateProviderConnection(provider, providerConnection);
 	}
 
 //	private void testWork() throws Exception
