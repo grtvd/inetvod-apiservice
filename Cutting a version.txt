@@ -23,6 +23,8 @@
 
 	- Confirm dbconnect.xml in "C:\Program Files\iNetVOD\Common".
 
+	- Comfirm cryptokeystore.xml in "C:\Program Files\iNetVOD\Common".
+
 	- Confirm categoryMapper.xml in "C:\Program Files\iNetVOD\Common".
 
 	- Confirm Scheduled Task
