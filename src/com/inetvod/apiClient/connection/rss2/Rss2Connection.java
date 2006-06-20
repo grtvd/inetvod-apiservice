@@ -44,11 +44,11 @@ public class Rss2Connection extends BaseConnection
 	private static final String ChannelDescriptionField = "channel.description";
 	private static final String ItemTitleField = "item.title";
 	private static final String ItemMediaTitleField = "item.media:title";
-	private static final String ItemMediaDescriptionField = "item.media:decription";
+	private static final String ItemMediaDescriptionField = "item.media:description";
 	private static final String MediaGroupMediaTitleField = "mediagroup.media:title";
-	private static final String MediaGroupMediaDescriptionField = "mediagroup.media:decription";
+	private static final String MediaGroupMediaDescriptionField = "mediagroup.media:description";
 	private static final String MediaContentMediaTitleField = "mediacontent.media:title";
-	private static final String MediaContentMediaDescriptionField = "mediacontent.media:decription";
+	private static final String MediaContentMediaDescriptionField = "mediacontent.media:description";
 	private static final String[] EpisodeNameSeparatorList = { ": ", " - " };
 
 	/* Fields */
