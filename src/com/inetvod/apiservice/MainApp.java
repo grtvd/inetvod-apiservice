@@ -12,7 +12,7 @@ import com.inetvod.apiClient.CategoryMapper;
 import com.inetvod.apiClient.connection.ConnectionShowUpdater;
 import com.inetvod.apiClient.providerapi.ProviderShowUpdater;
 import com.inetvod.common.core.Logger;
-import com.inetvod.common.cryto.CryptoKeyStore;
+import com.inetvod.common.crypto.CryptoKeyStore;
 import com.inetvod.common.data.ProviderConnectionID;
 import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.data.ProviderID;
@@ -101,7 +101,7 @@ public class MainApp
 		ShowCategory.getDatabaseAdaptor();
 		RentedShow.getDatabaseAdaptor();
 
-		// init the CrytoKeyStore
+		// init the CryptoKeyStore
 		CryptoKeyStore.load(properties.getProperty("cryptokeystore"));
 
 		CategoryMapper.load(properties.getProperty("categoryMapper"));
