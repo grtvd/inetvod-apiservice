@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2007 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.providerapi;
@@ -154,7 +154,12 @@ public class ProviderShowUpdater extends ShowUpdater
 
 		if(showDetail.getShowRentalList().size() > 0)
 		{
-			//TODO: confirm ShowFormats are not duplicated
+			// confirm ShowFormats are not duplicated
+			if(!confirmShowRentalList(showDetail.getShowRentalList()))
+			{
+				valid = false;
+				Logger.logWarn(this, METHOD_NAME, String.format("Duplicate ShowFormat found, ProviderShowID(%s)", providerShowIDStr));
+			}
 		}
 		else
 		{

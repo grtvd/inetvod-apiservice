@@ -1,5 +1,5 @@
 /**
- * Copyright © 2006 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2006-2007 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.connection.rss2.data;
@@ -22,7 +22,7 @@ public class Item implements Readable
 	private static final int ITunesSummaryMaxLength = Short.MAX_VALUE;
 	private static final int CategoryMaxLength = 128;
 	private static final int ITunesDurationMaxLength = 16;
-	private static final int GuidMaxLength = 128;
+	private static final int GuidMaxLength = 256;
 	private static final int DateMaxLength = 64;
 
 	/* Fields */

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2006 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2006-2007 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.connection.rss2;
@@ -301,8 +301,8 @@ public class Rss2Connection extends BaseConnection
 			categoryID = categoryMapper.mapCategory(iTunesCategory.getText());
 			if(categoryID != null)
 				categoryIDList.add(categoryID);
-			else
-				Logger.logWarn(this, "mapFromITunesCategory", String.format("Skipping category(%s)", iTunesCategory.getText()));
+			//TODO else
+			//TODO	Logger.logWarn(this, "mapFromITunesCategory", String.format("Skipping category(%s)", iTunesCategory.getText()));
 		}
 
 		return categoryIDList;
@@ -326,8 +326,8 @@ public class Rss2Connection extends BaseConnection
 			categoryID = categoryMapper.mapCategory(category);
 			if(categoryID != null)
 				categoryIDList.add(categoryID);
-			else
-				Logger.logWarn(this, "mapFromMiscCategory", String.format("Skipping category(%s)", category));
+			//TODO else
+			//TODO	Logger.logWarn(this, "mapFromMiscCategory", String.format("Skipping category(%s)", category));
 		}
 
 		return categoryIDList;
