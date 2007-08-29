@@ -78,9 +78,11 @@ public abstract class ShowUpdater
 			for(ShowFormat showFormat : showRental.getShowFormatList())
 			{
 				// showFormatSet.contains is not working as expected, not calling ShowFormat.equals
-				for(ShowFormat showFormatCheck : showFormatSet)
-					if(showFormatCheck.equals(showFormat))
-						return false;
+//				for(ShowFormat showFormatCheck : showFormatSet)
+//					if(showFormatCheck.equals(showFormat))
+//						return false;
+				if(showFormatSet.contains(showFormat))
+					return false;
 				showFormatSet.add(showFormat);
 			}
 

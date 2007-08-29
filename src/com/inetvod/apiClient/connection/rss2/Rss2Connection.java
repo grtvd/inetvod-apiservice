@@ -456,10 +456,7 @@ public class Rss2Connection extends BaseConnection
 
 		//TODO: confirm MediaEncoding, set other fields
 
-		ShowFormatExt showFormatExt = new ShowFormatExt();
-		showFormatExt.setShowURL(enclosure.getURL());
-		showFormatExt.setShowFormatMime(enclosure.getType());
-		return showFormatExt;
+		return new ShowFormatExt(enclosure.getURL(), enclosure.getType());
 	}
 
 	private ShowFormat getShowFormatFromMediaContent(MediaContent mediaContent)
@@ -469,10 +466,7 @@ public class Rss2Connection extends BaseConnection
 
 		//TODO: confirm MediaEncoding, set other fields
 
-		ShowFormatExt showFormatExt = new ShowFormatExt();
-		showFormatExt.setShowURL(mediaContent.getURL());
-		showFormatExt.setShowFormatMime(mediaContent.getType());
-		return showFormatExt;
+		return new ShowFormatExt(mediaContent.getURL(), mediaContent.getType());
 	}
 
 	@SuppressWarnings({"UNUSED_SYMBOL"})
