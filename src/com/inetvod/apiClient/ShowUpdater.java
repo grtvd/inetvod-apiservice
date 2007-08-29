@@ -209,13 +209,13 @@ public abstract class ShowUpdater
 	//TODO temporary method until MediaFormatID is support
 	private static String mapShowFormatMimeFromMediaEncoding(MediaEncoding mediaEncoding)
 	{
-		if(MediaEncoding.WMV9.equals(mediaEncoding))
+		if(MediaEncoding.WMV2.equals(mediaEncoding))
 			return MediaMIME.video_x_ms_wmv.toString();
-		if(MediaEncoding.DivX5.equals(mediaEncoding))
+		if(MediaEncoding.DIVX.equals(mediaEncoding))
 			return MediaMIME.video_x_msvideo.toString();
 		if(MediaEncoding.SVQ3.equals(mediaEncoding))
 			return MediaMIME.video_mov.toString();
-		if(MediaEncoding.MP3.equals(mediaEncoding))
+		if(MediaEncoding.MPGA.equals(mediaEncoding))
 			return MediaMIME.audio_mpeg.toString();
 
 		throw new IllegalArgumentException(mediaEncoding.toString());

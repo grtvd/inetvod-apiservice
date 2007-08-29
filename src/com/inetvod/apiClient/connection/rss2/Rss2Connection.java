@@ -474,13 +474,13 @@ public class Rss2Connection extends BaseConnection
 	{
 		//TODO: support more video formats
 		if(MediaMIME.video_x_ms_wmv.equals(type))
-			return MediaEncoding.WMV9;
+			return MediaEncoding.WMV2;
 		if(MediaMIME.video_x_msvideo.equals(type))
-			return MediaEncoding.DivX5;
+			return MediaEncoding.DIVX;
 		if(MediaMIME.video_mp4.equals(type))
 			return MediaEncoding.SVQ3;
 		if(MediaMIME.audio_mpeg.equals(type))
-			return MediaEncoding.MP3;
+			return MediaEncoding.MPGA;
 
 		Logger.logInfo(this, "determineMediaEncodingFromMIME", String.format("Skipping type(%s)", type));
 		return null;
