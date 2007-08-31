@@ -13,11 +13,11 @@ import com.inetvod.apiClient.connection.rss2.data.Channel;
 import com.inetvod.apiClient.connection.rss2.data.Enclosure;
 import com.inetvod.apiClient.connection.rss2.data.ITunesCategory;
 import com.inetvod.apiClient.connection.rss2.data.ITunesCategoryList;
+import com.inetvod.apiClient.connection.rss2.data.ITunesExplicit;
 import com.inetvod.apiClient.connection.rss2.data.Item;
 import com.inetvod.apiClient.connection.rss2.data.MediaContent;
 import com.inetvod.apiClient.connection.rss2.data.MediaGroup;
 import com.inetvod.apiClient.connection.rss2.data.Rss20;
-import com.inetvod.apiClient.connection.rss2.data.ITunesExplicit;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.core.StrUtil;
 import com.inetvod.common.core.StringList;
@@ -132,7 +132,8 @@ public class Rss2Connection extends BaseConnection
 		}
 		catch(Exception e)
 		{
-			Logger.logErr(this, "process", e);
+			Logger.logErr(this, "process", String.format("Failed processing Provider(%s) on ProviderConnection(%s)",
+				fProvider.getProviderID(), fProviderConnection.getProviderConnectionID()), e);
 		}
 
 		return null;
@@ -409,7 +410,7 @@ public class Rss2Connection extends BaseConnection
 		if(len <= maxLen)
 			return str;
 
-		Logger.logInfo(this, "confirmMaxLength", String.format("Trunking (%s) to maxLen(%d)", str, maxLen));
+		Logger.logInfo(this, "confirmMaxLength", String.format("Trunking len(%d) to maxLen(%d) for (%s)", len, maxLen, str));
 		return str.substring(0, maxLen);
 	}
 

@@ -7,9 +7,6 @@ package com.inetvod.apiClient.connection;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-
 import com.inetvod.apiClient.ShowDataList;
 import com.inetvod.common.core.FileExtension;
 import com.inetvod.common.core.Logger;
@@ -18,6 +15,8 @@ import com.inetvod.common.core.StreamUtil;
 import com.inetvod.common.core.XmlDataReader;
 import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 
 public abstract class BaseConnection
 {
@@ -42,6 +41,8 @@ public abstract class BaseConnection
 
 	protected <T extends Readable> T sendRequest(String rootElement, Constructor<T> ctorDataReader) throws Exception
 	{
+		String logFileName = null;
+
 		try
 		{
 			// Send HTTP request to server
@@ -57,7 +58,7 @@ public abstract class BaseConnection
 				InputStream responseStream = getMethod.getResponseBodyAsStream();
 
 				InputStream memoryResponseStream = StreamUtil.streamCopyToMemory(responseStream);
-				Logger.logFile(memoryResponseStream, "connection", FileExtension.xml);
+				logFileName = Logger.logFile(memoryResponseStream, "connection", FileExtension.xml);
 
 				XmlDataReader dataReader = new XmlDataReader(memoryResponseStream);
 				return dataReader.readObject(rootElement, ctorDataReader);
@@ -69,7 +70,8 @@ public abstract class BaseConnection
 		}
 		catch(Exception e)
 		{
-			Logger.logInfo(this, "sendRequest", e);
+			Logger.logInfo(this, "sendRequest", String.format("Exception while processing ConnectionURL(%s) from Provider(%s) on ProviderConnection(%s), logged to File(%s)",
+				fConnectionURL, fProvider.getProviderID(), fProviderConnection.getProviderConnectionID(), logFileName), e);
 			throw e;
 		}
 	}
