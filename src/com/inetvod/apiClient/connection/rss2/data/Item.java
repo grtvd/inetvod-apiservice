@@ -17,7 +17,7 @@ public class Item implements Readable
 {
 	/* Constants */
 	public static final Constructor<Item> CtorDataReader = DataReader.getCtor(Item.class);
-	private static final int TitleMaxLength = 128;
+	private static final int TitleMaxLength = 256;
 	private static final int LinkMaxLength = 4096;
 	private static final int ITunesSummaryMaxLength = Short.MAX_VALUE;
 	private static final int CategoryMaxLength = 128;
