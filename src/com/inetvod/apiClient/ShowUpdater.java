@@ -11,6 +11,7 @@ import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.MediaEncoding;
 import com.inetvod.common.data.MediaMIME;
+import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.data.ProviderID;
 import com.inetvod.common.data.ShowAvail;
 import com.inetvod.common.data.ShowFormat;
@@ -93,7 +94,7 @@ public abstract class ShowUpdater
 	{
 		final String METHOD_NAME = "updateShow";
 		ProviderID providerID = fProviderConnection.getProviderID();
-		Show show;
+		Show show = null;
 		ShowProviderList showProviderList;
 
 		showProviderList = ShowProviderList.findByProviderConnectionIDProviderShowID(
@@ -111,17 +112,21 @@ public abstract class ShowUpdater
 		}
 		else
 		{
-			show = locateExistingShow(showData);
-			if(show != null)
+			if(ProviderConnectionType.ProviderAPI.equals(fProviderConnection.getProviderConnectionType()))
 			{
-				if(ShowProviderList.findByShowIDProviderID(show.getShowID(), providerID).size() > 0)
+				show = locateExistingShow(showData);
+				if(show != null)
 				{
-					Logger.logErr(this, METHOD_NAME, String.format("Provider already set for Show, possible bad ProviderShowID(%s) for ShowID(%s)",
-						showData.getProviderShowID(), show.getShowID()));
-					return;
+					if(ShowProviderList.findByShowIDProviderID(show.getShowID(), providerID).size() > 0)
+					{
+						Logger.logErr(this, METHOD_NAME, String.format("Provider already set for Show, possible bad ProviderShowID(%s) for ShowID(%s)",
+							showData.getProviderShowID(), show.getShowID()));
+						return;
+					}
 				}
 			}
-			else
+
+			if(show == null)
 				show = Show.newInstance(showData.getName(), showData.getIsAdult());
 		}
 
@@ -179,15 +184,15 @@ public abstract class ShowUpdater
 				}
 				else
 				{
+					showProvider = showProviderList.findByShowFormat(showFormat);
 					showFormatMime = mapShowFormatMimeFromMediaEncoding(showFormat.getMediaEncoding());
-					//TODO Later this should map the showFormat into a valid MediaFormatID, then MediaFormatID would be used
-					showProvider = showProviderList.findByShowFormatMime(showFormatMime);
 				}
 
 				if(showProvider == null)
 				{
 					showProvider = ShowProvider.newInstance(showID, fProviderConnection.getProviderID(),
-						fProviderConnection.getProviderConnectionID(), showData.getProviderShowID(), showFormatMime);
+						fProviderConnection.getProviderConnectionID(), showData.getProviderShowID(), showFormatMime,
+						showFormat);
 				}
 				else
 					showProviderList.remove(showProvider);
@@ -203,7 +208,7 @@ public abstract class ShowUpdater
 
 		// delete old ShowProviders
 		for(ShowProvider showProvider : showProviderList)
-			showProvider.delete();
+			showProvider.delete();		//TODO what about tied ShowRentals
 	}
 
 	//TODO temporary method until MediaFormatID is support

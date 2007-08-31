@@ -59,8 +59,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
-    <content url="file://$MODULE_DIR$/../../shared/java">
+    <content url="file://$MODULE_DIR$/../../shared">
       <sourceFolder url="file://$MODULE_DIR$/../../shared/java" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/../../shared/SQL/AutoLoad" />
+      <excludeFolder url="file://$MODULE_DIR$/../../shared/SQL/Hold.nosvn" />
+      <excludeFolder url="file://$MODULE_DIR$/../../shared/SQL/ShowFormat.nosvn" />
+      <excludeFolder url="file://$MODULE_DIR$/../../shared/SQL/ShowSearch.nosvn" />
+      <excludeFolder url="file://$MODULE_DIR$/../../shared/dotNet" />
       <excludeFolder url="file://$MODULE_DIR$/../../shared/java/com/inetvod/common/web" />
     </content>
     <orderEntry type="inheritedJdk" />
