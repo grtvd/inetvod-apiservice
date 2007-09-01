@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005-2006 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2007 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiservice;
@@ -33,6 +33,7 @@ import com.inetvod.common.dbdata.RentedShow;
 import com.inetvod.common.dbdata.Show;
 import com.inetvod.common.dbdata.ShowCategory;
 import com.inetvod.common.dbdata.ShowProvider;
+import com.inetvod.contmgr.mgr.ContentManager;
 
 public class MainApp
 {
@@ -101,10 +102,9 @@ public class MainApp
 		ShowCategory.getDatabaseAdaptor();
 		RentedShow.getDatabaseAdaptor();
 
-		// init the CryptoKeyStore
 		CryptoKeyStore.load(properties.getProperty("cryptokeystore"));
-
 		CategoryMapper.load(properties.getProperty("categoryMapper"));
+		ContentManager.initialize(properties.getProperty("contmgrServiceURL"));
 	}
 
 	@SuppressWarnings({"UNUSED_SYMBOL"})

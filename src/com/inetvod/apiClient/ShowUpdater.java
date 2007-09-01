@@ -195,20 +195,24 @@ public abstract class ShowUpdater
 						showFormat);
 				}
 				else
-					showProviderList.remove(showProvider);
+					showProviderList.remove(showProvider);		//don't want to mistakenly re-find same ShowProvider
 
 				if(showFormat instanceof ShowFormatExt)
 					showProvider.setShowURL(((ShowFormatExt)showFormat).getShowURL());
 
 				showProvider.getShowCostList().copy(showRental.getShowCostList());
-				showProvider.setShowAvail(ShowAvail.Available);
+				if(ProviderConnectionType.ProviderAPI.equals(fProviderConnection.getProviderConnectionType()))
+					showProvider.setShowAvail(ShowAvail.Available);
+				else
+				{
+					if(ShowAvail.Reconfirming.equals(showProvider.getShowAvail()))
+						showProvider.setShowAvail(ShowAvail.Available);
+					else
+						showProvider.setShowAvail(ShowAvail.Unconfirmed);
+				}
 				showProvider.update();
 			}
 		}
-
-		// delete old ShowProviders
-		for(ShowProvider showProvider : showProviderList)
-			showProvider.delete();		//TODO what about tied ShowRentals
 	}
 
 	//TODO temporary method until MediaFormatID is support
