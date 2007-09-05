@@ -6,7 +6,7 @@
 	- Will create "C:\projects\iNetVOD\apiservice\trunk\build\apiservice.jar"
 	- Close IDEA
 
-- Comfirm files in Build folder
+- Confirm files in Build folder
 	- Check for current versions in "C:\projects\iNetVOD\apiservice\trunk\build".
 		- apiservice.xml
 		- log4j.xml
@@ -16,22 +16,24 @@
 - Commit all changed files, use label: "apiservice: Cut version CCYY-MM-DD."
 
 - Deploy to Server
-	- Copy to local FTP, copy down from apiservice.inetvod.com.
-		- ftp://alpha.inetvod.com
+	- Locally
+		- Copy to C:\projects\iNetVOD-prod\web\Program Files\iNetVOD\apiservice
+			- Commit all changes files, use label: "web: Deployed apiservice version CCYY-MM-DD."
 
-	- Copy files to "C:\Program Files\iNetVOD\apiservice".
+	- On Server
+		- Checkout/Update "C:\Program Files\iNetVOD" from "svn://svn.inetvod.com/prod/web/Program Files/iNetVOD"
 
-	- Confirm dbconnect.xml in "C:\Program Files\iNetVOD\Common".
-
-	- Comfirm cryptokeystore.xml in "C:\Program Files\iNetVOD\Common".
-
-	- Confirm categoryMapper.xml in "C:\Program Files\iNetVOD\Common".
-
-	- Confirm Scheduled Task
-		- Run: "C:\Program Files\Java\jre1.5.0_06\bin\java.exe" -jar "C:\Program Files\iNetVOD\apiservice\apiservice.jar"
-		- Start in: "C:\Program Files\iNetVOD\apiservice"
-		- Run as: APISERVER\inetvod
-		- Run every 6 hours starting at 4 AM MT.
+		- Confirm dbconnect.xml in "C:\Program Files\iNetVOD\common".
+	
+		- Confirm cryptokeystore.xml in "C:\Program Files\iNetVOD\common".
+	
+		- Confirm categoryMapper.xml in "C:\Program Files\iNetVOD\common".
+	
+		- Confirm Scheduled Task
+			- Run: "C:\Program Files\Java\jre1.5.0_06\bin\java.exe" -jar "C:\Program Files\iNetVOD\apiservice\apiservice.jar"
+			- Start in: "C:\Program Files\iNetVOD\apiservice"
+			- Run as: APISERVER\inetvod
+			- Run every 6 hours starting at 4 AM MT.
 
 
 - Steps for next update only (remove these items after each deployment)
