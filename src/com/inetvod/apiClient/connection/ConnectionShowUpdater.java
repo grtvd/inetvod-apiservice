@@ -235,8 +235,6 @@ public class ConnectionShowUpdater extends ShowUpdater
 					}
 				}
 			}
-			else
-				showProvider.delete();
 		}
 	}
 }
