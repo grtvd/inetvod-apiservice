@@ -60,15 +60,15 @@ public class ConnectionShowUpdater extends ShowUpdater
 
 		ShowProviderList.markReconfirmByProviderConnectionIDAvail(fProviderConnection.getProviderConnectionID());
 
-		if(showDataList == null)
-			return;
-
-		for(ShowData showData : showDataList)
+		if(showDataList != null)
 		{
-			if(!confirmShowData(showData))
-				continue;
+			for(ShowData showData : showDataList)
+			{
+				if(!confirmShowData(showData))
+					continue;
 
-			updateShow(showData);
+				updateShow(showData);
+			}
 		}
 
 		processReconfirming();
