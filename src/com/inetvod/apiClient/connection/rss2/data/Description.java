@@ -35,6 +35,8 @@ public class Description implements Readable
 	{
 //		fLink = reader.readString("a", 256);
 //		fImage = reader.readString("img", 256);
-		fText = StrUtil.removeHtml(reader.readString(null, TextMaxLength)).replace("\t", " ");
+		fText = StrUtil.removeHtml(reader.readString(null, TextMaxLength));
+		if(StrUtil.hasLen(fText))
+			fText = fText.replace("\t", " ");
 	}
 }
