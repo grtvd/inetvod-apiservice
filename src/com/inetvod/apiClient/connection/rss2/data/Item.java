@@ -9,6 +9,7 @@ import java.util.Date;
 
 import com.inetvod.common.core.DataReader;
 import com.inetvod.common.core.DateUtil;
+import com.inetvod.common.core.Logger;
 import com.inetvod.common.core.Readable;
 import com.inetvod.common.core.StrUtil;
 import com.inetvod.common.core.StringList;
@@ -82,9 +83,29 @@ public class Item implements Readable
 		fITunesExplicit = ITunesExplicit.convertFromString(reader.readString("itunes:explicit", ITunesExplicit.MaxLength));
 		fEnclosure = reader.readObject("enclosure", Enclosure.CtorDataReader);
 		fGuid = reader.readString("guid", GuidMaxLength);
-		fPubDate = DateUtil.convertFromRFC2822(reader.readString("pubDate", DateMaxLength));
+		fPubDate = parsePubDate(reader.readString("pubDate", DateMaxLength));
 
 		fMediaGroup = reader.readObject("media:group", MediaGroup.CtorDataReader);
 		fMediaContentList = reader.readList("media:content", MediaContentList.Ctor, MediaContent.CtorDataReader);
+	}
+
+	/**
+	 * Some invalid formats from various provider need to be specifically handled
+	 */
+	private static Date parsePubDate(String dateStr)
+	{
+		if(!StrUtil.hasLen(dateStr))
+			return null;
+
+		Date date = DateUtil.convertFromRFC2822(dateStr);
+		if(date != null)
+			return date;
+
+		if(dateStr.endsWith("+5000"))
+			date = DateUtil.convertFromRFC2822(String.format("%s-0500", dateStr.substring(0, dateStr.length() - 5)));
+
+		if(date == null)
+			Logger.logErr(Item.class, "parsePubDate", String.format("Can't parse dateStr(%s)", dateStr));
+		return date;
 	}
 }
