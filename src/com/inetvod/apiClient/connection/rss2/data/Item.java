@@ -105,6 +105,13 @@ public class Item implements Readable
 			date = DateUtil.convertFromRFC2822(String.format("%s-0500", dateStr.substring(0, dateStr.length() - 5)));
 
 		if(date == null)
+		{
+			String[] dateStrParts = dateStr.split("\\,");
+			if(dateStrParts.length == 2)
+				date = DateUtil.parseDate(dateStrParts[1].trim(), "d MMM yyyy HH:mm:ss Z");
+		}
+
+		if(date == null)
 			Logger.logErr(Item.class, "parsePubDate", String.format("Can't parse dateStr(%s)", dateStr));
 		return date;
 	}
