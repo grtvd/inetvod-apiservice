@@ -1,5 +1,5 @@
 /**
- * Copyright © 2006-2007 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2006-2008 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.connection.rss2.data;
@@ -40,6 +40,7 @@ public class Item implements Readable
 	private Enclosure fEnclosure;
 	private String fGuid;
 	private Date fPubDate;
+	private MediaThumbnail fMediaThumbnail;
 
 	private MediaGroup fMediaGroup;
 	private MediaContentList fMediaContentList;
@@ -58,6 +59,7 @@ public class Item implements Readable
 	public Enclosure getEnclosure() { return fEnclosure; }
 	public String getGuid() { return fGuid; }
 	public Date getPubDate() { return fPubDate; }
+	public MediaThumbnail getMediaThumbnail() { return fMediaThumbnail; }
 
 	public MediaGroup getMediaGroup() { return fMediaGroup; }
 	public MediaContentList getMediaContentList() { return fMediaContentList; }
@@ -84,6 +86,7 @@ public class Item implements Readable
 		fEnclosure = reader.readObject("enclosure", Enclosure.CtorDataReader);
 		fGuid = reader.readString("guid", GuidMaxLength);
 		fPubDate = parsePubDate(reader.readString("pubDate", DateMaxLength));
+		fMediaThumbnail = reader.readObject("media:thumbnail", MediaThumbnail.CtorDataReader);
 
 		fMediaGroup = reader.readObject("media:group", MediaGroup.CtorDataReader);
 		fMediaContentList = reader.readList("media:content", MediaContentList.Ctor, MediaContent.CtorDataReader);

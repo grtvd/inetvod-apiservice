@@ -1,5 +1,5 @@
 /**
- * Copyright © 2006 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2006-2008 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.connection.rss2.data;
@@ -27,6 +27,9 @@ public class Channel implements Readable
 	private StringList fCategoryList;
 	private ITunesCategoryList fITunesCategoryList;
 	private ITunesExplicit fITunesExplicit;
+	private Image fImage;
+	private MediaThumbnail fMediaThumbnail;
+	private ITunesImage fITunesImage;
 	private ItemList fItemList = new ItemList();
 
 	/* Getters and Setters */
@@ -37,6 +40,9 @@ public class Channel implements Readable
 	public StringList getCategoryList() { return fCategoryList; }
 	public ITunesCategoryList getITunesCategoryList() { return fITunesCategoryList; }
 	public ITunesExplicit getITunesExplicit() { return fITunesExplicit; }
+	public Image getImage() { return fImage; }
+	public MediaThumbnail getMediaThumbnail() { return fMediaThumbnail; }
+	public ITunesImage getITunesImage() { return fITunesImage; }
 	public ItemList getItemList() { return fItemList; }
 
 	/* Construction */
@@ -56,6 +62,9 @@ public class Channel implements Readable
 		fCategoryList = reader.readStringList("category", CategoryMaxLength, StringList.Ctor, StrUtil.CtorString);
 		fITunesCategoryList = reader.readList("itunes:category", ITunesCategoryList.Ctor, ITunesCategory.CtorDataReader);
 		fITunesExplicit = ITunesExplicit.convertFromString(reader.readString("itunes:explicit", ITunesExplicit.MaxLength));
+		fImage = reader.readObject("image", Image.CtorDataReader);
+		fMediaThumbnail = reader.readObject("media:thumbnail", MediaThumbnail.CtorDataReader);
+		fITunesImage = reader.readObject("itunes:image", ITunesImage.CtorDataReader);
 		fItemList = reader.readList("item", ItemList.Ctor, Item.CtorDataReader);
 	}
 }

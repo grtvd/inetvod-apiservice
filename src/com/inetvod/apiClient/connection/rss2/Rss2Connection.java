@@ -1,5 +1,5 @@
 /**
- * Copyright © 2006-2007 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2006-2008 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.connection.rss2;
@@ -23,8 +23,6 @@ import com.inetvod.common.core.StrUtil;
 import com.inetvod.common.core.StringList;
 import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.CategoryIDList;
-import com.inetvod.common.data.MediaEncoding;
-import com.inetvod.common.data.MediaMIME;
 import com.inetvod.common.data.ProviderShowID;
 import com.inetvod.common.data.ShowCost;
 import com.inetvod.common.data.ShowCostType;
@@ -118,6 +116,7 @@ public class Rss2Connection extends BaseConnection
 
 				showData.getCategoryIDList().copy(getCategories(channel, item));
 				showData.setIsAdult(getIsAdult(channel, item));
+				showData.setPictureURL(getImage(channel, item));
 
 				showRental = new ShowRental();
 				showRental.getShowFormatList().copy(showFormatList);
@@ -139,7 +138,7 @@ public class Rss2Connection extends BaseConnection
 		return null;
 	}
 
-	private ProviderShowID getProviderShowID(Item item) throws Exception
+	private static ProviderShowID getProviderShowID(Item item) throws Exception
 	{
 		String guid = item.getGuid();
 
@@ -198,7 +197,7 @@ public class Rss2Connection extends BaseConnection
 		return item.getTitle();
 	}
 
-	private String getDescription(Channel channel, Item item, MediaGroup mediaGroup, MediaContent mediaContent)
+	private static String getDescription(Channel channel, Item item, MediaGroup mediaGroup, MediaContent mediaContent)
 	{
 		if((mediaContent != null) && (mediaContent.getMediaDescription() != null))
 			return mediaContent.getMediaDescription().toString();
@@ -276,7 +275,7 @@ public class Rss2Connection extends BaseConnection
 
 	}
 
-	private CategoryIDList getCategories(Channel channel, Item item)
+	private static CategoryIDList getCategories(Channel channel, Item item)
 	{
 		if(item.getITunesCategoryList().size() != 0)
 			return mapFromITunesCategory(item.getITunesCategoryList());
@@ -291,7 +290,7 @@ public class Rss2Connection extends BaseConnection
 		return null;
 	}
 
-	private CategoryIDList mapFromITunesCategory(ITunesCategoryList iTunesCategoryList)
+	private static CategoryIDList mapFromITunesCategory(ITunesCategoryList iTunesCategoryList)
 	{
 		CategoryMapper categoryMapper = CategoryMapper.getThe();
 		CategoryIDList categoryIDList = new CategoryIDList();
@@ -309,14 +308,14 @@ public class Rss2Connection extends BaseConnection
 		return categoryIDList;
 	}
 
-	@SuppressWarnings({"UNUSED_SYMBOL"})
-	private CategoryIDList mapFromMediaCategory()
+	@SuppressWarnings({ "UnusedDeclaration" })
+	private static CategoryIDList mapFromMediaCategory()
 	{
 		//TODO:
 		return null;
 	}
 
-	private CategoryIDList mapFromMiscCategory(StringList categoryList)
+	private static CategoryIDList mapFromMiscCategory(StringList categoryList)
 	{
 		CategoryMapper categoryMapper = CategoryMapper.getThe();
 		CategoryIDList categoryIDList = new CategoryIDList();
@@ -334,7 +333,7 @@ public class Rss2Connection extends BaseConnection
 		return categoryIDList;
 	}
 
-	private Boolean getIsAdult(Channel channel, Item item)
+	private static Boolean getIsAdult(Channel channel, Item item)
 	{
 		ITunesExplicit iTunesExplicit;
 
@@ -350,6 +349,23 @@ public class Rss2Connection extends BaseConnection
 		//ITunesExplicit.Clean
 		//ITunesExplicit.No
 		return false;
+	}
+
+	private static String getImage(Channel channel, Item item)
+	{
+		if((item.getMediaThumbnail() != null) && (item.getMediaThumbnail().getURL() != null))
+			return item.getMediaThumbnail().getURL();
+
+		if((channel.getITunesImage() != null) && (channel.getITunesImage().getHREF() != null))
+			return channel.getITunesImage().getHREF();
+
+		if((channel.getMediaThumbnail() != null) && (channel.getMediaThumbnail().getURL() != null))
+			return channel.getMediaThumbnail().getURL();
+
+		if((channel.getImage() != null) && (channel.getImage().getURL() != null))
+			return channel.getImage().getURL();
+
+		return null;
 	}
 
 	private String getFieldValue(String field, Channel channel, Item item, MediaGroup mediaGroup, MediaContent mediaContent)
@@ -446,7 +462,7 @@ public class Rss2Connection extends BaseConnection
 		return showFormatList;
 	}
 
-	private ShowFormat getShowFormatFromItem(Item item)
+	private static ShowFormat getShowFormatFromItem(Item item)
 	{
 		Enclosure enclosure = item.getEnclosure();
 		if(enclosure == null)
@@ -460,7 +476,7 @@ public class Rss2Connection extends BaseConnection
 		return new ShowFormatExt(enclosure.getURL(), enclosure.getType());
 	}
 
-	private ShowFormat getShowFormatFromMediaContent(MediaContent mediaContent)
+	private static ShowFormat getShowFormatFromMediaContent(MediaContent mediaContent)
 	{
 		if(!StrUtil.hasLen(mediaContent.getURL()))
 			return null;
@@ -468,22 +484,5 @@ public class Rss2Connection extends BaseConnection
 		//TODO: confirm MediaEncoding, set other fields
 
 		return new ShowFormatExt(mediaContent.getURL(), mediaContent.getType());
-	}
-
-	@SuppressWarnings({"UNUSED_SYMBOL"})
-	private MediaEncoding determineMediaEncodingFromMIME(String type)
-	{
-		//TODO: support more video formats
-		if(MediaMIME.video_x_ms_wmv.equals(type))
-			return MediaEncoding.WMV2;
-		if(MediaMIME.video_x_msvideo.equals(type))
-			return MediaEncoding.DIVX;
-		if(MediaMIME.video_mp4.equals(type))
-			return MediaEncoding.SVQ3;
-		if(MediaMIME.audio_mpeg.equals(type))
-			return MediaEncoding.MPGA;
-
-		Logger.logInfo(this, "determineMediaEncodingFromMIME", String.format("Skipping type(%s)", type));
-		return null;
 	}
 }
