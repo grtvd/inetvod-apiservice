@@ -24,6 +24,7 @@ import com.inetvod.common.core.StringList;
 import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.ProviderShowID;
+import com.inetvod.common.data.RatingID;
 import com.inetvod.common.data.ShowCost;
 import com.inetvod.common.data.ShowCostType;
 import com.inetvod.common.data.ShowFormat;
@@ -115,7 +116,7 @@ public class Rss2Connection extends BaseConnection
 				showData.setRunningMins(getRunningMins(item, mediaGroup, mediaContent));
 
 				showData.getCategoryIDList().copy(getCategories(channel, item));
-				showData.setIsAdult(getIsAdult(channel, item));
+				showData.setRatingID(mapFromITunesExplicit(channel, item));
 				showData.setPictureURL(getImage(channel, item));
 
 				showRental = new ShowRental();
@@ -333,7 +334,7 @@ public class Rss2Connection extends BaseConnection
 		return categoryIDList;
 	}
 
-	private static Boolean getIsAdult(Channel channel, Item item)
+	private static RatingID mapFromITunesExplicit(Channel channel, Item item)
 	{
 		ITunesExplicit iTunesExplicit;
 
@@ -345,10 +346,11 @@ public class Rss2Connection extends BaseConnection
 			return null;
 
 		if(ITunesExplicit.Yes.equals(iTunesExplicit))
-			return true;
-		//ITunesExplicit.Clean
+			return RatingID.ITunesExplicit;
+		if(ITunesExplicit.Clean.equals(iTunesExplicit))
+			return RatingID.ITunesClean;
 		//ITunesExplicit.No
-		return false;
+		return null;
 	}
 
 	private static String getImage(Channel channel, Item item)

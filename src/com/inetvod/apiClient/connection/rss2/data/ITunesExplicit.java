@@ -1,5 +1,5 @@
 /**
- * Copyright © 2006 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2006-2008 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.connection.rss2.data;
@@ -10,9 +10,9 @@ public class ITunesExplicit
 {
 	public static final int MaxLength = 32;
 
-	public static final ITunesExplicit Yes = new ITunesExplicit("Yes");
-	public static final ITunesExplicit No = new ITunesExplicit("No");
-	public static final ITunesExplicit Clean = new ITunesExplicit("Clean");
+	public static final ITunesExplicit Yes = new ITunesExplicit("yes");
+	public static final ITunesExplicit No = new ITunesExplicit("no");
+	public static final ITunesExplicit Clean = new ITunesExplicit("clean");
 	private static HashMap<String, ITunesExplicit> fAllValues;
 
 	private final String fValue;
@@ -35,7 +35,7 @@ public class ITunesExplicit
 		if((value == null) || (value.length() == 0))
 			return null;
 
-		ITunesExplicit item = fAllValues.get(value);
+		ITunesExplicit item = fAllValues.get(value.toLowerCase());
 		if(item != null)
 			return item;
 
