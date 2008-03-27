@@ -327,8 +327,8 @@ public class Rss2Connection extends BaseConnection
 			categoryID = categoryMapper.mapCategory(category);
 			if(categoryID != null)
 				categoryIDList.add(categoryID);
-			//TODO else
-			//TODO	Logger.logWarn(this, "mapFromMiscCategory", String.format("Skipping category(%s)", category));
+			else
+				Logger.logErr(Rss2Connection.class, "mapFromMiscCategory", String.format("Skipping category(%s)", category));
 		}
 
 		return categoryIDList;

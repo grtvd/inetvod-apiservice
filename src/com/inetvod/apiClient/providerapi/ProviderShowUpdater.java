@@ -1,15 +1,17 @@
 /**
- * Copyright © 2005-2007 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2008 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.providerapi;
 
 import java.util.ArrayList;
 
+import com.inetvod.apiClient.CategoryMapper;
 import com.inetvod.apiClient.ShowData;
 import com.inetvod.apiClient.ShowUpdater;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.data.CategoryID;
+import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.ShowIDList;
 import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
@@ -79,7 +81,7 @@ public class ProviderShowUpdater extends ShowUpdater
 		//TODO: clean-up Shows with no ShowProvider records
 	}
 
-	private ArrayList<ShowIDList> makeUpdateList(ShowIDList completeShowIDList)
+	private static ArrayList<ShowIDList> makeUpdateList(ShowIDList completeShowIDList)
 	{
 		ArrayList<ShowIDList> showIDLists = new ArrayList<ShowIDList>();
 		ShowIDList showIDList;
@@ -170,7 +172,7 @@ public class ProviderShowUpdater extends ShowUpdater
 		return valid;
 	}
 
-	private ShowData convertToShowData(ShowDetail showDetail)
+	private static ShowData convertToShowData(ShowDetail showDetail)
 	{
 		ShowData showData = new ShowData();
 
@@ -183,13 +185,30 @@ public class ProviderShowUpdater extends ShowUpdater
 		showData.setDescription(showDetail.getDescription());
 		showData.setRunningMins(showDetail.getRunningMins());
 		showData.setPictureURL(showDetail.getPictureURL());
-		//TODO: map Provider's Categories to iNetVOD Categories
-		showData.getCategoryIDList().copy(showDetail.getCategoryIDList());
+		showData.getCategoryIDList().copy(mapFromProviderCategoryIDList(showDetail.getCategoryIDList()));
 		showData.setRatingID(showDetail.getRatingID());
 		showData.setLanguageID(showDetail.getLanguageID());
 		showData.setIsAdult(showDetail.getIsAdult());
 		showData.getShowRentalList().copy(showDetail.getShowRentalList());
 
 		return showData;
+	}
+
+	private static CategoryIDList mapFromProviderCategoryIDList(CategoryIDList providerCategoryIDList)
+	{
+		CategoryMapper categoryMapper = CategoryMapper.getThe();
+		CategoryIDList categoryIDList = new CategoryIDList();
+		CategoryID categoryID;
+
+		for(CategoryID providerCategoryID : providerCategoryIDList)
+		{
+			categoryID = categoryMapper.mapCategory(providerCategoryID.toString());
+			if(categoryID != null)
+				categoryIDList.add(categoryID);
+			else
+				Logger.logErr(ProviderShowUpdater.class, "mapFromProviderCategoryIDList", String.format("Skipping category(%s)", providerCategoryID.toString()));
+		}
+
+		return categoryIDList;
 	}
 }
