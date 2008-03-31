@@ -306,7 +306,7 @@ public class Rss2Connection extends BaseConnection
 					categoryIDList.add(categoryID);
 			}
 			else
-				Logger.logErr(Rss2Connection.class, "mapFromITunesCategory", String.format("Skipping category(%s)", iTunesCategory.getText()));
+				Logger.logInfo(Rss2Connection.class, "mapFromITunesCategory", String.format("Skipping category(%s)", iTunesCategory.getText()));
 		}
 
 		return categoryIDList;
@@ -334,7 +334,7 @@ public class Rss2Connection extends BaseConnection
 					categoryIDList.add(categoryID);
 			}
 			else
-				Logger.logErr(Rss2Connection.class, "mapFromMiscCategory", String.format("Skipping category(%s)", category));
+				Logger.logInfo(Rss2Connection.class, "mapFromMiscCategory", String.format("Skipping category(%s)", category));
 		}
 
 		return categoryIDList;
