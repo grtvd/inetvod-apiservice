@@ -45,6 +45,9 @@ public abstract class BaseConnection
 
 		try
 		{
+			Logger.logInfo(this, "sendRequest", String.format("Starting processing ConnectionURL(%s) from Provider(%s) on ProviderConnection(%s)",
+				fConnectionURL, fProvider.getProviderID(), fProviderConnection.getProviderConnectionID()));
+
 			// Send HTTP request to server
 			HttpClient httpClient = new HttpClient();
 			httpClient.getParams().setParameter("http.socket.timeout", TimeoutMillis);

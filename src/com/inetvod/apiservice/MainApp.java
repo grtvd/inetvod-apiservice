@@ -199,6 +199,9 @@ public class MainApp
 	{
 		try
 		{
+			Logger.logInfo(this, "updateProviderConnection", String.format("Beginning update of Provider(%s)/ProviderConnection(%s)",
+				provider.getProviderID().toString(), providerConnection.getProviderConnectionID().toString()));
+
 			if(ProviderConnectionType.ProviderAPI.equals(providerConnection.getProviderConnectionType()))
 				ProviderShowUpdater.newInstance(provider, providerConnection).doUpdate();
 			else

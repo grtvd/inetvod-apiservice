@@ -192,6 +192,9 @@ public class ConnectionShowUpdater extends ShowUpdater
 
 	private void processReconfirming() throws Exception
 	{
+		Logger.logInfo(this, "processReconfirming", String.format("Starting reconfirmation for Provider(%s) on ProviderConnection(%s)",
+			fProvider.getProviderID(), fProviderConnection.getProviderConnectionID()));
+
 		ShowProviderList showProviderList = ShowProviderList.findByProviderConnectionIDReconfirm(
 			this.fProviderConnection.getProviderConnectionID());
 
@@ -207,6 +210,9 @@ public class ConnectionShowUpdater extends ShowUpdater
 
 	private void processUnconfirmed() throws Exception
 	{
+		Logger.logInfo(this, "processReconfirming", String.format("Starting unconfirmed for Provider(%s) on ProviderConnection(%s)",
+			fProvider.getProviderID(), fProviderConnection.getProviderConnectionID()));
+
 		ShowProviderList showProviderList = ShowProviderList.findByProviderConnectionIDUnconfirm(
 			this.fProviderConnection.getProviderConnectionID());
 
