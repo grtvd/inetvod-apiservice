@@ -170,8 +170,7 @@ public class MainApp
 		else
 			updateAllProviders();
 
-
-		Logger.logInfo(this, "doWork", "Done!");
+		Logger.logWarn(this, "doWork", "Done!");	// make warning to send notification
 	}
 
 	private void updateAllProviders() throws Exception
