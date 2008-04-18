@@ -1,5 +1,5 @@
 /**
- * Copyright © 2005-2007 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2005-2008 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiservice;
@@ -32,6 +32,7 @@ import com.inetvod.common.dbdata.Rating;
 import com.inetvod.common.dbdata.RentedShow;
 import com.inetvod.common.dbdata.Show;
 import com.inetvod.common.dbdata.ShowCategory;
+import com.inetvod.common.dbdata.ShowCategoryList;
 import com.inetvod.common.dbdata.ShowProvider;
 import com.inetvod.contmgr.mgr.ContentManager;
 
@@ -169,6 +170,8 @@ public class MainApp
 			updateProviderConnection(fProviderConnectionID);
 		else
 			updateAllProviders();
+
+		ShowCategoryList.resetFeatured();
 
 		Logger.logWarn(this, "doWork", "Done!");	// make warning to send notification
 	}
