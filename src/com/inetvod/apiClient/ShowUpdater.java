@@ -144,7 +144,8 @@ public abstract class ShowUpdater
 		show.setReleasedOn(showData.getReleasedOn());
 		show.setReleasedYear(showData.getReleasedYear());
 		show.setDescription(showData.getDescription());
-		show.setRunningMins(showData.getRunningMins());
+		if (showData.getRunningMins() != null)
+			show.setRunningMins(showData.getRunningMins());
 		show.setPictureURL(showData.getPictureURL());
 		show.setRatingID(showData.getRatingID());
 		//TODO: showData.getLanguageID();
