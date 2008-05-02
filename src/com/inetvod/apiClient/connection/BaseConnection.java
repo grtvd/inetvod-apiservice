@@ -1,11 +1,12 @@
 /**
- * Copyright © 2006 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2006-2008 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.connection;
 
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
 
 import com.inetvod.apiClient.ShowDataList;
 import com.inetvod.common.core.FileExtension;
@@ -16,14 +17,21 @@ import com.inetvod.common.core.XmlDataReader;
 import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.HeadMethod;
 
 public abstract class BaseConnection
 {
+	/* Constants */
+	private static final int ConnectionTimeoutMillis = 30000;	//TODO: config?
+	private static final int SocketTimeoutMillis = 30000;	//TODO: config?
+
 	/* Fields */
 	protected Provider fProvider;
 	protected ProviderConnection fProviderConnection;
 	protected String fConnectionURL;
+	private HashMap<String, Boolean> fConfirmPictureMap = new HashMap<String, Boolean>();
 	protected static final int TimeoutMillis = 60000;	//TODO: config?
 
 	/* Getters and Setters */
@@ -77,5 +85,54 @@ public abstract class BaseConnection
 				fConnectionURL, fProvider.getProviderID(), fProviderConnection.getProviderConnectionID(), logFileName), e);
 			throw e;
 		}
+	}
+
+	private static boolean confirmURL(String url)
+	{
+		try
+		{
+			// Send HTTP request to server
+			HttpClient httpClient = new HttpClient();
+			httpClient.getParams().setParameter("http.connection.timeout", ConnectionTimeoutMillis);	//http.connection.timeout
+			httpClient.getParams().setParameter("http.socket.timeout", SocketTimeoutMillis);	//http.socket.timeout
+			HeadMethod headMethod = new HeadMethod(url);
+			headMethod.setFollowRedirects(true);
+
+			try
+			{
+				int rc = httpClient.executeMethod(headMethod);
+				if(rc != HttpStatus.SC_OK)
+				{
+					if(rc != HttpStatus.SC_NOT_FOUND)
+						Logger.logWarn(BaseConnection.class, "confirmURL", String.format(
+							"Bad result(%d) from url(%s)", rc, url));
+					return false;
+				}
+
+				return true;
+			}
+			finally
+			{
+				headMethod.releaseConnection();
+			}
+		}
+		catch(Exception e)
+		{
+			Logger.logWarn(BaseConnection.class, "confirmURL",
+				String.format("Exception while validating url(%s)", url), e);
+		}
+
+		return false;
+	}
+
+	protected String confirmPicture(String pictureURL)
+	{
+		Boolean valid = fConfirmPictureMap.get(pictureURL);
+		if(valid == null)
+		{
+			valid = confirmURL(pictureURL);
+			fConfirmPictureMap.put(pictureURL, valid);
+		}
+		return valid ? pictureURL : null;
 	}
 }

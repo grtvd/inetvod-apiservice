@@ -117,7 +117,7 @@ public class Rss2Connection extends BaseConnection
 
 				showData.getCategoryIDList().copy(getCategories(channel, item));
 				showData.setRatingID(mapFromITunesExplicit(channel, item));
-				showData.setPictureURL(getImage(channel, item));
+				showData.setPictureURL(confirmPicture(getImage(channel, item)));
 
 				showRental = new ShowRental();
 				showRental.getShowFormatList().copy(showFormatList);
