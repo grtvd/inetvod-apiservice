@@ -1,11 +1,13 @@
 /**
- * Copyright © 2006-2007 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2006-2008 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient;
 
+import java.util.Date;
 import java.util.HashSet;
 
+import com.inetvod.common.core.DateUtil;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.data.CategoryID;
 import com.inetvod.common.data.CategoryIDList;
@@ -141,7 +143,7 @@ public abstract class ShowUpdater
 		show.setName(showData.getName());
 		show.setEpisodeName(showData.getEpisodeName());
 		show.setEpisodeNumber(showData.getEpisodeNumber());
-		show.setReleasedOn(showData.getReleasedOn());
+		reconcileReleasedOn(showData, show);
 		show.setReleasedYear(showData.getReleasedYear());
 		show.setDescription(showData.getDescription());
 		if (showData.getRunningMins() != null)
@@ -157,6 +159,20 @@ public abstract class ShowUpdater
 
 		// update ShowCategory entries
 		reconcileShowCategory(showData, show.getShowID());
+	}
+
+	private static void reconcileReleasedOn(ShowData showData, Show show)
+	{
+		Date now = DateUtil.now();
+
+		if((showData.getReleasedOn() == null) || showData.getReleasedOn().after(now))
+		{
+			if (show.getReleasedOn() == null)
+				show.setReleasedOn(now);
+			return;
+		}
+
+		show.setReleasedOn(showData.getReleasedOn());
 	}
 
 	private void reconcileShowProvider(ShowData showData, ShowID showID, ShowProviderList showProviderList)
