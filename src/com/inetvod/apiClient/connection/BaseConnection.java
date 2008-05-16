@@ -65,7 +65,10 @@ public abstract class BaseConnection
 
 			try
 			{
-				httpClient.executeMethod(getMethod);
+				int rc = httpClient.executeMethod(getMethod);
+				if(rc != HttpStatus.SC_OK)
+					throw new Exception(String.format("Bad result(%d) from url(%s)", rc, fConnectionURL));
+
 				InputStream responseStream = getMethod.getResponseBodyAsStream();
 
 				InputStream memoryResponseStream = StreamUtil.streamCopyToMemory(responseStream);
