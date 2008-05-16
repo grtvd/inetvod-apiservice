@@ -115,6 +115,11 @@ public class Item implements Readable
 		}
 
 		if(date == null)
+		{
+			date = DateUtil.parseDate(dateStr.replaceAll("\\,", ""), "EEE d MMM yyyy HH:mm:ss Z");
+		}
+
+		if(date == null)
 			Logger.logErr(Item.class, "parsePubDate", String.format("Can't parse dateStr(%s)", dateStr));
 		return date;
 	}
