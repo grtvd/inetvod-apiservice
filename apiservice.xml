@@ -6,5 +6,5 @@
 	<entry key="logdir">/program files/inetvod/logs/apiservice</entry>
 	<entry key="cryptokeystore">/program files/inetvod/common/cryptokeystore.xml</entry>
 	<entry key="categoryMapper">/program files/inetvod/common/categoryMapper.xml</entry>
-	<entry key="contmgrServiceURL">http://contmgr.inetvod.com/contmgr</entry>
+	<entry key="contmgrServiceURL">http://contmgr.stormmediaplayer.com/contmgr</entry>
 </properties>
