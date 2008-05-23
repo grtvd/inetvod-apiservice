@@ -1,16 +1,14 @@
 /**
- * Copyright © 2006-2007 iNetVOD, Inc. All Rights Reserved.
+ * Copyright © 2006-2008 iNetVOD, Inc. All Rights Reserved.
  * iNetVOD Confidential and Proprietary.  See LEGAL.txt.
  */
 package com.inetvod.apiClient.connection;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashSet;
 
 import com.inetvod.apiClient.ShowData;
 import com.inetvod.apiClient.ShowDataList;
-import com.inetvod.apiClient.ShowFormatExt;
 import com.inetvod.apiClient.ShowUpdater;
 import com.inetvod.common.core.LanguageID;
 import com.inetvod.common.core.Logger;
@@ -19,7 +17,6 @@ import com.inetvod.common.data.CategoryIDList;
 import com.inetvod.common.data.ProviderConnectionType;
 import com.inetvod.common.data.ShowAvail;
 import com.inetvod.common.data.ShowFormat;
-import com.inetvod.common.data.ShowRental;
 import com.inetvod.common.dbdata.CategoryList;
 import com.inetvod.common.dbdata.Provider;
 import com.inetvod.common.dbdata.ProviderConnection;
@@ -44,6 +41,7 @@ public class ConnectionShowUpdater extends ShowUpdater
 	}
 
 	/* Implementation */
+	@Override
 	public void doUpdate() throws Exception
 	{
 		if(!fProviderConnection.isEnabled())
@@ -155,31 +153,33 @@ public class ConnectionShowUpdater extends ShowUpdater
 
 		if(showData.getShowRentalList().size() > 0)
 		{
-			/* For now, ShowFormatMime is used as unique identifier for ShowFormat (see ShowUpdater.reconcileShowProvider()).
-				Need to confirm not receiving two formats that are the same (if so, probably vary in quality).
-				TODO: Later, need to map by show quality, not just mime.
-			 */
-			HashSet<String> showFormatMimeList = new HashSet<String>();
-			for(ShowRental showRental : showData.getShowRentalList())
-				for(ShowFormat showFormat : showRental.getShowFormatList())
-				{
-					if(showFormat instanceof ShowFormatExt)
-					{
-						String showFormatMime = ((ShowFormatExt)showFormat).getShowFormatMime();
-						if(showFormatMimeList.contains(showFormatMime))
-						{
-							valid = false;
-							Logger.logWarn(this, METHOD_NAME, String.format("Duplicate ShowFormatMime(%s), ProviderShowID(%s)",
-								showFormatMime, providerShowIDStr));
-						}
-						showFormatMimeList.add(showFormatMime);
-					}
-					else
-					{
-						valid= false;
-						Logger.logErr(this, METHOD_NAME, String.format("Expecting ShowFormatExt, ProviderShowID(%s)", providerShowIDStr));
-					}
-				}
+// ShowUpdater.reconcileShowProvider() no longer uses ShowFormatMime as unique identifier so this test is no longer required.
+//
+//			/* For now, ShowFormatMime is used as unique identifier for ShowFormat (see ShowUpdater.reconcileShowProvider()).
+//				Need to confirm not receiving two formats that are the same (if so, probably vary in quality).
+//				TODO: Later, need to map by show quality, not just mime.
+//			 */
+//			HashSet<String> showFormatMimeList = new HashSet<String>();
+//			for(ShowRental showRental : showData.getShowRentalList())
+//				for(ShowFormat showFormat : showRental.getShowFormatList())
+//				{
+//					if(showFormat instanceof ShowFormatExt)
+//					{
+//						String showFormatMime = ((ShowFormatExt)showFormat).getShowFormatMime();
+//						if(showFormatMimeList.contains(showFormatMime))
+//						{
+//							valid = false;
+//							Logger.logWarn(this, METHOD_NAME, String.format("Duplicate ShowFormatMime(%s), ProviderShowID(%s)",
+//								showFormatMime, providerShowIDStr));
+//						}
+//						showFormatMimeList.add(showFormatMime);
+//					}
+//					else
+//					{
+//						valid= false;
+//						Logger.logErr(this, METHOD_NAME, String.format("Expecting ShowFormatExt, ProviderShowID(%s)", providerShowIDStr));
+//					}
+//				}
 		}
 		else
 		{
