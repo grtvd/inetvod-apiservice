@@ -12,6 +12,7 @@ import com.inetvod.apiClient.ShowDataList;
 import com.inetvod.common.core.FileExtension;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.core.Readable;
+import com.inetvod.common.core.StrUtil;
 import com.inetvod.common.core.StreamUtil;
 import com.inetvod.common.core.XmlDataReader;
 import com.inetvod.common.dbdata.Provider;
@@ -130,6 +131,9 @@ public abstract class BaseConnection
 
 	protected String confirmPicture(String pictureURL)
 	{
+		if(!StrUtil.hasLen(pictureURL))
+			return null;
+
 		Boolean valid = fConfirmPictureMap.get(pictureURL);
 		if(valid == null)
 		{
