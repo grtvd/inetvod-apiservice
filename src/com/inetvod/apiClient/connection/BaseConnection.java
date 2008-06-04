@@ -6,6 +6,8 @@ package com.inetvod.apiClient.connection;
 
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 
 import com.inetvod.apiClient.ShowDataList;
@@ -122,8 +124,16 @@ public abstract class BaseConnection
 		}
 		catch(Exception e)
 		{
-			Logger.logWarn(BaseConnection.class, "confirmURL",
-				String.format("Exception while validating url(%s)", url), e);
+			try
+			{
+				new URL(url);	//is in valid URL format?
+				Logger.logWarn(BaseConnection.class, "confirmURL",
+					String.format("Exception while validating url(%s)", url), e);
+			}
+			catch(MalformedURLException ignore)
+			{
+				Logger.logInfo(BaseConnection.class, "confirmURL", String.format("Invalid url(%s)", url));
+			}
 		}
 
 		return false;
@@ -137,9 +147,35 @@ public abstract class BaseConnection
 		Boolean valid = fConfirmPictureMap.get(pictureURL);
 		if(valid == null)
 		{
+			try
+			{
+				new URL(pictureURL);
+			}
+			catch(MalformedURLException ignore)
+			{
+				pictureURL = buildURLFromRelative(pictureURL);
+				valid = fConfirmPictureMap.get(pictureURL);
+				if(valid != null)
+					return valid ? pictureURL : null;
+			}
+
 			valid = confirmURL(pictureURL);
 			fConfirmPictureMap.put(pictureURL, valid);
 		}
 		return valid ? pictureURL : null;
+	}
+
+	private String buildURLFromRelative(String relativePath)
+	{
+		try
+		{
+			URL connectionURL = new URL(fConnectionURL);
+			URL fullURL = new URL(connectionURL.getProtocol(), connectionURL.getHost(), relativePath);
+			return fullURL.toString();
+		}
+		catch(MalformedURLException ignore)
+		{
+			return relativePath;
+		}
 	}
 }
