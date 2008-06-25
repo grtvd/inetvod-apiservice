@@ -66,6 +66,7 @@ public class Rss2Connection extends BaseConnection
 	}
 
 	/* Implementation */
+	@Override
 	public ShowDataList process()
 	{
 		try
@@ -244,6 +245,8 @@ public class Rss2Connection extends BaseConnection
 		{
 			if(!StrUtil.hasLen(iTunesDuration))
 				return null;
+
+			iTunesDuration = iTunesDuration.replaceAll("[^\\d:]*", "");
 
 			int hours = 0;
 			int minutes = 0;
