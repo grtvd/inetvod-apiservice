@@ -119,6 +119,9 @@ public class Item implements Readable
 			date = DateUtil.parseDate(dateStr.replaceAll("\\,", ""), "EEE d MMM yyyy HH:mm:ss Z");
 		}
 
+		if((date == null) && dateStr.contains("Sept"))
+			return parsePubDate(dateStr.replaceFirst("Sept", "Sep"));
+
 		if(date == null)
 			Logger.logErr(Item.class, "parsePubDate", String.format("Can't parse dateStr(%s)", dateStr));
 		return date;
