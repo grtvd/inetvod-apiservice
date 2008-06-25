@@ -41,12 +41,17 @@ public class ConnectionShowUpdater extends ShowUpdater
 	}
 
 	/* Implementation */
-	@Override
-	public void doUpdate() throws Exception
+	public void doUpdate(boolean processUnconfirmedOnly) throws Exception
 	{
 		if(!fProviderConnection.isEnabled())
 		{
 			ShowProviderList.markUnavailByProviderConnectionID(fProviderConnection.getProviderConnectionID());
+			return;
+		}
+
+		if(processUnconfirmedOnly)
+		{
+			processUnconfirmed();
 			return;
 		}
 
@@ -71,6 +76,12 @@ public class ConnectionShowUpdater extends ShowUpdater
 
 		processReconfirming();
 		processUnconfirmed();
+	}
+
+	@Override
+	public void doUpdate() throws Exception
+	{
+		doUpdate(false);
 	}
 
 	@SuppressWarnings({"unchecked"})
@@ -210,11 +221,11 @@ public class ConnectionShowUpdater extends ShowUpdater
 
 	private void processUnconfirmed() throws Exception
 	{
-		Logger.logInfo(this, "processReconfirming", String.format("Starting unconfirmed for Provider(%s) on ProviderConnection(%s)",
-			fProvider.getProviderID(), fProviderConnection.getProviderConnectionID()));
-
 		ShowProviderList showProviderList = ShowProviderList.findByProviderConnectionIDUnconfirm(
 			this.fProviderConnection.getProviderConnectionID());
+
+		Logger.logInfo(this, "processUnconfirmed", String.format("Starting confirm of %d shows for Provider(%s) on ProviderConnection(%s)",
+			showProviderList.size(), fProvider.getProviderID(), fProviderConnection.getProviderConnectionID()));
 
 		for(ShowProvider showProvider : showProviderList)
 		{
