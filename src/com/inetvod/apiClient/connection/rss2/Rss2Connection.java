@@ -256,17 +256,25 @@ public class Rss2Connection extends BaseConnection
 
 			if(parts.length >= 3)
 			{
-				hours = Integer.parseInt(parts[0]);
-				minutes = Integer.parseInt(parts[1]);
-				seconds = Integer.parseInt(parts[2]);
+				if (StrUtil.hasLen(parts[0]))
+					hours = Integer.parseInt(parts[0]);
+				if (StrUtil.hasLen(parts[1]))
+					minutes = Integer.parseInt(parts[1]);
+				if (StrUtil.hasLen(parts[2]))
+					seconds = Integer.parseInt(parts[2]);
 			}
 			else if(parts.length == 2)
 			{
-				minutes = Integer.parseInt(parts[0]);
-				seconds = Integer.parseInt(parts[1]);
+				if (StrUtil.hasLen(parts[0]))
+					minutes = Integer.parseInt(parts[0]);
+				if (StrUtil.hasLen(parts[1]))
+					seconds = Integer.parseInt(parts[1]);
 			}
 			else if(parts.length == 1)
-				seconds = Integer.parseInt(parts[0]);
+			{
+				if (StrUtil.hasLen(parts[0]))
+					seconds = Integer.parseInt(parts[0]);
+			}
 
 			//noinspection MagicNumber
 			return (hours * 3600) + (minutes * 60) + seconds;
