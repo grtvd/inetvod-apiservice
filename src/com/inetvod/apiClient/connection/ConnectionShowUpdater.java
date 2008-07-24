@@ -6,10 +6,12 @@ package com.inetvod.apiClient.connection;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 import com.inetvod.apiClient.ShowData;
 import com.inetvod.apiClient.ShowDataList;
 import com.inetvod.apiClient.ShowUpdater;
+import com.inetvod.common.core.DateUtil;
 import com.inetvod.common.core.LanguageID;
 import com.inetvod.common.core.Logger;
 import com.inetvod.common.data.CategoryID;
@@ -208,12 +210,18 @@ public class ConnectionShowUpdater extends ShowUpdater
 
 		ShowProviderList showProviderList = ShowProviderList.findByProviderConnectionIDReconfirm(
 			this.fProviderConnection.getProviderConnectionID());
+		Date oldestAllowed = DateUtil.addDays(DateUtil.today(), -this.fProviderConnection.getMaxDaysSinceAvail());
 
 		for(ShowProvider showProvider : showProviderList)
 		{
 			if(ContentManager.checkContent(showProvider.getShowURL()))
 			{
 				showProvider.setShowAvail(ShowAvail.Available);
+				showProvider.update();
+			}
+			else if((showProvider.getLastAvailableAt() != null) && showProvider.getLastAvailableAt().before(oldestAllowed))
+			{
+				showProvider.setShowAvail(ShowAvail.Unavailable);
 				showProvider.update();
 			}
 		}
