@@ -110,7 +110,7 @@ public abstract class BaseConnection
 				if(rc != HttpStatus.SC_OK)
 				{
 					if(rc != HttpStatus.SC_NOT_FOUND)
-						Logger.logWarn(BaseConnection.class, "confirmURL", String.format(
+						Logger.logInfo(BaseConnection.class, "confirmURL", String.format(
 							"Bad result(%d) from url(%s)", rc, url));
 					return false;
 				}
@@ -127,7 +127,7 @@ public abstract class BaseConnection
 			try
 			{
 				new URL(url);	//is in valid URL format?
-				Logger.logWarn(BaseConnection.class, "confirmURL",
+				Logger.logInfo(BaseConnection.class, "confirmURL",
 					String.format("Exception while validating url(%s)", url), e);
 			}
 			catch(MalformedURLException ignore)
